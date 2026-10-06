@@ -2,6 +2,7 @@
 import { buildGarment } from "../components/cloth/engine/garment";
 for (const q of ["high", "low"] as const) {
   const g = buildGarment({ shape: "hooded-poncho", trim: "tassels" }, q, false);
+  if (process.env.STRAIN_ITERS) g.sim.strainIters = Number(process.env.STRAIN_ITERS); // 0 = the solver without strain limiting, for comparison
   for (let k = 0; k < 120; k++) { g.sim.frame(1 / 60); if (k % 2 === 0) { g.body.update(); g.hood?.update(); } }
   const N = 300;
   let t0 = performance.now();

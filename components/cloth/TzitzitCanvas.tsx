@@ -22,6 +22,25 @@ export interface TzitzitCanvasProps {
 
 const fill: CSSProperties = { position: "absolute", inset: 0, width: "100%", height: "100%" };
 
+// The reset control speaks the page's language (the component has no dictionary of its own).
+const RESET_LABEL: Record<string, string> = { he: "להחזיר את הבד למקומו", en: "Reset the cloth", fr: "Remettre le tissu en place" };
+const pageLang = (): string => {
+  const l = typeof document !== "undefined" ? document.documentElement.lang : "";
+  const k = (l || "he").toLowerCase().split("-")[0];
+  return k in RESET_LABEL ? k : "en";
+};
+// The stage is always black, whatever the section around it: bone strokes, tekhelet-on-black focus ring.
+const RESET_CSS = `
+.tz-reset{position:absolute;inset-block-start:12px;inset-inline-end:12px;inline-size:40px;block-size:40px;padding:0;margin:0;border-radius:50%;
+border:1px solid rgba(243,239,231,.3);background:rgba(0,0,0,.5);color:#F3EFE7;cursor:pointer;display:grid;place-items:center;
+opacity:.72;transition:opacity 200ms ease,border-color 200ms ease;animation:tz-reset-in 500ms ease both;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.tz-reset:hover,.tz-reset:focus-visible{opacity:1;border-color:rgba(243,239,231,.6)}
+.tz-reset:focus-visible{outline:2px solid #8FB2E6;outline-offset:3px}
+.tz-reset:active{opacity:.85}
+@keyframes tz-reset-in{from{opacity:0}to{opacity:.72}}
+@media (prefers-reduced-motion:reduce){.tz-reset{animation:none;transition:none}}
+`;
+
 export default function TzitzitCanvas({ spec, size = "adult", poster, className, label, hint }: TzitzitCanvasProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -35,6 +54,15 @@ export default function TzitzitCanvas({ spec, size = "adult", poster, className,
   const [failed, setFailed] = useState(false);
   const [touched, setTouched] = useState(false);
   const [needsPlay, setNeedsPlay] = useState(false);
+  const [lang, setLang] = useState(pageLang);
+
+  useEffect(() => {
+    setLang(pageLang());
+    if (typeof MutationObserver === "undefined") return;
+    const mo = new MutationObserver(() => setLang(pageLang()));
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    return () => mo.disconnect();
+  }, []);
 
   const applyPause = (): void => {
     const hidden = typeof document !== "undefined" && document.visibilityState === "hidden";
@@ -112,22 +140,34 @@ export default function TzitzitCanvas({ spec, size = "adult", poster, className,
     <div
       ref={hostRef}
       className={className}
-      role="img"
-      aria-label={label}
       style={{ position: "relative", aspectRatio: "3 / 4", background: "#000", overflow: "hidden" }}
     >
-      {poster ? (
-        <img
-          src={poster}
-          alt=""
-          aria-hidden="true"
-          draggable={false}
-          style={{ ...fill, objectFit: "contain", opacity: live ? 0 : 1, transition: "opacity 500ms ease", pointerEvents: "none" }}
-        />
+      {/* the picture itself; the controls sit beside it, not inside it, so assistive technology still reaches them */}
+      <div role="img" aria-label={label} style={fill}>
+        {poster ? (
+          <img
+            src={poster}
+            alt=""
+            aria-hidden="true"
+            draggable={false}
+            style={{ ...fill, objectFit: "contain", opacity: live ? 0 : 1, transition: "opacity 500ms ease", pointerEvents: "none" }}
+          />
+        ) : null}
+        {failed ? null : (
+          <div ref={stageRef} style={{ ...fill, opacity: live ? 1 : 0, transition: "opacity 500ms ease" }} />
+        )}
+      </div>
+      {live && touched ? (
+        <>
+          <style>{RESET_CSS}</style>
+          <button type="button" className="tz-reset" onClick={() => handleRef.current?.reset()} aria-label={RESET_LABEL[lang]} title={RESET_LABEL[lang]}>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M3.4 9a5.6 5.6 0 1 0 1.9-4.2" />
+              <path d="M3.2 2.6v2.9h2.9" />
+            </svg>
+          </button>
+        </>
       ) : null}
-      {failed ? null : (
-        <div ref={stageRef} style={{ ...fill, opacity: live ? 1 : 0, transition: "opacity 500ms ease" }} />
-      )}
       {live && needsPlay ? (
         <button
           type="button"

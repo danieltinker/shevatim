@@ -31,8 +31,13 @@ for (let k = 1; k <= 6; k++) { await page.mouse.move(20 + k * 20, 30 + k * 4); a
 await page.mouse.up();
 out.afterOrbit = await view();
 await page.mouse.dblclick(430, 580);
-await page.waitForTimeout(200);
+await page.waitForTimeout(150);
+out.easingAfterDoubleClick = (await view()).homing;
+await page.waitForTimeout(1200); // the reset is an ease of 0.6 s, not a jump
 out.afterDoubleClick = await view();
+await page.evaluate(() => window.handle.reset());
+await page.waitForTimeout(1200);
+out.afterHandleReset = await view();
 out.snapshotBytes = (await page.evaluate(() => window.handle.snapshot())).length;
 await page.evaluate(() => window.handle.setPaused(true));
 out.pausedFlag = (await view()).paused;

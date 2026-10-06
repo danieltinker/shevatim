@@ -18,7 +18,8 @@ for (const reduced of [false, true]) {
   const page = await browser.newPage({ viewport: { width: 400, height: 600 }, reducedMotion: reduced ? "reduce" : "no-preference" });
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text().slice(0, 200)); });
+  page.on("console", (m) => { if (m.type() === "error" && !/status of 404/.test(m.text())) errors.push(m.text().slice(0, 200)); });
+  page.on("response", (r) => { if (r.status() === 404 && !r.url().endsWith("/favicon.ico")) errors.push("404 " + r.url()); }); // the harness page has no favicon; anything else missing is an error
   await page.goto(`http://localhost:${server.address().port}/react.html`);
   await page.waitForFunction(() => { const c = document.querySelector("canvas"); return c && getComputedStyle(c.parentElement).opacity === "1"; }, null, { timeout: 90000 }).catch(() => errors.push("never became ready"));
   await page.waitForTimeout(700);
@@ -31,6 +32,30 @@ for (const reduced of [false, true]) {
     errors,
   }));
   if (reduced) { await page.click("button"); await page.waitForTimeout(300); console.log("after play: button present =", await page.evaluate(() => !!document.querySelector("button"))); }
+  else {
+    // the reset control: absent until the cloth is touched, then a real, labelled, focusable button that does not move the layout
+    const host = () => page.evaluate(() => { const r = document.querySelector("canvas").parentElement.parentElement.parentElement.getBoundingClientRect(); return [r.x, r.y, r.width, r.height].map(Math.round).join(","); });
+    const before = await host();
+    const absentBeforeTouch = await page.evaluate(() => !document.querySelector(".tz-reset"));
+    await page.mouse.move(150, 220); await page.mouse.down();
+    for (let k = 1; k <= 5; k++) { await page.mouse.move(150 + k * 12, 220); await page.waitForTimeout(50); }
+    await page.mouse.up();
+    await page.waitForSelector(".tz-reset", { timeout: 5000 }).catch(() => errors.push("reset button never appeared"));
+    await page.waitForTimeout(700);
+    const info = await page.evaluate(() => {
+      const b = document.querySelector(".tz-reset"); if (!b) return null;
+      const r = b.getBoundingClientRect(), st = getComputedStyle(b);
+      return { tag: b.tagName, type: b.type, label: b.getAttribute("aria-label"), size: `${Math.round(r.width)}x${Math.round(r.height)}`, radius: st.borderRadius, color: st.color, insideImgRole: !!b.closest('[role="img"]'), tabIndex: b.tabIndex };
+    });
+    await page.keyboard.press("Tab");
+    const focus = await page.evaluate(() => { const b = document.activeElement; const st = getComputedStyle(b); return { isReset: b.classList.contains("tz-reset"), focusVisible: b.matches(":focus-visible"), outline: `${st.outlineWidth} ${st.outlineStyle} ${st.outlineColor}` }; });
+    const labels = {};
+    for (const l of ["he", "en", "fr"]) { await page.evaluate((l) => { document.documentElement.lang = l; }, l); await page.waitForTimeout(80); labels[l] = await page.evaluate(() => document.querySelector(".tz-reset")?.getAttribute("aria-label")); }
+    await page.keyboard.press("Enter"); // keyboard activation resets
+    await page.waitForTimeout(900);
+    console.log(JSON.stringify({ resetButton: { absentBeforeTouch, ...info, focus, labels, layoutUnchanged: before === (await host()), stillThereAfterReset: await page.evaluate(() => !!document.querySelector(".tz-reset")) }, errors }, null, 1));
+    await page.screenshot({ path: path.join(here, "dist/react-reset.png") });
+  }
   await browser.close();
 }
 server.close();

@@ -52,13 +52,33 @@ export class ClothSim {
 
   grabIdx = -1;
   grabX = 0; grabY = 0; grabZ = 0;
+  /** The hand never pulls harder than this share of the whole garment's weight: taut cloth holds instead of stretching. */
+  grabForce = 0.5;
+  /** Strain limiting: woven cloth does not stretch, and one solver pass per substep lets it.
+   *  While the cloth is held (and for a moment after, or whenever a thread is found over-long) the threads (warp,
+   *  weft, seams) are solved again in every substep, up to strainIters times, until none is more than strainLimit
+   *  times the length it has in the settled garment (or its nominal length, if that is longer: around the neck
+   *  seam under the hood a few threads hang longer than nominal, and those are left as they are).
+   *  The hanging garment therefore drapes exactly as before and costs one cheap measurement per frame.
+   *  Active from saveRest() on. */
+  strainLimit = 1.05;
+  strainIters = 6;
+  private cHold: Float64Array = new Float64Array(0); // per thread: the length it may keep
+  private cMax: Float64Array = new Float64Array(0);  // per thread: beyond this it counts as over-stretched
+  private limiting = false;
+  private limitFrames = 0;
+  /** number of leading constraints that are inextensible threads (set by finalize) */
+  nStretch = 0;
+  totalMass = 0;
 
   private acc = 0;
   private windM: Float32Array;
   private mask: Uint8Array;
-  cGrp: Uint8Array;            // solve order: 0 stretch, 1 shear, 2 bending
+  cGrp: Uint8Array;            // solve order: 0 stretch, 1 shear, 2 bending, 3 soft tethers
   lastSolveMs = 0;
   kinetic = 0;
+  /** how many extra thread passes strain limiting has run so far (a diagnostic: it must not grow while the cloth just hangs) */
+  strainPasses = 0;
 
   constructor(maxParticles: number, maxConstraints: number) {
     this.pos = new Float64Array(maxParticles * 3);
@@ -108,9 +128,61 @@ export class ClothSim {
     const L = Float64Array.from(order, (i) => this.cLen[i]), C = Float64Array.from(order, (i) => this.cComp[i]);
     const Gp = Uint8Array.from(order, (i) => this.cGrp[i]);
     this.cA = A; this.cB = B; this.cLen = L; this.cComp = C; this.cGrp = Gp;
+    let ns = 0; while (ns < Gp.length && Gp[ns] === 0) ns++;
+    this.nStretch = ns;
+    let m = 0; for (let i = 0; i < this.n; i++) if (this.w[i] > 0) m += 1 / this.w[i];
+    this.totalMass = m;
   }
 
-  saveRest(): void { this.rest.set(this.pos); }
+  private overStretched(): boolean {
+    const pos = this.pos, cA = this.cA, cB = this.cB, cMax = this.cMax;
+    for (let c = 0, n = this.nStretch; c < n; c++) {
+      const a = cA[c] * 3, b = cB[c] * 3;
+      const dx = pos[a] - pos[b], dy = pos[a + 1] - pos[b + 1], dz = pos[a + 2] - pos[b + 2];
+      if (dx * dx + dy * dy + dz * dz > cMax[c] * cMax[c]) return true;
+    }
+    return false;
+  }
+
+  /** Longest thread relative to the length it has in the settled garment (1 = as settled). NaN if the state is broken. */
+  maxStrain(): number {
+    const pos = this.pos, cA = this.cA, cB = this.cB, cLen = this.cLen;
+    const hold = this.cHold.length === this.nStretch ? this.cHold : cLen;
+    let worst = 0;
+    for (let c = 0, n = this.nStretch; c < n; c++) {
+      if (cLen[c] < 0.015) continue; // seams and tacks: their slack is not cloth strain
+      const a = cA[c] * 3, b = cB[c] * 3;
+      const dx = pos[a] - pos[b], dy = pos[a + 1] - pos[b + 1], dz = pos[a + 2] - pos[b + 2];
+      const r = Math.sqrt(dx * dx + dy * dy + dz * dz) / hold[c];
+      if (r !== r) return NaN;
+      if (r > worst) worst = r;
+    }
+    return worst;
+  }
+
+  /** Mean distance of the cloth particles from the settled pose, in metres. NaN if the state is broken. */
+  meanFromRest(from = 0, to = this.n): number {
+    const pos = this.pos, rest = this.rest, w = this.w, kind = this.kind;
+    let sum = 0, cnt = 0;
+    for (let i = from, i3 = from * 3; i < to; i++, i3 += 3) {
+      if (w[i] === 0 || kind[i] !== KIND_CLOTH) continue;
+      const dx = pos[i3] - rest[i3], dy = pos[i3 + 1] - rest[i3 + 1], dz = pos[i3 + 2] - rest[i3 + 2];
+      sum += Math.sqrt(dx * dx + dy * dy + dz * dz); cnt++;
+    }
+    return cnt ? sum / cnt : 0;
+  }
+
+  saveRest(): void {
+    this.rest.set(this.pos);
+    const pos = this.pos, cA = this.cA, cB = this.cB, L = this.cLen, ns = this.nStretch;
+    const cHold = (this.cHold = new Float64Array(ns)), cMax = (this.cMax = new Float64Array(ns));
+    for (let c = 0; c < ns; c++) {
+      const a = cA[c] * 3, b = cB[c] * 3;
+      const settled = Math.hypot(pos[a] - pos[b], pos[a + 1] - pos[b + 1], pos[a + 2] - pos[b + 2]);
+      cHold[c] = Math.max(L[c], settled);
+      cMax[c] = L[c] < 0.015 ? cHold[c] + 0.004 : cHold[c] * this.strainLimit; // a seam may gape 4 mm
+    }
+  }
   reset(): void {
     this.pos.set(this.rest); this.prev.set(this.rest); this.vel.fill(0); this.grabIdx = -1; this.acc = 0;
   }
@@ -133,6 +205,9 @@ export class ClothSim {
   frame(h: number): void {
     const t0 = typeof performance !== "undefined" ? performance.now() : 0;
     const sdt = h / this.substeps;
+    if (this.strainIters > 0 && this.nStretch > 0 && this.cMax.length === this.nStretch && (this.grabIdx >= 0 || this.overStretched())) this.limitFrames = 90;
+    this.limiting = this.limitFrames > 0;
+    if (this.limiting) this.limitFrames--;
     this.broadPhase();
     for (let s = 0; s < this.substeps; s++) this.substep(sdt);
     if (typeof performance !== "undefined") this.lastSolveMs = performance.now() - t0;
@@ -172,20 +247,34 @@ export class ClothSim {
       pos[i3] = px + vx * dt; pos[i3 + 1] = py + vy * dt; pos[i3 + 2] = pz + vz * dt;
     }
 
-    // pointer grab: a soft pin (the particle is pulled most of the way each substep and made heavy)
+    // pointer grab: the held particle is heavy and is steered towards the pointer by a velocity servo whose
+    // acceleration is capped, so the hand pulls with a bounded force. Slack cloth follows the pointer closely;
+    // taut cloth holds the hand back instead of stretching like rubber or being dragged off the shoulders.
     const g = this.grabIdx;
     let gw = 0;
     if (g >= 0) {
       const g3 = g * 3;
-      pos[g3] += (this.grabX - pos[g3]) * 0.35;
-      pos[g3 + 1] += (this.grabY - pos[g3 + 1]) * 0.35;
-      pos[g3 + 2] += (this.grabZ - pos[g3 + 2]) * 0.35;
       gw = w[g]; w[g] = gw * 0.04;
+      const aMax = this.grabForce * this.totalMass * this.gravity * w[g];
+      const ex = this.grabX - pos[g3], ey = this.grabY - pos[g3 + 1], ez = this.grabZ - pos[g3 + 2];
+      const e = Math.sqrt(ex * ex + ey * ey + ez * ez);
+      if (e > 1e-9) {
+        // approach speed: proportional close in, never faster than the cap can still brake
+        let sp = e * 90; const brake = Math.sqrt(aMax * e); if (sp > brake) sp = brake; if (sp > 6) sp = 6;
+        const k = sp / e;
+        let ax = ex * k - (pos[g3] - prev[g3]) / dt, ay = ey * k - (pos[g3 + 1] - prev[g3 + 1]) / dt, az = ez * k - (pos[g3 + 2] - prev[g3 + 2]) / dt;
+        const a = Math.sqrt(ax * ax + ay * ay + az * az), lim = aMax * dt;
+        if (a > lim) { const q = lim / a; ax *= q; ay *= q; az *= q; }
+        pos[g3] += ax * dt; pos[g3 + 1] += ay * dt; pos[g3 + 2] += az * dt;
+      }
     }
 
     // distance constraints
     const idt2 = 1 / (dt * dt);
     const cA = this.cA, cB = this.cB, cLen = this.cLen, cComp = this.cComp;
+    const cHold = this.cHold, cMax = this.cMax;
+    const nS = this.limiting ? this.nStretch : 0;
+    let over = false;
     for (let c = 0, nc = this.nc; c < nc; c++) {
       const ia = cA[c], ib = cB[c];
       const wa = w[ia], wb = w[ib];
@@ -195,11 +284,36 @@ export class ClothSim {
       const dx = pos[a] - pos[b], dy = pos[a + 1] - pos[b + 1], dz = pos[a + 2] - pos[b + 2];
       const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
       if (len < 1e-9) continue;
+      if (c < nS && len > cMax[c]) over = true;
       const s = -(len - cLen[c]) / ((ws + cComp[c] * idt2) * len);
       const sa = s * wa, sb = s * wb;
       pos[a] += dx * sa; pos[a + 1] += dy * sa; pos[a + 2] += dz * sa;
       pos[b] -= dx * sb; pos[b + 1] -= dy * sb; pos[b + 2] -= dz * sb;
     }
+    // strain limiting: where a thread went into that pass too long, solve the threads again (only them, and only
+    // then), so a hard pull travels through the cloth instead of lengthening it.
+    for (let it = 0, its = this.strainIters; over && it < its; it++) {
+      over = false; this.strainPasses++;
+      if (g >= 0 && it === its - 2) w[g] = gw; // the last passes: the held particle gives way like any other
+      for (let c = 0; c < nS; c++) {
+        const ia = cA[c], ib = cB[c];
+        const wa = w[ia], wb = w[ib];
+        const ws = wa + wb;
+        if (ws === 0) continue;
+        const a = ia * 3, b = ib * 3;
+        const dx = pos[a] - pos[b], dy = pos[a + 1] - pos[b + 1], dz = pos[a + 2] - pos[b + 2];
+        const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (len < 1e-9) continue;
+        const hold = cHold[c];
+        if (len <= hold) continue; // threads buckle freely; only pull back what is too long
+        if (len > cMax[c]) over = true;
+        const s = -(len - hold) / ((ws + cComp[c] * idt2) * len);
+        const sa = s * wa, sb = s * wb;
+        pos[a] += dx * sa; pos[a + 1] += dy * sa; pos[a + 2] += dz * sa;
+        pos[b] -= dx * sb; pos[b + 1] -= dy * sb; pos[b + 2] -= dz * sb;
+      }
+    }
+    if (g >= 0) w[g] = gw * 0.04;
 
     // front panel stays in front of the back panel (cheap cloth–cloth for a garment that never turns)
     const sA = this.sepA, sB = this.sepB, gap = this.sepGap;
