@@ -44,7 +44,12 @@
 /* tribe story (chalk) */
 .story { padding-block-start: clamp(32px, 5vw, 72px); }
 .storyName { font-family: var(--font-display); font-weight: 800; line-height: .95; font-size: clamp(64px, min(17vw, calc(100cqi / (var(--len) * 0.6))), 240px); white-space: nowrap; }
+.storyName { inline-size: fit-content; max-inline-size: 100%; }
+.storyName::after { content: ""; display: block; block-size: var(--bar-h, 0em); background: var(--bar, transparent); margin-block-start: var(--bar-h, 0em); }
 :global(html[lang="he"]) .storyName { line-height: 1.15; }
+:global(html[lang="he"]) .storyName::after { margin-block-start: calc(var(--bar-h, 0em) * 2.4); }
+.priceNote { font-size: var(--fs-small); color: var(--muted); }
+.priceNoteTop { margin-block-end: clamp(20px, 2.5vw, 32px); }
 .storyTop { container-type: inline-size; }
 .tagline { font-size: clamp(24px, 2.6vw, 38px) !important; margin-block-start: 8px; max-inline-size: 24em; }
 .storyGrid { display: grid; gap: 40px; margin-block-start: clamp(32px, 5vw, 64px); }

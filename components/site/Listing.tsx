@@ -6,7 +6,8 @@ import { currentCollection, fill, slotItems, tr } from "@/lib/format";
 import type { Item } from "@/lib/types";
 import { useI18n } from "./Providers";
 import { StoneLabel, stoneStyle } from "./Stone";
-import Tile, { Grid } from "./Tile";
+import { pick } from "@/lib/i18n";
+import Tile, { Grid, PriceNote } from "./Tile";
 import { tribeNameStyle, type TribeView } from "./tribes";
 import ch from "./Choshen.module.css";
 import tile from "./Tile.module.css";
@@ -24,6 +25,7 @@ export function CollectionView({ tribes, slug }: { tribes: TribeView[]; slug: st
         <p className="muted small">{t.home.collectionLabel}</p>
         <h1 className={s.display}>{tr(col.name, locale)}</h1>
         <p className="measure">{tr(col.description, locale)}</p>
+        <PriceNote items={tribes.flatMap((x) => slotItems(catalog, col, x.key))} className={s.priceNote} />
       </header>
       <nav className={s.stickyStrip} aria-label={t.tribes.choose}>
         <ul className={`${ch.stripList}`}>
@@ -71,6 +73,7 @@ export function TribeItems({ tribe }: { tribe: TribeView }) {
   return (
     <div className={`onBlack section ${s.tribeItems}`}>
       <div className="wrap">
+        <PriceNote items={[...five, ...more]} className={`${s.priceNote} ${s.priceNoteTop}`} />
         {five.length ? (
           <section>
             <h2 className={s.h2}>{fill(t.tribes.inCollection, { name: tribe.plain, collection: col ? tr(col.name, locale) : "" })}</h2>
@@ -123,6 +126,8 @@ export function ShopView({ tribes, cat, tribe }: { tribes: TribeView[]; cat: str
             ))}
           </ul>
         </nav>
+        {/* a category with nothing in it yet (kippot) has nothing to filter */}
+        {catEmpty ? null : (
         <div className={s.filter}>
           <p className={`small muted ${s.filterLabel}`}>{t.shop.tribeFilter}</p>
           <ul className={ch.chips}>
@@ -138,10 +143,12 @@ export function ShopView({ tribes, cat, tribe }: { tribes: TribeView[]; cat: str
             })}
           </ul>
         </div>
+        )}
         <p className={`small muted ${s.count}`} aria-live="polite" hidden={catEmpty}>
-          <bdi>{fill(t.shop.count, { n: items.length })}</bdi>
+          <bdi>{fill(items.length === 1 ? pick(t.shop, "countOne", t.shop.count) : t.shop.count, { n: items.length })}</bdi>
           {activeTribe ? <> <Link className={s.clear} href={href(cat, null)} scroll={false}>{t.shop.clear}</Link></> : null}
         </p>
+        <PriceNote items={items} className={s.priceNote} />
       </header>
       <div className={`wrap ${s.listing}`}>
         {items.length ? <Grid>{items.map((it, i) => <Tile key={it.id} item={it} eager={i < 4} />)}</Grid>

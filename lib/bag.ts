@@ -41,6 +41,8 @@ export const bag = {
   },
   remove(itemId: string, variantKey: string | null) { load(); save(lines.filter((l) => !same(l, itemId, variantKey))); },
   clear() { save([]); },
+  /** Reads the saved bag now (a no-op after the first time). */
+  load,
 };
 
 function subscribe(l: () => void) {
@@ -49,6 +51,7 @@ function subscribe(l: () => void) {
   return () => { listeners.delete(l); };
 }
 export function useBag(): BagLine[] {
-  return useSyncExternalStore(subscribe, () => lines, () => EMPTY);
+  // reading the snapshot also reads localStorage, so the first client render after hydration has the real bag
+  return useSyncExternalStore(subscribe, () => { load(); return lines; }, () => EMPTY);
 }
 export const bagCount = (b: BagLine[]) => b.reduce((n, l) => n + l.qty, 0);

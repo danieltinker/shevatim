@@ -39,4 +39,9 @@ export function isPhone(raw: string): boolean {
   const d = raw.replace(/[\s\-().]/g, "");
   return /^\+?\d{9,15}$/.test(d);
 }
+/** What is sent to the server: dots become spaces (06.12.34.56.78 → 06 12 34 56 78), because the server
+ *  accepts spaces, brackets, hyphens and a leading plus, but not dots. */
+export const normalizePhone = (raw: string): string => raw.replace(/\./g, " ").replace(/\s+/g, " ").trim();
+/** A reservation code as the server makes it: SHV- and five characters without look-alikes. */
+export const isReservationCode = (s: string | null | undefined): s is string => !!s && /^SHV-[2-9A-HJ-NP-Z]{5}$/.test(s);
 export const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);

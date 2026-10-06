@@ -10,6 +10,14 @@ const dicts: Record<Locale, Dict> = { he, en, fr };
 const _same: [typeof en, typeof fr] = [he, he];
 void _same;
 
+/** A string that may not be in the dictionaries yet: the new key when it exists, otherwise the fallback. */
+export function pick(group: object, key: string, fallback: string): string {
+  const v = (group as Record<string, unknown>)[key];
+  return typeof v === "string" && v ? v : fallback;
+}
+/** French sets a no-break space before a colon. */
+export const colon = (locale: Locale): string => (locale === "fr" ? "\u00a0:" : ":");
+
 export const getDict = (locale: Locale): Dict => dicts[locale];
 export const isLocale = (x: string): x is Locale => x === "he" || x === "en" || x === "fr";
 export const dirOf = (locale: Locale): "rtl" | "ltr" => (locale === "he" ? "rtl" : "ltr");

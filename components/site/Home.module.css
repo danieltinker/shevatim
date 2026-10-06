@@ -6,6 +6,7 @@
 .colName { font-size: var(--fs-display); font-weight: 800; line-height: 1; }
 :global(html[lang="he"]) .colName { line-height: 1.05; }
 .colText { display: grid; gap: 8px; justify-items: start; }
+.priceNote { font-size: var(--fs-small); color: var(--muted); }
 @media (min-width: 900px) { .colHead { grid-template-columns: 1fr 1fr; align-items: end; gap: 48px; } }
 
 @media (min-width: 768px) { .four { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -13,8 +14,10 @@
 /* touch the cloth */
 .clothGrid { display: grid; gap: 28px; align-items: center; }
 .clothText { display: grid; gap: 12px; justify-items: start; }
-.clothStage { inline-size: 100%; max-inline-size: min(560px, 60vh); margin-inline: auto; touch-action: pan-y; }
-.canvas { inline-size: 100%; display: block; }
+.clothStage { position: relative; inline-size: 100%; max-inline-size: min(560px, 60vh); aspect-ratio: 3 / 4; margin-inline: auto; touch-action: pan-y; background: #000; overflow: hidden; }
+.stagePoster { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; display: block; }
+.canvas { position: relative; inline-size: 100%; display: block; }
+.canvasHold { aspect-ratio: 3 / 4; }
 @media (min-width: 900px) { .clothGrid { grid-template-columns: 5fr 7fr; gap: 64px; } .clothStage { max-inline-size: min(560px, 60vh); } }
 
 /* categories */

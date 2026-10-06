@@ -7,8 +7,9 @@
 .tile { display: flex; flex-direction: column; text-decoration: none; color: var(--fg); min-inline-size: 0; }
 .frame { position: relative; display: block; aspect-ratio: 3 / 4; background: #000; overflow: hidden; }
 .pic { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; display: block; }
+/* the second picture is only rendered where a pointer can hover (see Tile.tsx) */
 .second { opacity: 0; transition: opacity .25s ease; }
-@media (hover: hover) and (pointer: fine) { .tile:hover .second { opacity: 1; } }
+@media (hover: hover) and (pointer: fine) { .tile:hover .second, .tile:focus-visible .second { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .second { transition: none; } }
 .sold {
   position: absolute; inset-block-start: 10px; inset-inline-start: 10px; padding: 3px 8px;

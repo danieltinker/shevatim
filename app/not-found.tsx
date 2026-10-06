@@ -15,7 +15,12 @@ export const metadata: Metadata = { title: "שבטים · Shevatim", robots: { i
 export default function NotFound() {
   return (
     <main lang="he" dir="rtl" className="onBlack" style={{ minBlockSize: "100svh", display: "grid", placeContent: "center", justifyItems: "center", gap: 28, padding: "48px 16px", textAlign: "center" }}>
-          <img src={asset(media.brand.wordmarkWhiteSmall)} alt="Shevatim" width={626} height={242} style={{ inlineSize: "min(72vw, 420px)", blockSize: "auto" }} />
+          <h1 style={{ margin: 0, lineHeight: 0 }}>
+            <img src={asset(media.brand.wordmarkWhiteSmall)} alt="שבטים · Shevatim" width={626} height={242} style={{ inlineSize: "min(72vw, 420px)", blockSize: "auto" }} />
+            <span className="srOnly"> 404</span>
+          </h1>
+          {/* this page has no layout of its own to say which language it is in: Hebrew first, like the site */}
+          <script dangerouslySetInnerHTML={{ __html: "document.documentElement.lang='he';document.documentElement.dir='rtl'" }} />
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 20 }}>
             {LOCALES.map((l) => {
               const t = getDict(l);

@@ -9,7 +9,7 @@ interface RawTribe {
   key: TribeKey; order: number;
   name: Tri & { he_plain: string };
   mother: Tri; meaning: Tri;
-  stone: { he: string; he_plain: string; en: string; gloss: Tri };
+  stone: { he: string; he_plain: string; en: string; fr?: string; gloss: Tri };
   flag: { color: Tri; hex: string; symbol: Tri };
   camp: Tri; essence: Tri; tagline: Tri;
   verses: { ref: Tri; source: string; he: string; en: string; fr: string }[];
@@ -26,7 +26,8 @@ export interface TribeView {
   hex: string;
   onChalk: { color: string; underline: boolean };
   onBlack: string;     // the flag colour lifted until it reads on black
-  stoneText: string;   // text colour inside the stone
+  stoneText: string;   // text colour inside the stone: ink or bone, whichever reads better
+  stoneBg: string;     // the stone as drawn: the flag colour, nudged only as far as the text needs for 4.5:1
   stone: string; stoneGloss: string;
   flagColor: string; symbol: string;
   mother: string; meaning: string; camp: string; essence: string;
@@ -54,11 +55,23 @@ function lift(hex: string) {
   return c;
 }
 
+/** The stone as drawn. The text is ink or bone, whichever contrasts more with the flag colour; when even that
+ *  is under AA (4.5:1) the background moves away from the text, a step at a time, only until it passes. */
+const AA = 4.5;
+export function stoneColours(hex: string): { bg: string; text: string; ratio: number } {
+  const text = contrast(hex, BONE) >= contrast(hex, INK) ? BONE : INK;
+  const away = text === BONE ? BLACK : "#FFFFFF";
+  let bg = hex;
+  for (let t = 0.01; contrast(bg, text) < AA + 0.05 && t <= 0.5; t += 0.01) bg = mix(hex, away, t);
+  return { bg, text, ratio: contrast(bg, text) };
+}
+
 const TRIBES = raw as unknown as RawTribe[];
 
 export function tribeViews(locale: Locale): TribeView[] {
   return TRIBES.map((t) => {
     const plain = locale === "he" ? t.name.he_plain : t.name[locale];
+    const stone = stoneColours(t.flag.hex);
     return {
       key: t.key, order: t.order,
       name: t.name[locale], plain, len: [...plain].length,
@@ -66,8 +79,8 @@ export function tribeViews(locale: Locale): TribeView[] {
       hex: t.flag.hex,
       onChalk: contrast(t.flag.hex, CHALK) >= 3 ? { color: t.flag.hex, underline: false } : { color: INK, underline: true },
       onBlack: lift(t.flag.hex),
-      stoneText: contrast(t.flag.hex, BONE) >= contrast(t.flag.hex, INK) ? BONE : INK,
-      stone: locale === "he" ? t.stone.he : t.stone.en, stoneGloss: t.stone.gloss[locale],
+      stoneText: stone.text, stoneBg: stone.bg,
+      stone: locale === "he" ? t.stone.he : locale === "fr" ? t.stone.fr || t.stone.en : t.stone.en, stoneGloss: t.stone.gloss[locale],
       flagColor: t.flag.color[locale], symbol: t.flag.symbol[locale],
       mother: t.mother[locale], meaning: t.meaning[locale], camp: t.camp[locale], essence: t.essence[locale],
       tagline: { ref: "", he: t.tagline.he, tr: locale === "he" ? null : t.tagline[locale] },
@@ -87,12 +100,14 @@ export function tribesIntro(locale: Locale) {
   return { title: INTRO.title[locale], lede: INTRO.lede[locale], choshen: v(INTRO.choshen_verse), tzitzit: v(INTRO.tzitzit_verse) };
 }
 
-/** Colour for a tribe's name: its flag colour where it reads, otherwise ink with a colour underline (chalk)
- *  or the colour lifted towards bone (black). Also passes the name length for sizing. */
+/** Colour for a tribe's name: its flag colour where it reads, otherwise ink with a colour bar under it (chalk)
+ *  or the colour lifted towards bone (black). Also passes the name length for sizing.
+ *  The bar is drawn by the stylesheet as its own box under the name (`--bar`, `--bar-h`): a text underline
+ *  runs through the Hebrew vowel points and gets chopped into pieces by them. */
 export function tribeNameStyle(t: TribeView, ground: "chalk" | "black"): CSSProperties {
   const base = { ["--len" as string]: Math.max(4, t.len) } as CSSProperties;
   if (ground === "black") return { ...base, color: t.onBlack };
   return t.onChalk.underline
-    ? { ...base, color: t.onChalk.color, textDecoration: "underline", textDecorationColor: t.hex, textDecorationThickness: "0.06em", textUnderlineOffset: "0.14em" }
+    ? { ...base, color: t.onChalk.color, ["--bar" as string]: t.hex, ["--bar-h" as string]: "0.06em" }
     : { ...base, color: t.onChalk.color };
 }

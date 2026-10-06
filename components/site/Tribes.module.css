@@ -26,8 +26,12 @@
   /* as large as the column allows for this name, capped by the display size */
   font-size: clamp(56px, min(11.6vw, calc(100cqi / (var(--len) * 0.6))), 168px);
   margin-block-end: .16em; padding-block-end: .04em; white-space: nowrap;
+  inline-size: fit-content; max-inline-size: 100%;
 }
-:global(html[lang="he"]) .name { line-height: 1.12; font-size: clamp(64px, min(15vw, calc(100cqi / (var(--len) * 0.6))), 168px); margin-block-end: 0; }
+/* the colour bar of a name that is set in ink (Zevulun): its own box under the line, clear of the vowel points */
+.name::after { content: ""; display: block; block-size: var(--bar-h, 0em); background: var(--bar, transparent); margin-block-start: var(--bar-h, 0em); }
+:global(html[lang="he"]) .name { line-height: 1.12; font-size: clamp(64px, min(15vw, calc(100cqi / (var(--len) * 0.6))), 168px); margin-block-end: 0; padding-block-end: .15em; }
+:global(html[lang="he"]) .name::after { margin-block-start: calc(var(--bar-h, 0em) * 2.4); }
 .stoneLine { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: var(--fs-body); font-weight: 500; }
 .dot { inline-size: 18px; block-size: 12px; border-radius: 2px; box-shadow: inset 0 0 0 1px var(--line); flex: none; }
 .emblem { font-size: var(--fs-small); margin-block-start: 4px; max-inline-size: 48ch; }

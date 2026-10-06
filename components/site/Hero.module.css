@@ -13,7 +13,7 @@
   display: flex; flex-direction: column; align-items: center; text-align: center;
 }
 .mark { margin: 0; line-height: 0; }
-.mark img { inline-size: min(84vw, 760px, 96vh); block-size: auto; display: block; }
+.mark img { inline-size: min(84vw, 620px, 80vh); block-size: auto; display: block; }
 .line { font-family: var(--font-display); font-weight: 500; font-size: clamp(22px, 2.4vw, 34px); line-height: 1.25; margin-block-start: -8px; }
 .cta { margin-block-start: clamp(18px, 3vh, 28px); }
 .toggle {
@@ -22,6 +22,8 @@
   background: transparent; color: rgba(243, 239, 231, .8); border: 1px solid rgba(243, 239, 231, .32);
 }
 .toggle:hover { color: var(--bone); border-color: rgba(243, 239, 231, .7); }
+/* phones: the pause button sits in the corner under the call to action, so the copy ends above it */
+@media (max-width: 767px) { .copy { padding-block-end: max(76px, 6vh); } }
 @media (min-width: 768px) { .toggle { inset-inline-end: auto; inset-inline-start: var(--gutter); inset-block-end: clamp(20px, 4vh, 32px); } }
 
 /* the one orchestrated moment */

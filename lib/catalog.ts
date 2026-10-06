@@ -33,6 +33,16 @@ function start() {
     .catch(() => { /* database unreachable: keep what we have */ });
 }
 
+/** Fetches the catalogue again (after the server said a piece is no longer available). False when it could not. */
+export async function refreshCatalog(): Promise<boolean> {
+  try {
+    const fresh = await getCatalog();
+    set(fresh);
+    try { window.sessionStorage.setItem(KEY, JSON.stringify(fresh)); } catch { /* ignore */ }
+    return true;
+  } catch { return false; }
+}
+
 function subscribe(l: () => void) {
   listeners.add(l);
   start();

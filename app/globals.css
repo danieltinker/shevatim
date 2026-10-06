@@ -56,10 +56,10 @@ button { cursor: pointer; }
   background: var(--fg); color: var(--bg); font-weight: 500; font-size: 16px; line-height: 1.2; text-decoration: none; text-align: center;
   transition: background-color .2s ease, color .2s ease;
 }
-.btn:hover { background: transparent; color: var(--fg); }
+@media (hover: hover) { .btn:hover { background: transparent; color: var(--fg); } }
 .btn[disabled], .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
 .btnGhost { background: transparent; color: var(--fg); }
-.btnGhost:hover { background: var(--fg); color: var(--bg); }
+@media (hover: hover) { .btnGhost:hover { background: var(--fg); color: var(--bg); } }
 .link {
   color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 6px;
   font-weight: 500; display: inline-block; padding-block: 10px;
