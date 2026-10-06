@@ -7,7 +7,10 @@ import type {
 } from "./types";
 import { ApiError } from "./types";
 
-const URL_ = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://localhost:54321").replace(/\/$/, "");
+// A built site without a backend address (a Vercel preview whose variables are set for production only) makes no
+// call at all: it shows the built-in catalogue, and reserving answers "could not reach the server". Only the
+// development server falls back to the local database, so a visitor's browser is never sent to localhost.
+const URL_ = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? (process.env.NODE_ENV === "production" ? "" : "http://localhost:54321")).replace(/\/$/, "");
 const KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? "dev-key";
 // Supabase's publishable keys (sb_publishable_…) go on the `apikey` header only; they are not JWTs, so they must
 // not be sent as a Bearer token. A legacy anon key (a JWT, "eyJ…") is sent on both, as it always was.
@@ -15,6 +18,7 @@ const AUTH: Record<string, string> = KEY.startsWith("eyJ") ? { apikey: KEY, Auth
 
 async function rpc<T>(fn: string, args: Record<string, unknown> = {}): Promise<T> {
   let res: Response;
+  if (!URL_) throw new ApiError("network");
   try {
     res = await fetch(`${URL_}/rest/v1/rpc/${fn}`, {
       method: "POST",
