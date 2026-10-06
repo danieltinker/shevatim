@@ -372,12 +372,15 @@ def dark_rim(col, a, o):
     solid = a > 0.5; k = solid.astype(np.float32)
     loc = cv2.GaussianBlur(lum * k, (0, 0), 25) / np.maximum(cv2.GaussianBlur(k, (0, 0), 25), 1e-3)
     r = int(o.get('darkrim_px', 14))
-    band = solid & ~cv2.erode(solid.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * r + 1, 2 * r + 1))).astype(bool)
+    band = solid & (cv2.distanceTransform(solid.astype(np.uint8), cv2.DIST_L2, 3) <= r)
     dark = band & (lum < thr * loc)
     num, lab = cv2.connectedComponents(dark.astype(np.uint8), connectivity=8)
     open_ = cv2.dilate((~solid).astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
     ids = np.unique(lab[dark & open_]); ids = ids[ids > 0]
     rem = np.isin(lab, ids)
+    # pockets closed in by tassels: only when they are nearly black against the cloth
+    ratio = np.bincount(lab.ravel(), (lum / np.maximum(loc, 1e-3)).ravel(), num) / np.maximum(np.bincount(lab.ravel(), minlength=num), 1)
+    deep = np.nonzero(ratio < 0.35)[0]; rem |= np.isin(lab, deep[deep > 0])
     if not rem.any(): return a
     rem = cv2.dilate(rem.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(np.float32)
     return a * np.clip(1 - cv2.GaussianBlur(rem, (0, 0), 0.8) * 1.5, 0, 1)

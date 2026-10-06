@@ -10,6 +10,8 @@
 #   PIC_KEEP=1          only re-cut the views whose files already exist in the out dir (keeps a curated set curated)
 #   PIC_RAW=<dir>       also keep the cut-out before the edge clean-up; `edges.py all` then redoes only edges + encoding
 #   PIC_EDGE_T0=0.10    how much the soft outline is tightened;  PIC_Q=84  colour quality (the alpha is always lossless)
+# overrides.json keeps every manual clean-up (erase polygons, hems, ...). New for light grounds: "darkrim": true on a
+# view removes dark bits of trousers / room caught between fringe tassels (light, unprinted cloth only; never the default).
 # One item or view:  PIC_SRC=… PIC_CACHE=… python3 process.py tz01,ls04 [front|back|side]
 # Proof sheets on both stage colours (#DACBB1 / #3B2C20):  python3 sheet.py --grounds <dir>
 # The 3D stills (3d-*.webp) are not made here: node cloth-lab/render-items.mjs (transparent too).
