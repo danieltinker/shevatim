@@ -3,9 +3,9 @@ usage: parse_all.py <worker_index> <n_workers> [all]   (default: first candidate
 import sys, os, json, cv2, numpy as np
 sys.path.insert(0, os.path.dirname(__file__))
 import models
-SRC = '/home/claude/media-src/img'; CACHE = os.environ.get('PIC_CACHE', '/home/claude/pic-cache')
+from paths import SRC, CACHE, SOURCES_JSON
 os.makedirs(CACHE, exist_ok=True)
-d = json.load(open(os.path.join(os.path.dirname(__file__), '../../db/picture-sources.json')))
+d = json.load(open(SOURCES_JSON))
 first = ['tz01', 'tz10', 'tz11', 'ls01', 'pa01', 'tz22', 'tz30', 'te02']
 files = []
 for code in first + [c for c in d if c not in first]:

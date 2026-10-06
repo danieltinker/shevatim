@@ -1,10 +1,10 @@
-"""Step 3: write shop/public/media/items/quality.json from the per-view meta (cache) + reviewed scores in scores.json.
+"""Step 3: write <out>/quality.json from the per-view meta (cache) + reviewed scores in scores.json.
 scores.json: {"<code>": {"<view>": [score, "notes"]}} filled by eye from the contact sheets; unreviewed views get a
 conservative automatic score from the pipeline's own flags."""
-import os, json
-HERE = os.path.dirname(os.path.abspath(__file__)); OUT = os.path.join(HERE, '../../public/media/items')
-CACHE = os.environ.get('PIC_CACHE', '/home/claude/pic-cache')
-S = json.load(open(os.path.join(HERE, '../../db/picture-sources.json')))
+import os, sys, json
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+from paths import CACHE, OUT, SOURCES_JSON
+S = json.load(open(SOURCES_JSON))
 R = json.load(open(os.path.join(HERE, 'scores.json'))) if os.path.exists(os.path.join(HERE, 'scores.json')) else {}
 D = R.get('_defaults', {})
 OV = json.load(open(os.path.join(HERE, 'overrides.json'))) if os.path.exists(os.path.join(HERE, 'overrides.json')) else {}

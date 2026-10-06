@@ -1,8 +1,9 @@
-"""Jewellery detail pictures: no cut-out. Crop to 3:4, tone darker / warmer, vignette to black so it sits on a black page.
+"""Jewellery detail pictures: no cut-out, they stay opaque photographs (not part of the transparent set).
+Crop to 3:4, tone darker / warmer, vignette to black.
 ne01: table photo of the shell necklace. br01: sharpest early frame of c_jewelry.mp4 (bracelets on the wrist; 720x960 video, so soft)."""
 import os, sys, json, subprocess, glob, cv2, numpy as np
-HERE = os.path.dirname(os.path.abspath(__file__)); OUT = os.path.join(HERE, '../../public/media/items')
-CACHE = os.environ.get('PIC_CACHE', '/home/claude/pic-cache')
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+from paths import SRC, MEDIA, CACHE, OUT
 
 def tone(img, vig=0.85, warm=1.05, gamma=1.18, cx=0.5, cy=0.5):
     f = img.astype(np.float32) / 255.0
@@ -21,13 +22,13 @@ def save(img, code):
         cv2.imwrite(os.path.join(d, 'detail-%s.webp' % n), big if n == '1600' else cv2.resize(big, s, interpolation=cv2.INTER_AREA), [cv2.IMWRITE_WEBP_QUALITY, 84])
 
 def necklace(src='IMG_6526.jpg', box=(60, 200, 1410, 2000)):
-    im = cv2.imread('/home/claude/media-src/img/' + src); x0, y0, x1, y1 = box
+    im = cv2.imread(os.path.join(SRC, src)); x0, y0, x1, y1 = box
     save(tone(im[y0:y1, x0:x1], cx=0.5, cy=0.58), 'ne01')
     json.dump(dict(source=src), open(os.path.join(CACHE, 'meta_ne01_detail.json'), 'w'))
 
 def bracelet(box=(131, 150, 531, 683)):
     tmp = os.path.join(CACHE, 'brframes'); os.makedirs(tmp, exist_ok=True)
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', '/home/claude/media-src/seg/c_jewelry.mp4', '-t', '1.3', os.path.join(tmp, 'f_%03d.png')], check=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', os.path.join(MEDIA, 'c_jewelry.mp4'), '-t', '1.3', os.path.join(tmp, 'f_%03d.png')], check=True)
     x0, y0, x1, y1 = box; best = None
     for f in sorted(glob.glob(os.path.join(tmp, 'f_*.png'))):
         c = cv2.imread(f)[y0:y1, x0:x1]; s = cv2.Laplacian(cv2.cvtColor(c, cv2.COLOR_BGR2GRAY), cv2.CV_64F).var()

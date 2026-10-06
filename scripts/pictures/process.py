@@ -1,19 +1,23 @@
-"""Step 2: cut the item out of the fitting-room photo and compose it on black.
+"""Step 2: cut the item out of the fitting-room photo and write it as a transparent cut-out.
 
 Inputs : cached isnet matte + u2net_cloth_seg label map per source photo (see parse_all.py),
-         shop/db/picture-sources.json, optional overrides.json ({code: {view: {"src": "IMG.jpg", ...flags}}}).
-Outputs: shop/public/media/items/<code>/<view>-{480,960,1600}.webp (360x480, 720x960, 1200x1600, pure black bg),
-         <code>/fabric-1024.webp for tzitziyot, and a meta json per view in the cache (used by quality.py).
+         db/picture-sources.json, optional overrides.json ({code: {view: {"src": "IMG.jpg", ...flags}}}).
+Outputs: <out>/<code>/<view>-{480,960,1600}.webp (360x480, 720x960, 1200x1600) as RGBA WebP: straight alpha, the
+         background fully transparent, garment colour bled outward under the alpha (no fringe on light or dark grounds),
+         <code>/fabric-1024.webp for tzitziyot (opt-in), and a meta json per view in the cache (used by quality.py).
 usage  : process.py all | tz01,tz02 ...   [-j N]
+paths  : environment, see paths.py / run.sh: PIC_SRC (source photos), PIC_CACHE (masks), PIC_OUT (item folders),
+         PIC_SOURCES (picture-sources.json). PIC_KEEP=1 writes only the views whose files already exist in PIC_OUT
+         (re-cut of a curated set without bringing the dropped views back).
 No generative step anywhere: masks come from segmentation + colour/geometry rules, pixels are the real photo.
 """
 import sys, os, json, cv2, numpy as np
 from multiprocessing import Pool
+from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = '/home/claude/media-src/img'
-CACHE = os.environ.get('PIC_CACHE', '/home/claude/pic-cache')
-OUT = os.path.join(HERE, '../../public/media/items')
-SOURCES = json.load(open(os.path.join(HERE, '../../db/picture-sources.json')))
+sys.path.insert(0, HERE)
+from paths import SRC, CACHE, OUT, SOURCES_JSON
+SOURCES = json.load(open(SOURCES_JSON))
 OVR = json.load(open(os.path.join(HERE, 'overrides.json'))) if os.path.exists(os.path.join(HERE, 'overrides.json')) else {}
 CW, CH = 1200, 1600
 OLIVE_ITEMS = {'tz11', 'tz16', 'tz18', 'tz28', 'pa01'}
@@ -349,17 +353,119 @@ def compose(img, alpha, body, strings, o):
         ca = ca * cv2.dilate(keep[cl].astype(np.uint8), np.ones((5, 5), np.uint8))
     ca = cv2.GaussianBlur(cv2.erode(ca, np.ones((3, 3), np.uint8)), (0, 0), 0.8)
     ca = np.clip((ca - 0.12) / 0.8, 0, 1)
-    can = can * (np.minimum(ca / np.maximum(ca0, 1e-3), 1.0))[..., None]
-    can = np.clip(can * fade[..., None], 0, 1); can[ca < 0.02] = 0
-    return (can * 255 + 0.5).astype(np.uint8), ca, float(sc)
+    # The black pictures were  can * min(ca / ca0, 1) * fade  =  colour * min(ca, ca0): the same colour and the same
+    # coverage are kept here, only un-premultiplied (colour = can / warped alpha) instead of flattened on black.
+    aw = ca0 / np.maximum(fade, 1e-6); aw[fade[:, 0] <= 0] = 0
+    col = np.clip(can / np.maximum(aw, 1e-4)[..., None], 0, 1)
+    a = np.where(ca0 >= 1e-3, np.minimum(ca, ca0), 0.0).astype(np.float32); a[ca < 0.02] = 0
+    return (col, a, aw > 0.05), None, float(sc)
 
 
-def save_webps(can, code, view):
+RAW = os.environ.get('PIC_RAW')   # optional folder: the cut-out before the edge clean-up, so edges.py can redo only that
+def dark_rim(col, a, o):
+    """Override "darkrim" (light, unprinted cloth only): dark bits of trousers / room that sit in the outline between
+    fringe tassels. They were invisible on black and are specks on sand. Removed when they are much darker than the
+    cloth around them, lie within a few pixels of the outline and are open to the outside. Never on by default: on a
+    dark or printed garment this would eat the garment."""
+    thr = o['darkrim'] if isinstance(o['darkrim'], (int, float)) and not isinstance(o['darkrim'], bool) else 0.55
+    lum = col @ np.array([0.299, 0.587, 0.114], np.float32)
+    solid = a > 0.5; k = solid.astype(np.float32)
+    loc = cv2.GaussianBlur(lum * k, (0, 0), 25) / np.maximum(cv2.GaussianBlur(k, (0, 0), 25), 1e-3)
+    r = int(o.get('darkrim_px', 14))
+    band = solid & (cv2.distanceTransform(solid.astype(np.uint8), cv2.DIST_L2, 3) <= r)
+    dark = band & (lum < thr * loc)
+    num, lab = cv2.connectedComponents(dark.astype(np.uint8), connectivity=8)
+    open_ = cv2.dilate((~solid).astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
+    ids = np.unique(lab[dark & open_]); ids = ids[ids > 0]
+    rem = np.isin(lab, ids)
+    # pockets closed in by tassels: only when they are nearly black against the cloth
+    ratio = np.bincount(lab.ravel(), (lum / np.maximum(loc, 1e-3)).ravel(), num) / np.maximum(np.bincount(lab.ravel(), minlength=num), 1)
+    deep = np.nonzero(ratio < 0.35)[0]; rem |= np.isin(lab, deep[deep > 0])
+    if not rem.any(): return a
+    rem = cv2.dilate(rem.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(np.float32)
+    return a * np.clip(1 - cv2.GaussianBlur(rem, (0, 0), 0.8) * 1.5, 0, 1)
+
+
+def view_overrides(code, view):
+    o = dict(OVR.get(code, {}).get('*', {})); o.update(OVR.get(code, {}).get(view, {})); return o
+
+
+def finish(raw, code, view):
+    col, a, valid = raw
+    if RAW:
+        os.makedirs(RAW, exist_ok=True); b = os.path.join(RAW, '%s_%s' % (code, view))
+        cv2.imwrite(b + '_rgb.png', cv2.cvtColor((col * 255 + 0.5).astype(np.uint8), cv2.COLOR_RGB2BGR), [cv2.IMWRITE_PNG_COMPRESSION, 1])
+        cv2.imwrite(b + '_a.png', (a * 65535 + 0.5).astype(np.uint16), [cv2.IMWRITE_PNG_COMPRESSION, 1])
+        cv2.imwrite(b + '_v.png', valid.astype(np.uint8) * 255, [cv2.IMWRITE_PNG_COMPRESSION, 1])
+    o = view_overrides(code, view)
+    if o.get('darkrim'): a = dark_rim(col, a, o)
+    col, a = clean_edges(col, a, valid)
+    save_webps(col, a, code, view)
+    return a
+
+
+def spread(col, known, passes):
+    """grow the colours of the known pixels outward by `passes` pixels (average of the known neighbours)"""
+    col = col * known[..., None]; kn = known.astype(np.float32)
+    for _ in range(passes):
+        k2 = cv2.blur(kn, (3, 3)); c2 = cv2.blur(col, (3, 3))
+        new = (kn == 0) & (k2 > 1e-6)
+        col[new] = c2[new] / k2[new][:, None]; kn[new] = 1
+    return col, kn > 0
+
+
+def fill_far(col, known):
+    """push-pull: every unknown pixel takes a smooth average of the known colours around it (whole canvas)"""
+    k = known.astype(np.float32); c = col * k[..., None]
+    pyr = [(c, k)]
+    while min(pyr[-1][1].shape) > 2:
+        c0, k0 = pyr[-1]; sz = ((k0.shape[1] + 1) // 2, (k0.shape[0] + 1) // 2)
+        pyr.append((cv2.resize(c0, sz, interpolation=cv2.INTER_AREA), cv2.resize(k0, sz, interpolation=cv2.INTER_AREA)))
+    cu, ku = pyr[-1]; out = cu / np.maximum(ku, 1e-6)[..., None]
+    if ku.max() <= 0: return col
+    for c0, k0 in pyr[-2::-1]:
+        up = cv2.resize(out, (k0.shape[1], k0.shape[0]), interpolation=cv2.INTER_LINEAR)
+        w = np.clip(k0 * 4, 0, 1)[..., None]            # any known coverage at this level wins over the coarser guess
+        out = w * (c0 / np.maximum(k0, 1e-6)[..., None]) + (1 - w) * up
+    return np.where(known[..., None], col, out)
+
+
+def clean_edges(col, a, valid):
+    """Edges for any ground. The photo's outline pixels are a mix of cloth and whatever was behind it (wall, trousers,
+    skin): invisible on black, a fringe on sand. So: (1) tighten the coverage a little, (2) replace the colour of the
+    soft outline by cloth colour bled out from just inside the outline, (3) fill everything empty with the same bled
+    colour so neither the encoder nor a scaling browser can mix a foreign colour in. Fully covered pixels keep the
+    photo's own colour untouched."""
+    a = np.clip((a - EDGE_T0) / (1 - EDGE_T0), 0, 1)
+    solid = (a >= 0.985) & valid
+    core = cv2.erode(solid.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)      # one pixel inside the outline
+    b1, r1 = spread(col, core, 6)
+    # thin things (strings, fringe) have no solid core nearby: bleed from their own ridge instead
+    ridge = (a >= 0.7) & valid & ~r1
+    b2, r2 = spread(col, ridge, 4)
+    bled = np.where(r1[..., None], b1, b2); reach = r1 | r2
+    w = np.clip((a - 0.6) / 0.385, 0, 1); w = w * w * (3 - 2 * w)                          # 1 = the photo's own colour
+    w = np.where(reach, w, np.where(valid, 1.0, 0.0)).astype(np.float32)[..., None]
+    col = np.where(reach[..., None], bled, col) * (1 - w) + col * w
+    col = fill_far(col, reach | (valid & (a > 0.02)))
+    return np.clip(col, 0, 1), a.astype(np.float32)
+EDGE_T0 = float(os.environ.get('PIC_EDGE_T0', 0.10))
+
+
+WEBP = dict(quality=int(os.environ.get('PIC_Q', 84)), alpha_quality=100, method=6, exact=True)   # lossless alpha; exact keeps the bled colour under it
+def save_webps(col, a, code, view):
+    """col: straight RGB float (bled over the whole canvas), a: coverage float. Smaller sizes are scaled premultiplied."""
     d = os.path.join(OUT, code); os.makedirs(d, exist_ok=True)
-    bgr = cv2.cvtColor(can, cv2.COLOR_RGB2BGR)
     for name, (ww, hh) in {'1600': (1200, 1600), '960': (720, 960), '480': (360, 480)}.items():
-        im = bgr if ww == 1200 else cv2.resize(bgr, (ww, hh), interpolation=cv2.INTER_AREA)
-        cv2.imwrite(os.path.join(d, '%s-%s.webp' % (view, name)), im, [cv2.IMWRITE_WEBP_QUALITY, 84])
+        if os.environ.get('PIC_KEEP') and not os.path.exists(os.path.join(d, '%s-%s.webp' % (view, name))): continue
+        if ww == 1200: c, al = col, a
+        else:
+            al = cv2.resize(a, (ww, hh), interpolation=cv2.INTER_AREA)
+            pm = cv2.resize(col * a[..., None], (ww, hh), interpolation=cv2.INTER_AREA)
+            c = (pm + 0.02 * cv2.resize(col, (ww, hh), interpolation=cv2.INTER_AREA)) / (al + 0.02)[..., None]
+        al8 = (np.clip(al, 0, 1) * 255 + 0.5).astype(np.uint8); al8[al8 < 3] = 0
+        rgba = np.dstack([(np.clip(c, 0, 1) * 255 + 0.5).astype(np.uint8), al8])
+        Image.fromarray(rgba, 'RGBA').save(os.path.join(d, '%s-%s.webp' % (view, name)), 'WEBP', **WEBP)
 
 
 def fabric(code, img, alpha, body, meta):
@@ -423,8 +529,8 @@ def run_view(code, view, src=None):
         rgb, alpha, body, strings = rgb[ya:yb, xa:xb], alpha[ya:yb, xa:xb], body[ya:yb, xa:xb], strings[ya:yb, xa:xb]
         if not body.any(): body = alpha > 0.5
     img = relight(rgb, alpha, wall)
-    can, ca, sc = compose(img, alpha, body, strings, o)
-    save_webps(can, code, view)
+    raw, _, sc = compose(img, alpha, body, strings, o)
+    ca = finish(raw, code, view)
     meta.update(source=f, scale=round(sc, 3), strings=bool(strings.any()), dark_room=wall is None,
                 item_frac=round(float((ca > 0.5).mean()), 3))
     if cat == 'poncho' and view == 'front' and os.environ.get('PIC_FABRIC'):   # swatches are owned by the 3D work now: opt-in only
@@ -438,8 +544,8 @@ def fallback_view(code, view):
     f = SOURCES[code][view][0]; rgb, A, C = load(f)
     S = largest(A > 0.5); sk = cv2.dilate(skin_mask(rgb).astype(np.uint8), ell(31)).astype(bool)
     alpha = A * (S & ~sk); body = S & ~sk
-    can, ca, sc = compose(relight(rgb, alpha, None), alpha, body, np.zeros_like(S), {})
-    save_webps(can, code, view)
+    raw, _, sc = compose(relight(rgb, alpha, None), alpha, body, np.zeros_like(S), {})
+    finish(raw, code, view)
     return dict(source=f, notes=['pipeline failed on this view: crude silhouette-minus-skin cut used'], fallback=True)
 
 
@@ -455,8 +561,12 @@ def job(a):
 
 
 VIEWS = os.environ.get('PIC_VIEWS', 'front,back,side,detail').split(',')
+def wanted(code, v):
+    """PIC_KEEP: only the views that are published (files exist); a poncho's front is still computed, its colours are reused by the back"""
+    if not os.environ.get('PIC_KEEP'): return True
+    return os.path.exists(os.path.join(OUT, code, v + '-1600.webp')) or (category(code) == 'poncho' and v == 'front')
 def job_item(code):
-    return [job((code, v)) for v in ('front', 'back', 'side', 'detail') if v in SOURCES[code] and v in VIEWS]
+    return [job((code, v)) for v in ('front', 'back', 'side', 'detail') if v in SOURCES[code] and v in VIEWS and wanted(code, v)]
 
 
 if __name__ == '__main__':

@@ -1,10 +1,10 @@
 """Round 2: publish only clean real cut-outs. Reads curation.json ({code: {view: [score, note]}} = the views to publish,
 in display order), deletes every other <view>-*.webp from public/media/items (never fabric-1024.webp or 3d-*),
-writes shop/db/pictures-final.json and quality.json (published views only) and the final contact sheets."""
+writes db/pictures-final.json and quality.json (published views only) and the final contact sheets."""
 import os, sys, json, glob
-HERE = os.path.dirname(os.path.abspath(__file__)); OUT = os.path.join(HERE, '../../public/media/items')
-CACHE = os.environ.get('PIC_CACHE', '/home/claude/pic-cache')
-S = json.load(open(os.path.join(HERE, '../../db/picture-sources.json')))
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+from paths import CACHE, OUT, SOURCES_JSON, DB
+S = json.load(open(SOURCES_JSON))
 K = json.load(open(os.path.join(HERE, 'curation.json')))
 final, q, dropped = {}, {}, []
 for code in S:
@@ -20,7 +20,7 @@ for code in S:
         if v in keep: continue
         for f in glob.glob(os.path.join(OUT, code, v + '-*.webp')):
             os.remove(f); dropped.append(os.path.relpath(f, OUT))
-json.dump(final, open(os.path.join(HERE, '../../db/pictures-final.json'), 'w'), indent=1)
+json.dump(final, open(os.path.join(DB, 'pictures-final.json'), 'w'), indent=1)
 json.dump(q, open(os.path.join(OUT, 'quality.json'), 'w'), indent=1, ensure_ascii=False)
 from collections import Counter
 print('published', sum(len(v) for v in final.values()), 'deleted files', len(dropped))

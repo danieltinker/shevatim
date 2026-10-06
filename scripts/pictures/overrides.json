@@ -115,7 +115,9 @@
       0.688
      ]
     ]
-   ]
+   ],
+   "darkrim": true,
+   "darkrim_px": 30
   }
  },
  "ls13": {
@@ -185,7 +187,9 @@
       0.9395
      ]
     ]
-   ]
+   ],
+   "darkrim": true,
+   "darkrim_px": 20
   }
  },
  "ls01": {
@@ -548,7 +552,8 @@
       0.662
      ]
     ]
-   ]
+   ],
+   "darkrim": true
   },
   "back": {
    "erase": [
@@ -570,7 +575,8 @@
       0.785
      ]
     ]
-   ]
+   ],
+   "darkrim": true
   }
  },
  "tz01": {
@@ -612,7 +618,11 @@
       0.9
      ]
     ]
-   ]
+   ],
+   "darkrim": true
+  },
+  "front": {
+   "darkrim": true
   }
  },
  "tz02": {
@@ -660,7 +670,8 @@
       0.575
      ]
     ]
-   ]
+   ],
+   "darkrim": true
   }
  },
  "tz04": {
@@ -913,6 +924,16 @@
      ]
     ]
    ]
+  }
+ },
+ "tz29": {
+  "back": {
+   "darkrim": true,
+   "darkrim_px": 40
+  },
+  "front": {
+   "darkrim": true,
+   "darkrim_px": 40
   }
  }
 }
