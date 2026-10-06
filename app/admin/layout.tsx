@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   icons: ICONS,
   robots: { index: false, follow: false, nocache: true },
 };
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#E9E5DC" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#EBE0CD" };
 
 // The back office is its own root layout (the storefront's root layouts live in their route groups), so it
 // renders its own <html> and <body> and loads none of the storefront's global CSS. The app switches lang/dir

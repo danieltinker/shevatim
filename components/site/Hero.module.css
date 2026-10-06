@@ -5,7 +5,7 @@
   --cream: #F2E8D8;
   --fg: var(--cream); --bg: rgb(var(--shade)); --accent: var(--cream);
   position: relative; overflow: hidden; background: rgb(var(--shade)); color: var(--cream);
-  block-size: calc(100svh - var(--ann-h)); min-block-size: 520px;
+  block-size: calc(100svh - var(--ann-h)); min-block-size: min(520px, calc(100svh - var(--ann-h)));
   margin-block-start: calc(-1 * var(--header-h));
   display: flex; align-items: flex-end; justify-content: center;
 }
@@ -41,6 +41,14 @@
 @media (max-width: 767px) {
   .copy { padding-block-end: 88px; }
   .controls { inset-block-end: 20px; }
+}
+
+/* a phone held sideways: everything sits low, inside the shade, and fits the short screen */
+@media (max-height: 480px) {
+  .ink { inline-size: min(40vw, 46vh); }
+  .copy { padding-block-end: 20px; }
+  .line { font-size: 17px; margin-block-start: 4px; }
+  .cta { margin-block-start: 12px; }
 }
 
 /* the one orchestrated moment: the wordmark, the line and the button rise and settle in turn, once */

@@ -122,8 +122,8 @@ export function Categories() {
             return (
               <li key={c.key}>
                 <CategoryTile href={`/${locale}/shop/?cat=${c.key}`} name={tr(c.name, locale)} soon={empty ? t.home.comingSoon : null} clip={clip}>
-                  {still ? <span className={s.catZoom} style={{ transform: `scale(${STILL[c.key].zoom ?? 1})`, transformOrigin: STILL[c.key].origin }}><Pic className={s.catMedia} p={still} alt="" ratio="4 / 5" sizes="(min-width: 768px) 60vw, 100vw" position={STILL[c.key].position} /></span>
-                    : first ? <Pic className={s.catMedia} p={first} alt="" ratio="4 / 5" sizes="(min-width: 768px) 33vw, 50vw" /> : null}
+                  {still ? <span className={s.catZoom} style={{ transform: `scale(${STILL[c.key].zoom ?? 1})`, transformOrigin: STILL[c.key].origin }}><Pic className={s.catMedia} p={still} alt="" ratio="4 / 5" sizes="(min-width: 1024px) 52vw, 120vw" position={STILL[c.key].position} /></span>
+                    : first ? <Pic className={s.catMedia} p={first} alt="" ratio="4 / 5" sizes="(min-width: 1024px) 16vw, 33vw" /> : null}
                 </CategoryTile>
               </li>
             );

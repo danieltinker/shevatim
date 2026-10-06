@@ -32,7 +32,7 @@ const pageLang = (): string => {
 // The controls take the page theme: text colour strokes on a translucent page ground, accent focus ring.
 const RESET_CSS = `
 .tz-reset{position:absolute;inset-block-start:12px;inset-inline-end:12px;inline-size:40px;block-size:40px;padding:0;margin:0;border-radius:50%;
-border:1px solid var(--line, rgba(128,128,128,.4));background:color-mix(in srgb, var(--bg, #231911) 70%, transparent);color:var(--fg, #F2E8D8);cursor:pointer;display:grid;place-items:center;
+border:1px solid var(--line, rgba(128,128,128,.4));background:color-mix(in srgb, var(--bg, #30241A) 70%, transparent);color:var(--fg, #F2E8D8);cursor:pointer;display:grid;place-items:center;
 opacity:.72;transition:opacity 200ms ease,border-color 200ms ease;animation:tz-reset-in 500ms ease both;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .tz-reset:hover,.tz-reset:focus-visible{opacity:1;border-color:var(--fg, #F2E8D8)}
 .tz-reset:focus-visible{outline:2px solid var(--accent, #D5AC7A);outline-offset:3px}
@@ -186,7 +186,7 @@ export default function TzitzitCanvas({ spec, size = "adult", poster, className,
         <span
           aria-hidden="true"
           style={{
-            position: "absolute", insetInline: 0, bottom: 10, textAlign: "center", fontSize: 11, letterSpacing: "0.08em",
+            position: "absolute", insetInline: 0, bottom: 10, textAlign: "center", fontSize: 13,
             color: "var(--muted)", pointerEvents: "none", opacity: touched ? 0 : 1, transition: "opacity 600ms ease",
           }}
         >

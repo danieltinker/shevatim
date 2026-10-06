@@ -6,7 +6,8 @@ export const THEME_KEY = "shv-theme";
 export type Theme = "light" | "dark";
 
 /** Runs in the document head before the first paint, so the saved theme never flashes. Light is the default. */
-export const THEME_BOOT = `try{var t=localStorage.getItem("${THEME_KEY}");document.documentElement.dataset.theme=t==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}`;
+export const THEME_COLOR: Record<Theme, string> = { light: "#F4EDE0", dark: "#30241A" };
+export const THEME_BOOT = `try{var t=localStorage.getItem("${THEME_KEY}");document.documentElement.dataset.theme=t==="dark"?"dark":"light";if(t==="dark"){var f=function(){var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content","${"#30241A"}")};f();document.addEventListener("DOMContentLoaded",f)}}catch(e){document.documentElement.dataset.theme="light"}`;
 
 const current = (): Theme => (typeof document !== "undefined" && document.documentElement.dataset.theme === "dark" ? "dark" : "light");
 
@@ -14,13 +15,14 @@ const current = (): Theme => (typeof document !== "undefined" && document.docume
 export default function ThemeToggle({ className }: { className?: string }) {
   const { t } = useI18n();
   const [theme, setTheme] = useState<Theme>("light");
-  useEffect(() => { setTheme(current()); }, []);
+  const paintBar = (th: Theme) => document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR[th]);
+  useEffect(() => { setTheme(current()); paintBar(current()); }, []);
   const flip = () => {
     const next: Theme = current() === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
     try { window.localStorage.setItem(THEME_KEY, next); } catch { /* ignore */ }
     setTheme(next);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#231911" : "#F4EDE0");
+    paintBar(next);
   };
   const label = theme === "dark" ? t.theme.toLight : t.theme.toDark;
   return (

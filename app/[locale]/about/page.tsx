@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = getDict(locale);
   return pageMeta(locale, "/about/", t.about.title, t.meta.about);
 }
-const PICS: [string, boolean][] = [["yog06146", true], ["img_1921", false], ["img_1955", false], ["img_1933", false], ["img_1951", false], ["yog06122", true]];
+const PICS: [string, boolean][] = [["yog06146", true], ["img_1921", false], ["img_1948", false], ["img_1909", false], ["img_1951", false], ["yog06122", true]];
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const locale = (await params).locale as Locale;

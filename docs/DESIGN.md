@@ -14,13 +14,13 @@ dark keeps brown, beige and earth, never plain black". He likes the motion on th
 Two themes, set by `data-theme` on `<html>` (`light` is the default; the visitor's choice is remembered).
 | Token | Light ("day") | Dark ("night") | Use |
 |---|---|---|---|
-| `--bg` | `#F4EDE0` cream sand | `#231911` deep earth | page ground |
-| `--surface` | `#EBE0CD` warm beige | `#2D2118` | alternate sections, cards, the header once scrolled |
-| `--stage` | `#DACBB1` dune | `#3B2C20` | behind product pictures (they are cut-outs with transparency) |
+| `--bg` | `#F4EDE0` cream sand | `#30241A` walnut earth | page ground |
+| `--surface` | `#EBE0CD` warm beige | `#3A2D21` | alternate sections, cards, the header once scrolled |
+| `--stage` | `#DACBB1` dune | `#48382B` | behind product pictures (they are cut-outs with transparency) |
 | `--fg` | `#33261B` earth | `#F2E8D8` cream | text |
 | `--muted` | `#625341` | `#B9A78F` | secondary text |
 | `--accent` | `#784B25` clay | `#D5AC7A` sand gold | links, focus ring, the active control, one small detail per view |
-| `--accent-ink` | `#FBF6EC` | `#231911` | text on an accent fill |
+| `--accent-ink` | `#FBF6EC` | `#30241A` | text on an accent fill |
 | `--line` | `rgba(51,38,27,.16)` | `rgba(242,232,216,.16)` | hairlines |
 | `--line-strong` | see `app/globals.css` | | borders of inputs and outlined buttons |
 | `--warn` | `#8C3B1F` burnt clay | `#E9A587` | form errors only |
@@ -57,10 +57,12 @@ Text contrast: body and secondary text at least 4.5:1 on `--bg`, `--surface` and
    sound and pause. The title's entrance motion stays. No stone strip, no second button, no tiles on this screen.
 2. **The collection**: small label, the collection's name, one sentence, four pieces, one button "See the
    collection" and a quiet text link "All pieces" (the shop).
-3. **Shop by category**: the six categories as calm picture tiles (3 across on desktop, 2 on phones).
+3. **Shop by category**: the six categories as a compact index of small picture tiles (six in one row on
+   desktop, three across below). They are smaller than the product tiles above them: the products lead.
 4. **The twelve tribes** (the brand's idea, told calmly): heading and two sentences; the twelve stones; for the
    chosen tribe its name, ONE verse (Hebrew with nikud; translation and reference under it in English and French),
-   two lines about the tribe, and one link "The pieces of <tribe>". No product tiles inside this section.
+   two lines about the tribe, and two quiet links: "The pieces of <tribe>" and "The story of <tribe>". No product
+   tiles inside this section. All twelve are also listed on `/tribes/`, where the header's "Tribes" link leads.
 5. **Lookbook**: five or six campaign pictures with air between them.
 6. **The crew**: three sentences and a row of four pictures.
 7. **How reserving works**: three steps, then the tzitzit verse.
@@ -71,7 +73,7 @@ The live 3D cloth leaves the home page; it stays on each tzitzit's own page.
 - Header: `--bg` (transparent over the hero film, with a warm shade behind it), one hairline. Wordmark centred,
   drawn in `--fg` (use the wordmark PNG as a CSS mask so it follows the theme). Start side: menu (phones) or
   three links. End side: language, theme switch, sound, bag. On phones the header shows menu, wordmark, sound,
-  bag; language and theme sit in the menu and in the footer.
+  bag; language and theme sit in the top bar of the menu and in the footer.
 - Product tile: the cut-out on `--stage` (3:4, a little padding so the garment does not touch the edge), then the
   name (15px, 500) and the price when there is one. Hover on pointer devices swaps to the second picture.
 - Item page: the stage is `--stage`; thumbnails are small `--stage` tiles; the form column is calm: category
@@ -84,7 +86,8 @@ The live 3D cloth leaves the home page; it stays on each tzitzit's own page.
 Off until the visitor turns it on (browsers do not allow sound before a tap). One round button (speaker) in the
 header and on the hero: on = the film's own sound while the hero is on screen, plus a very quiet looping
 background track across the site; off = silence at once. The choice is remembered. The track pauses when the tab
-is hidden. `components/site/Sound.tsx` owns all of it.
+is hidden. `components/site/Sound.tsx` owns all of it. The levels live in the files (film sound about -21 LUFS,
+track about -28 LUFS), because iPhones play every file at full level whatever the page asks for.
 
 ## Theme switch
 One small round button (sun / moon), `components/site/Theme.tsx`. It sets `data-theme` on `<html>` and remembers

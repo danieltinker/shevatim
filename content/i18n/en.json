@@ -209,7 +209,8 @@
   },
   "sound": {
     "on": "Turn sound on",
-    "off": "Mute"
+    "off": "Mute",
+    "label": "Sound"
   },
   "theme": {
     "toDark": "Dark mode",

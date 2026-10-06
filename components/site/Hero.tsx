@@ -17,7 +17,7 @@ export default function Hero() {
   const { settings } = useCatalog();
   const video = useRef<HTMLVideoElement>(null);
   const [src, setSrc] = useState<{ mp4: string; poster: string } | null>(null);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false); // follows the film itself (a phone in low-power mode may not start it)
   const { attachFilm } = useSound();
   // the film keeps its own sound; the sound provider decides when it is heard
   useEffect(() => { attachFilm(video.current); return () => attachFilm(null); }, [src, attachFilm]);
@@ -28,8 +28,8 @@ export default function Hero() {
       const { desktop, mobile } = media.hero;
       if (window.matchMedia(PORTRAIT).matches) return { mp4: mobile.mp4, poster: mobile.poster };
       const saver = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-      // the 1080p film is large: only for wide screens that did not ask to save data
-      return { mp4: window.innerWidth >= 1600 && !saver ? desktop.mp4 : desktop.mp4_720, poster: desktop.poster };
+      // the 1080p film is large: only for screens that can show it (wide, or dense like a laptop's) and did not ask to save data
+      return { mp4: window.innerWidth * Math.min(2, window.devicePixelRatio || 1) >= 1600 && !saver ? desktop.mp4 : desktop.mp4_720, poster: desktop.poster };
     };
     setSrc(pick());
     const mq = window.matchMedia(PORTRAIT);
@@ -41,7 +41,7 @@ export default function Hero() {
   const toggle = () => {
     const v = video.current;
     if (!v) return;
-    if (v.paused) { void v.play().catch(() => undefined); setPlaying(true); } else { v.pause(); setPlaying(false); }
+    if (v.paused) void v.play().catch(() => undefined); else v.pause();
   };
 
   // the wordmark is drawn through its PNG as a mask, so it is the same cream as the line under it
@@ -61,7 +61,8 @@ export default function Hero() {
       </picture>
       {src ? (
         <video ref={video} key={src.mp4} className={s.media} src={asset(src.mp4)} poster={asset(src.poster)}
-          muted loop playsInline autoPlay preload="metadata" aria-hidden="true" tabIndex={-1} />
+          muted loop playsInline autoPlay preload="metadata" aria-hidden="true" tabIndex={-1}
+          onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
       ) : null}
       <div className={s.shade} aria-hidden="true" />
       <div className={s.copy}>

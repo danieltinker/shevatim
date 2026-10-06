@@ -19,7 +19,8 @@ const LOOK: { base: string; tall?: boolean; position?: string }[] = [
   { base: "yog06092_2" },
   { base: "yog06172", tall: true, position: "56% 50%" },
 ];
-export const CREW = ["img_1921", "img_1955", "img_1933", "img_1951"];
+// four different moments (not two of the motorbike and two of the camel)
+export const CREW = ["img_1933", "img_1951", "img_1909", "img_1948"];
 
 export function Lookbook({ t }: { t: Dict }) {
   const pics = LOOK.map((x) => ({ ...x, p: find(media.lookbook, x.base) })).filter((x): x is typeof x & { p: M } => !!x.p?.pick);
@@ -31,7 +32,7 @@ export function Lookbook({ t }: { t: Dict }) {
           {pics.map(({ p, tall, position }) => (
             <figure key={p.base} className={tall ? s.tall : s.wide}>
               <Pic p={p} alt="" ratio={tall ? "4 / 5" : "3 / 2"} position={position}
-                sizes={tall ? "(min-width: 900px) 32vw, 100vw" : "(min-width: 900px) 56vw, 100vw"} />
+                sizes={tall ? "(min-width: 640px) 64vw, 150vw" : "(min-width: 640px) 60vw, 100vw"} />
             </figure>
           ))}
         </div>

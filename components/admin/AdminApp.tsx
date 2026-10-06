@@ -227,7 +227,7 @@ export default function AdminApp() {
     <div className="adm" lang={lang} dir={lang === "he" ? "rtl" : "ltr"}>
       <header className="adm-top">
         <a className="adm-wordmark" href="#/reservations" onClick={(e) => { e.preventDefault(); go("reservations"); }}>
-          <img src={asset("/media/brand/wordmark-black-600.png")} alt="Shevatim" />
+          <span className="adm-mark" role="img" aria-label="Shevatim" style={{ ["--wm" as string]: `url("${asset("/media/brand/wordmark-white-600.png")}")` }} />
         </a>
         <nav className="adm-nav" aria-label={t.appTitle}>{navLinks("adm-nav-link")}</nav>
         <div className="adm-top-end">
@@ -280,7 +280,7 @@ function Login({ t, notice, langButton, onDone }: { t: (typeof STRINGS)["he"]; n
     <main className="adm-login">
       <div className="adm-login-lang">{langButton}</div>
       <form className="adm-panel adm-login-box" onSubmit={submit} noValidate>
-        <img className="adm-login-mark" src={asset("/media/brand/wordmark-black-600.png")} alt="Shevatim" />
+        <span className="adm-mark adm-login-mark" role="img" aria-label="Shevatim" style={{ ["--wm" as string]: `url("${asset("/media/brand/wordmark-white-600.png")}")` }} />
         <h1>{t.loginTitle}</h1>
         {notice && !error ? <p className="adm-notice" role="status">{notice}</p> : null}
         <label className="adm-label" htmlFor="adm-pw">{t.loginPassword}</label>

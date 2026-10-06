@@ -78,8 +78,7 @@ export default function Header() {
     document.addEventListener("keydown", key);
     document.documentElement.style.overflow = "hidden";
     const toggler = btn.current;
-    const first = stops();
-    (first[1] ?? first[0])?.focus(); // the first link; the close button sits just before it
+    (panel.current?.querySelector<HTMLElement>("nav a[href]") ?? stops()[0])?.focus(); // the first link; close, language and theme sit in the bar above it
     return () => {
       document.removeEventListener("keydown", key);
       document.documentElement.style.overflow = "";
@@ -102,7 +101,7 @@ export default function Header() {
           </button>
           <nav className={s.links} aria-label={t.nav.main}>
             <Link prefetch={false} href={`${home}collection/`} aria-current={here("collection/")}>{t.nav.collection}</Link>
-            <Link prefetch={false} href={`${home}#tribes`} aria-current={here("tribes/")}>{t.nav.tribes}</Link>
+            <Link prefetch={false} href={`${home}tribes/`} aria-current={here("tribes/")}>{t.nav.tribes}</Link>
             <Link prefetch={false} href={`${home}shop/`} aria-current={here("shop/")}>{t.nav.shop}</Link>
           </nav>
         </div>
@@ -125,11 +124,12 @@ export default function Header() {
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M5 5l14 14M19 5 5 19" /></svg>
             <span className="srOnly">{t.nav.close}</span>
           </button>
+          <div className={s.panelTools}><LangSwitch /><ThemeToggle /></div>
         </div>
         <nav className={s.panelNav} aria-label={t.nav.main}>
           <ul className={s.big}>
             <li><Link prefetch={false} href={`${home}collection/`} onClick={() => setOpen(false)}>{t.nav.collection}</Link></li>
-            <li><Link prefetch={false} href={`${home}#tribes`} onClick={() => setOpen(false)}>{t.nav.tribes}</Link></li>
+            <li><Link prefetch={false} href={`${home}tribes/`} onClick={() => setOpen(false)}>{t.nav.tribes}</Link></li>
             <li><Link prefetch={false} href={`${home}shop/`} onClick={() => setOpen(false)}>{t.nav.shop}</Link></li>
           </ul>
           <ul className={s.sub}>
@@ -141,7 +141,6 @@ export default function Header() {
             <li><Link prefetch={false} href={`${home}terms/`} onClick={() => setOpen(false)}>{t.nav.terms}</Link></li>
           </ul>
         </nav>
-        <div className={s.panelTools}><LangSwitch /><ThemeToggle /></div>
       </div>
     </>
   );

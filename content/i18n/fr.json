@@ -209,7 +209,8 @@
   },
   "sound": {
     "on": "Activer le son",
-    "off": "Couper le son"
+    "off": "Couper le son",
+    "label": "Son"
   },
   "theme": {
     "toDark": "Mode sombre",

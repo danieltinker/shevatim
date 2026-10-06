@@ -131,9 +131,8 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 export function SoundToggle({ className }: { className?: string }) {
   const { t } = useI18n();
   const { on, toggle } = useSound();
-  const label = on ? t.sound.off : t.sound.on;
   return (
-    <button type="button" className={`iconBtn ${className ?? ""}`} onClick={toggle} aria-pressed={on} aria-label={label} title={label}>
+    <button type="button" className={`iconBtn ${className ?? ""}`} onClick={toggle} aria-pressed={on} aria-label={t.sound.label} title={on ? t.sound.off : t.sound.on}>
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4Z" />
         {on ? <><path d="M15.5 9a4.2 4.2 0 0 1 0 6" /><path d="M18 6.5a7.8 7.8 0 0 1 0 11" /></> : <path d="m16 9.5 5 5m0-5-5 5" />}

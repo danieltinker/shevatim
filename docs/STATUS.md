@@ -2,6 +2,29 @@
 
 State as of 6 Oct 2026, 09:30 UTC. Built by Halom for the Shevatim brand.
 
+## Redesign "Midbar" (branch `desert`, 6 Oct 2026): waiting for approval
+Made after the brand owner's notes on the first version (too black, too many colours, crowded home page, wanted
+sound and a light/dark switch). Design rules: `docs/DESIGN.md`. It is **not on the live site yet**: Vercel builds
+every push to `desert` as a preview; merging `desert` into `main` puts it live.
+- Palette: cream sand, beige, dune, clay and earth only. Light theme by default; a small sun/moon button switches
+  to a walnut-brown dark theme (remembered per visitor). The tribes are no longer colour-coded.
+- Home page order: film with one line and one button, the collection (four pieces), a compact row of the six
+  categories, the twelve tribes (one verse each), lookbook, the crew, how reserving works. The 3D cloth moved to
+  the tzitziyot's own pages. New page `/tribes/` lists all twelve.
+- Product pictures are transparent cut-outs on a dune ground (no black boxes). All 96 3D stills were re-rendered.
+- Sound: off until the speaker button is tapped. Then the film's own sound plays while the film is on screen and
+  a quiet background loop plays across the site. The loop is an original, generated piece
+  (`scripts/audio/midbar_ambient.py`); the film's sound was cut from the camera originals, shot by shot
+  (`~/Documents/shevatim/_halom_work/hero_audio/`).
+- Back office and site icons follow the same palette.
+Not done / to check by a person:
+- **Nobody has listened to the sound.** Levels were measured (film about -21 LUFS, loop about -28 LUFS), but the
+  film's original sound may contain crew talk or wind, and the loop may simply not be to the owner's taste.
+- Not tried on a real iPhone or in Safari (the wordmark is drawn with a CSS mask; sound rules differ on iOS).
+- Some photo cut-outs are still rough (ls10 back, ls14 front, ls02 front, ls16, tz13 back, tz26 back, tz29);
+  cream garments are low in contrast on the sand ground.
+- The six category pictures are crops of campaign pictures and film stills, not product shots.
+
 ## Where everything is
 | Thing | Where |
 |---|---|
