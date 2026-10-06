@@ -1,20 +1,28 @@
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; }
-@media (min-width: 768px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 20px; } }
-@media (min-width: 1024px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 24px; } }
-.five { }
-@media (min-width: 1024px) { .five { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+/* 2 columns on phones, 3 on tablets, 4 on desktop */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 20px; }
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 28px; } }
+@media (min-width: 1024px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 56px 32px; } }
+@media (min-width: 1440px) { .grid { gap: 64px 40px; } }
+/* a tribe's five pieces: one row of five on desktop; on phones the first piece leads at full width, so the
+   other four close the block as two even rows (no single tile left over) */
+@media (max-width: 767px) { .five > :first-child:nth-last-child(5) { grid-column: 1 / -1; } }
+@media (min-width: 1024px) { .five { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 56px 28px; } }
 
 .tile { display: flex; flex-direction: column; text-decoration: none; color: var(--fg); min-inline-size: 0; }
-.frame { position: relative; display: block; aspect-ratio: 3 / 4; background: #000; overflow: hidden; }
-.pic { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; display: block; }
-/* the second picture is only rendered where a pointer can hover (see Tile.tsx) */
-.second { opacity: 0; transition: opacity .25s ease; }
-@media (hover: hover) and (pointer: fine) { .tile:hover .second, .tile:focus-visible .second { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .second { transition: none; } }
-.sold {
-  position: absolute; inset-block-start: 10px; inset-inline-start: 10px; padding: 3px 8px;
-  background: var(--bone); color: var(--ink); font-size: 12px; font-weight: 500;
+/* the stage: the garment is a transparent cut-out that never touches the edge */
+.frame { position: relative; display: block; aspect-ratio: 3 / 4; background: var(--stage); overflow: hidden; }
+.pic {
+  position: absolute; inset-block-start: 7%; inset-inline-start: 7%; inline-size: 86%; block-size: 86%;
+  object-fit: contain; object-position: center; display: block; transition: opacity .3s ease;
 }
-.name { margin-block-start: 12px; font-size: 15px; font-weight: 500; line-height: 1.35; text-wrap: balance; }
-.price { margin-block-start: 3px; font-size: 13px; line-height: 1.4; color: var(--muted); }
+/* the second picture exists only after the first hover or focus (see Tile.tsx) and shows once it has loaded */
+.second { opacity: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover .swap .first, .tile:focus-visible .swap .first { opacity: 0; }
+  .tile:hover .swap .second, .tile:focus-visible .swap .second { opacity: 1; }
+  .tile:hover .name { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 5px; }
+}
+@media (prefers-reduced-motion: reduce) { .pic { transition: none; } }
+.name { margin-block-start: 14px; font-size: 15px; font-weight: 500; line-height: 1.4; text-wrap: balance; }
+.price, .sold { margin-block-start: 2px; font-size: 13px; line-height: 1.5; color: var(--muted); }
 .tile:focus-visible { outline-offset: 6px; }

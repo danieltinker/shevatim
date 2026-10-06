@@ -10,20 +10,26 @@
   --fs-small: clamp(13px, .92vw, 14px);
   --gutter: 20px; --header-h: 60px; --ann-h: 0px;
   --section-y: clamp(88px, 11vw, 176px);
+  --on-film: #F2E8D8; /* cream text laid over the film and its earth shade: the same in both themes */
 }
 @media (min-width: 768px) { :root { --gutter: 40px; } }
 @media (min-width: 1024px) { :root { --gutter: 64px; --header-h: 68px; } }
 
 /* light ("day") is the default; the visitor's choice is set on <html data-theme> before the first paint */
 :root, :root[data-theme="light"] {
-  --bg: #F4EDE0; --surface: #EBE0CD; --stage: #DACBB1; --fg: #33261B; --muted: #6E5D4B;
-  --accent: #8A5A30; --accent-ink: #FBF6EC; --line: rgba(51, 38, 27, .16);
+  /* muted and accent sit a step deeper than the first draft of the table so that both pass 4.5:1 on --stage too */
+  --bg: #F4EDE0; --surface: #EBE0CD; --stage: #DACBB1; --fg: #33261B; --muted: #625341;
+  --accent: #784B25; --accent-ink: #FBF6EC; --line: rgba(51, 38, 27, .16);
+  --line-strong: rgba(51, 38, 27, .55); /* the edge of a form field: 3:1 against the ground */
+  --warn: #8C3B1F; /* terracotta: error text */
   --shade: 35, 25, 17; /* the earth shade laid over films and pictures, as r, g, b */
   color-scheme: light;
 }
 :root[data-theme="dark"] {
   --bg: #231911; --surface: #2D2118; --stage: #3B2C20; --fg: #F2E8D8; --muted: #B9A78F;
   --accent: #D5AC7A; --accent-ink: #231911; --line: rgba(242, 232, 216, .16);
+  --line-strong: rgba(242, 232, 216, .45);
+  --warn: #E9A587;
   --shade: 20, 14, 9;
   color-scheme: dark;
 }
@@ -65,22 +71,34 @@ button { cursor: pointer; }
 .small { font-size: var(--fs-small); }
 .srOnly { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
+/* small section label: introduces the heading under it */
+.label { font-size: 13px; line-height: 1.5; color: var(--muted); font-weight: 400; }
+.label a { text-decoration: none; }
+.label a:hover { color: var(--fg); }
+
+/* filled = the one main action of a view; hover turns it into an outline. Ghost = the outline. */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-block-size: 52px; padding: 12px 28px; border: 1px solid var(--fg); border-radius: 0;
-  background: var(--fg); color: var(--bg); font-weight: 500; font-size: 16px; line-height: 1.2; text-decoration: none; text-align: center;
+  min-block-size: 48px; padding: 12px 30px; border: 1px solid var(--fg); border-radius: 0;
+  background: var(--fg); color: var(--bg); font-weight: 500; font-size: 15px; line-height: 1.25; text-decoration: none; text-align: center;
   transition: background-color .2s ease, color .2s ease;
 }
-@media (hover: hover) { .btn:hover { background: transparent; color: var(--fg); } }
+@media (hover: hover) { .btn:hover:not([disabled]) { background: transparent; color: var(--fg); } }
 .btn[disabled], .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
 .btnGhost { background: transparent; color: var(--fg); }
-@media (hover: hover) { .btnGhost:hover { background: var(--fg); color: var(--bg); } }
+@media (hover: hover) { .btnGhost:hover:not([disabled]) { background: var(--fg); color: var(--bg); } }
 .link {
-  color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 6px;
-  font-weight: 500; display: inline-block; padding-block: 10px;
+  color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 6px;
+  font-weight: 500; font-size: 15px; display: inline-block; padding-block: 10px;
 }
-.link:hover { color: var(--accent); }
+@media (hover: hover) { .link:hover { color: var(--accent); } }
 @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+
+/* the wordmark: the PNG is only a mask, so the mark is drawn in the text colour of whatever it sits on */
+.wordmark {
+  display: block; aspect-ratio: 626 / 242; block-size: 40px; background: currentColor;
+  -webkit-mask: var(--wm) center / contain no-repeat; mask: var(--wm) center / contain no-repeat;
+}
 
 /* Hebrew verses: the printed-book voice */
 .verse { font-family: var(--font-display); font-weight: 500; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.7; text-wrap: pretty; }
@@ -92,7 +110,7 @@ button { cursor: pointer; }
 
 /* small round controls (theme, sound): quiet, the same everywhere */
 .iconBtn {
-  inline-size: 40px; block-size: 40px; display: inline-grid; place-items: center; flex: none;
+  inline-size: 44px; block-size: 44px; display: inline-grid; place-items: center; flex: none;
   background: none; border: 0; border-radius: 50%; color: inherit; cursor: pointer;
   transition: background-color .2s ease, color .2s ease;
 }

@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+import media from "@/content/media.json";
 import { asset } from "@/lib/asset";
 import type { Picture } from "@/lib/types";
 
@@ -26,4 +28,14 @@ export default function Pic({ p, alt, sizes, ratio, eager, className, fit = "cov
       style={{ aspectRatio: ratio ?? `${p.w} / ${p.h}`, objectFit: fit, objectPosition: position, width: "100%", height: "auto", display: "block" }}
     />
   );
+}
+
+/** The wordmark, drawn in the current text colour: the PNG (it has an alpha channel) is only a mask, so one
+ *  file serves both themes and the film. Give `label` where the mark is the only name of its element; leave
+ *  it out inside a link or heading that is named already. Its height is set with `block-size` (40px by default). */
+export function Wordmark({ className, label }: { className?: string; label?: string }) {
+  const style = { ["--wm" as string]: `url("${asset(media.brand.wordmarkWhiteSmall)}")` } as CSSProperties;
+  return label
+    ? <span className={`wordmark ${className ?? ""}`} style={style} role="img" aria-label={label} />
+    : <span className={`wordmark ${className ?? ""}`} style={style} aria-hidden="true" />;
 }

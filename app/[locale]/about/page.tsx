@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const t = getDict(locale);
   const team = media.team as unknown as Picture[];
   return (
-    <div className="onChalk section" style={{ minBlockSize: "76vh" }}>
+    <div className={s.text}>
       <div className="wrap">
         <div className={s.prose}>
           <h1>{t.about.title}</h1>
@@ -27,6 +27,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
           <p>{t.about.p2}</p>
           <p>{t.about.p3}</p>
           <p><Link className="btn" href={`/${locale}/collection/`}>{t.about.cta}</Link></p>
+          <p><Link className="link" href={`/${locale}/shop/`}>{t.nav.shop}</Link></p>
         </div>
         <div className={s.aboutPics}>
           {PICS.map(([b, wide]) => {

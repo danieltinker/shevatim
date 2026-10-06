@@ -9,11 +9,12 @@ import Providers from "@/components/site/Providers";
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import { THEME_BOOT } from "@/components/site/Theme";
-import { tribeViews } from "@/components/site/tribes";
 import { brandName, ICONS, metadataBase } from "@/components/site/meta";
 
 export const dynamicParams = false;
 export function generateStaticParams() { return LOCALES.map((locale) => ({ locale })); }
+// the browser bar: a meta tag cannot read a CSS token, so this repeats --bg of the light theme (Theme.tsx
+// rewrites it when the visitor switches)
 export const viewport: Viewport = { themeColor: "#F4EDE0", width: "device-width", initialScale: 1 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -27,7 +28,6 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const t = getDict(locale);
-  const tribes = tribeViews(locale).map((x) => ({ key: x.key, plain: x.plain }));
   return (
     <html lang={locale} dir={dirOf(locale)} data-theme="light" suppressHydrationWarning>
       <head>
@@ -37,7 +37,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
       <body>
         <Providers locale={locale} dict={t}>
           <a className="skip" href="#main">{t.nav.skip}</a>
-          <Header tribes={tribes} />
+          <Header />
           <main id="main">{children}</main>
           <Footer />
         </Providers>

@@ -119,7 +119,7 @@ export function ReserveView() {
   // until the saved bag has been read nothing below the heading is drawn, so the form cannot jump when the lines arrive
   if (!ready) {
     return (
-      <div className={`onBlack section ${s.page}`} aria-busy="true">
+      <div className={`section ${s.page}`} aria-busy="true">
         <div className={`wrap ${s.grid}`}>
           <section className={s.bag} aria-labelledby="bag-h"><h1 id="bag-h" className={s.h1}>{t.reserve.title}</h1></section>
         </div>
@@ -128,7 +128,7 @@ export function ReserveView() {
   }
   if (rows.length === 0) {
     return (
-      <div className={`onBlack section ${s.page}`}>
+      <div className={`section ${s.page}`}>
         <div className={`wrap ${s.empty}`}>
           <h1 id="bag-h" className={s.h1} tabIndex={-1}>{t.reserve.emptyTitle}</h1>
           <p className="muted">{t.reserve.emptyText}</p>
@@ -139,7 +139,7 @@ export function ReserveView() {
   }
 
   return (
-    <div className={`onBlack section ${s.page}`}>
+    <div className={`section ${s.page}`}>
       <div className={`wrap ${s.grid}`}>
         <section className={s.bag} aria-labelledby="bag-h">
           <h1 id="bag-h" className={s.h1} tabIndex={-1}>{t.reserve.title}</h1>
@@ -154,7 +154,8 @@ export function ReserveView() {
                   <div className={s.lineText}>
                     <p className={s.lineName}>{item ? <Link href={`/${locale}/item/?i=${encodeURIComponent(item.slug)}`}>{name}</Link> : <bdi>{name}</bdi>}</p>
                     {v ? <p className="small muted"><bdi>{tr(v.label, locale)}</bdi></p> : null}
-                    <p className="small muted">{price == null ? t.shop.priceLater : <bdi dir="ltr">{formatPrice(price)}</bdi>}</p>
+                    {/* a line shows a price only when it has one; that prices are confirmed later is said once, in the summary */}
+                    {price != null ? <p className="small muted"><bdi dir="ltr">{formatPrice(price)}</bdi></p> : null}
                     {gone ? <p className={`small ${s.gone}`} role={flagged ? "alert" : undefined}>{t.reserve.gone}</p> : null}
                     <div className={s.lineActions}>
                       <div className={s.qty} dir="ltr" role="group" aria-label={`${t.reserve.qty}${colon(locale)} ${name}`}>
@@ -239,12 +240,26 @@ export function DoneView({ code }: { code: string | null }) {
     setReceipt(r && isReservationCode(code) && r.code === code && Array.isArray(r.lines) ? r : null);
     setChecked(true);
   }, [code]);
-  if (!checked) return <div className={`onChalk section ${s.page}`} aria-busy="true" />;
+  // The tab says "received" only for a confirmed code; the static page carries a neutral title. The framework
+  // may write that neutral title again after this page has opened, so it is put back whenever <head> changes.
+  const confirmed = !!code && !!receipt;
+  useEffect(() => {
+    if (!confirmed) return;
+    const wanted = `${t.done.title} · ${locale === "he" ? "שבטים" : "Shevatim"}`;
+    const before = document.title;
+    const apply = () => { if (document.title !== wanted) document.title = wanted; };
+    apply();
+    const mo = new MutationObserver(apply);
+    mo.observe(document.head, { childList: true, subtree: true, characterData: true });
+    return () => { mo.disconnect(); if (document.title === wanted) document.title = before; };
+  }, [confirmed, locale, t.done.title]);
+  if (!checked) return <div className={`section ${s.page}`} aria-busy="true" />;
   if (!code || !receipt) {
     return (
-      <div className={`onChalk section ${s.page}`}>
+      <div className={`section ${s.page}`}>
         <div className={`wrap ${s.empty}`}>
-          <p>{t.done.noCode}</p>
+          <h1 className={s.h1}>{t.done.tab}</h1>
+          <p className="muted">{t.done.noCode}</p>
           <Link className="btn" href={`/${locale}/`}>{t.notFound.home}</Link>
         </div>
       </div>
@@ -255,10 +270,10 @@ export function DoneView({ code }: { code: string | null }) {
         [fill(t.done.whatsappText, { code }), ...(receipt?.lines ?? []).map((l) => `${l.qty} × ${tr(l.name, locale)}${l.variant ? ` (${tr(l.variant, locale)})` : ""}`)].join("\n"))}`
     : null;
   return (
-    <div className={`onChalk section ${s.page}`}>
+    <div className={`section ${s.page}`}>
       <div className={`wrap ${s.done}`}>
         <div>
-          <h1>{t.done.title}</h1>
+          <h1 className={s.doneTitle}>{t.done.title}</h1>
           <p className={s.codeLabel}>{t.done.code}</p>
           <p className={s.code}><bdi dir="ltr">{code}</bdi></p>
           <p className="muted">{t.done.keep}</p>
@@ -276,7 +291,7 @@ export function DoneView({ code }: { code: string | null }) {
                 {receipt.lines.map((l, i) => (
                   <li key={i}>
                     <span><bdi>{l.qty}</bdi> × {tr(l.name, locale)}{l.variant ? <span className="muted">, <bdi>{tr(l.variant, locale)}</bdi></span> : null}</span>
-                    <span className="muted small">{l.price == null ? t.shop.priceLater : <bdi dir="ltr">{formatPrice(l.price * l.qty)}</bdi>}</span>
+                    {l.price != null ? <span className="muted small"><bdi dir="ltr">{formatPrice(l.price * l.qty)}</bdi></span> : null}
                   </li>
                 ))}
               </ul>

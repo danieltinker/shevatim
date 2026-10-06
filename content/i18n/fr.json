@@ -83,7 +83,9 @@
     "priceLater": "Prix confirmé lors de notre prise de contact",
     "priceNote": "Les prix sont confirmés lors de notre prise de contact.",
     "soldOut": "Épuisé",
-    "collectionTitle": "La collection {name}"
+    "collectionTitle": "La collection {name}",
+    "collectionLabel": "La collection",
+    "lede": "Toutes les pièces au même endroit. Filtrez par catégorie et par tribu."
   },
   "item": {
     "choose": "Choisir une taille",
@@ -108,7 +110,9 @@
     "loading": "Chargement de la pièce",
     "noReserve": "Les réservations sont fermées pour le moment.",
     "render": "Rendu 3D. Le tissu a été photographié sur la pièce réelle.",
-    "noPictures": "Les photos de cette pièce arrivent."
+    "noPictures": "Les photos de cette pièce arrivent.",
+    "clothLabel": "Un tsitsit en 3D que l’on peut faire glisser",
+    "clothHint": "Faites glisser le tissu"
   },
   "reserve": {
     "title": "Votre réservation",
@@ -165,7 +169,8 @@
     "whatsappText": "Bonjour, j’ai fait une réservation sur le site Shevatim. Code de réservation : {code}",
     "call": "Prendre rendez-vous pour un appel ou un essayage",
     "back": "Retour à la collection",
-    "noCode": "Nous n’avons trouvé aucune réservation ici. Si vous en avez envoyé une, le code s’est affiché juste après l’envoi."
+    "noCode": "Nous n’avons trouvé aucune réservation ici. Si vous en avez envoyé une, le code s’est affiché juste après l’envoi.",
+    "tab": "Réservation"
   },
   "about": {
     "title": "À propos",

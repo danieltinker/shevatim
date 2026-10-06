@@ -14,7 +14,7 @@ export default function RootPage() {
     <>
       <script dangerouslySetInnerHTML={{ __html: go }} />
       <noscript>
-        <p style={{ padding: 32 }}><a href={he} style={{ color: "#F3EFE7" }}>{getDict("he").root.go}</a></p>
+        <p style={{ padding: 32 }}><a className="link" href={he}>{getDict("he").root.go}</a></p>
       </noscript>
     </>
   );

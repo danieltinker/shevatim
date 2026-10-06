@@ -83,7 +83,9 @@
     "priceLater": "Price confirmed when we contact you",
     "priceNote": "Prices are confirmed when we contact you.",
     "soldOut": "Sold out",
-    "collectionTitle": "The {name} collection"
+    "collectionTitle": "The {name} collection",
+    "collectionLabel": "The collection",
+    "lede": "Every piece in one place. Filter by category and by tribe."
   },
   "item": {
     "choose": "Choose a size",
@@ -108,7 +110,9 @@
     "loading": "Loading the piece",
     "noReserve": "Reservations are closed right now.",
     "render": "3D rendering. The cloth was photographed from the real piece.",
-    "noPictures": "Pictures of this piece are on their way."
+    "noPictures": "Pictures of this piece are on their way.",
+    "clothLabel": "A 3D tzitzit you can drag",
+    "clothHint": "Drag the cloth"
   },
   "reserve": {
     "title": "Your reservation",
@@ -165,7 +169,8 @@
     "whatsappText": "Hello, I made a reservation on the Shevatim site. Reservation code: {code}",
     "call": "Book a call or a fitting",
     "back": "Back to the collection",
-    "noCode": "We found no reservation here. If you sent one, the code appeared right after sending."
+    "noCode": "We found no reservation here. If you sent one, the code appeared right after sending.",
+    "tab": "Reservation"
   },
   "about": {
     "title": "About",

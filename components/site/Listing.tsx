@@ -8,49 +8,46 @@ import { useI18n } from "./Providers";
 import { StoneLabel, stoneStyle } from "./Stone";
 import { pick } from "@/lib/i18n";
 import Tile, { Grid, PriceNote } from "./Tile";
-import { tribeNameStyle, type TribeView } from "./tribes";
+import type { TribeView } from "./tribes";
 import ch from "./Choshen.module.css";
 import tile from "./Tile.module.css";
 import s from "./Page.module.css";
+
+const FIVE = "(min-width: 1024px) 19vw, (min-width: 768px) 33vw, 50vw";
 
 // ───────── collection: twelve tribes, up to five pieces each ─────────
 export function CollectionView({ tribes, slug }: { tribes: TribeView[]; slug: string | null }) {
   const { locale, t } = useI18n();
   const catalog = useCatalog();
   const col = currentCollection(catalog, slug);
-  if (!col) return <div className={`onBlack section ${s.page}`}><p className="muted">{t.shop.empty}</p></div>;
+  if (!col) return <div className={`section ${s.page}`}><p className="muted">{t.shop.empty}</p></div>;
   return (
-    <div className={`onBlack ${s.page}`}>
-      <header className={`section wrap ${s.pageHead}`}>
-        <p className="muted small">{t.home.collectionLabel}</p>
-        <h1 className={s.display}>{tr(col.name, locale)}</h1>
-        <p className="measure">{tr(col.description, locale)}</p>
+    <div className={s.page}>
+      <header className={`wrap ${s.pageHead}`}>
+        <p className="label">{t.shop.collectionLabel}</p>
+        <h1>{tr(col.name, locale)}</h1>
+        <p className={s.lede}>{tr(col.description, locale)}</p>
         <PriceNote items={tribes.flatMap((x) => slotItems(catalog, col, x.key))} className={s.priceNote} />
       </header>
-      <nav className={s.stickyStrip} aria-label={t.tribes.choose}>
-        <ul className={`${ch.stripList}`}>
+      <nav className={`wrap ${s.strip}`} aria-label={t.tribes.choose}>
+        <ul className={ch.stripList}>
           {tribes.map((x) => <li key={x.key}><a className={ch.stone} style={stoneStyle(x)} href={`#${x.key}`}><StoneLabel t={x} /></a></li>)}
         </ul>
       </nav>
       {tribes.map((x, i) => {
         const items = slotItems(catalog, col, x.key);
         return (
-          <section key={x.key} id={x.key} className={`wrap ${s.tribeBlock}`} aria-labelledby={`h-${x.key}`}>
-            <header className={s.tribeHead}>
-              <div className={s.tribeWho}>
-                <h2 id={`h-${x.key}`} className={s.tribeName} style={tribeNameStyle(x, "black")}>
-                  <Link href={`/${locale}/tribes/${x.key}/`}>{x.name}</Link>
-                </h2>
-                <p className={s.stoneLine}>
-                  <span className={s.dot} style={{ background: x.hex }} aria-hidden="true" />
-                  <span>{x.stone}, {x.stoneGloss}</span>
-                </p>
+          <section key={x.key} id={x.key} className={`wrap ${s.group}`} aria-labelledby={`h-${x.key}`}>
+            <header className={s.groupHead}>
+              <h2 id={`h-${x.key}`} className={s.groupName}><Link href={`/${locale}/tribes/${x.key}/`}>{x.name}</Link></h2>
+              <div className={s.groupSay}>
+                <p className={`verse ${s.groupVerse}`} lang="he" dir="rtl">{x.tagline.he}</p>
+                {x.tagline.tr ? <p className={s.groupVerseTr}>{x.tagline.tr}</p> : null}
               </div>
-              <p className={`verse ${s.oneVerse}`} lang="he" dir="rtl">{x.tagline.he}</p>
-              {x.tagline.tr ? <p className={`muted ${s.oneVerseTr}`}>{x.tagline.tr}</p> : null}
+              <Link className={`link ${s.groupLink}`} href={`/${locale}/tribes/${x.key}/`}>{fill(t.item.tribeLink, { name: x.plain })}</Link>
             </header>
             {items.length ? (
-              <Grid className={tile.five}>{items.map((it, j) => <Tile key={it.id} item={it} eager={i === 0 && j < 2} sizes="(min-width: 1024px) 19vw, (min-width: 768px) 33vw, 50vw" />)}</Grid>
+              <Grid className={tile.five}>{items.map((it, j) => <Tile key={it.id} item={it} eager={i === 0 && j < 2} sizes={FIVE} />)}</Grid>
             ) : <p className="muted">{t.shop.empty}</p>}
           </section>
         );
@@ -71,18 +68,23 @@ export function TribeItems({ tribe }: { tribe: TribeView }) {
   const ids = new Set(five.map((i) => i.id));
   const more = catalog.items.filter((i) => i.status === "published" && i.tribe === tribe.key && !ids.has(i.id)).sort((a, b) => a.sort - b.sort);
   return (
-    <div className={`onBlack section ${s.tribeItems}`}>
+    <div className={`section ${s.tribeItems}`}>
       <div className="wrap">
-        <PriceNote items={[...five, ...more]} className={`${s.priceNote} ${s.priceNoteTop}`} />
         {five.length ? (
           <section>
-            <h2 className={s.h2}>{fill(t.tribes.inCollection, { name: tribe.plain, collection: col ? tr(col.name, locale) : "" })}</h2>
-            <Grid className={tile.five}>{five.map((it) => <Tile key={it.id} item={it} sizes="(min-width: 1024px) 19vw, (min-width: 768px) 33vw, 50vw" />)}</Grid>
+            <header className={s.blockHead}>
+              <h2 className={s.h2}>{fill(t.tribes.inCollection, { name: tribe.plain, collection: col ? tr(col.name, locale) : "" })}</h2>
+              <PriceNote items={[...five, ...more]} className={s.priceNote} />
+            </header>
+            <Grid className={tile.five}>{five.map((it) => <Tile key={it.id} item={it} sizes={FIVE} />)}</Grid>
           </section>
         ) : null}
         {more.length ? (
-          <section className={s.moreBlock}>
-            <h2 className={s.h2}>{fill(t.tribes.more, { name: tribe.plain })}</h2>
+          <section className={five.length ? s.moreBlock : undefined}>
+            <header className={s.blockHead}>
+              <h2 className={s.h2}>{fill(t.tribes.more, { name: tribe.plain })}</h2>
+              {five.length ? null : <PriceNote items={more} className={s.priceNote} />}
+            </header>
             <Grid>{more.map((it) => <Tile key={it.id} item={it} />)}</Grid>
           </section>
         ) : null}
@@ -92,7 +94,7 @@ export function TribeItems({ tribe }: { tribe: TribeView }) {
   );
 }
 
-// ───────── shop: category tabs + the Choshen as tribe filter ─────────
+// ───────── shop: category tabs + the stones as tribe filter ─────────
 export function ShopView({ tribes, cat, tribe }: { tribes: TribeView[]; cat: string | null; tribe: string | null }) {
   const { locale, t } = useI18n();
   const catalog = useCatalog();
@@ -115,9 +117,13 @@ export function ShopView({ tribes, cat, tribe }: { tribes: TribeView[]; cat: str
     .sort((a, b) => a.sort - b.sort);
   const catEmpty = !!activeCat && !catalog.items.some((i) => i.category === activeCat.key);
   return (
-    <div className={`onBlack ${s.page}`}>
-      <header className={`section wrap ${s.pageHead} ${s.shopHead}`}>
+    <div className={s.page}>
+      <header className={`wrap ${s.pageHead}`}>
+        {activeCat ? <p className="label">{t.shop.title}</p> : null}
         <h1>{activeCat ? tr(activeCat.name, locale) : t.shop.title}</h1>
+        {activeCat ? null : <p className={s.lede}>{t.shop.lede}</p>}
+      </header>
+      <div className={`wrap ${s.filters}`}>
         <nav aria-label={t.shop.categories}>
           <ul className={s.tabs}>
             <li><Link href={href(null, tribe)} scroll={false} aria-current={!activeCat ? "page" : undefined}>{t.shop.all}</Link></li>
@@ -128,32 +134,35 @@ export function ShopView({ tribes, cat, tribe }: { tribes: TribeView[]; cat: str
         </nav>
         {/* a category with nothing in it yet (kippot) has nothing to filter */}
         {catEmpty ? null : (
-        <div className={s.filter}>
-          <p className={`small muted ${s.filterLabel}`}>{t.shop.tribeFilter}</p>
-          <ul className={ch.chips}>
-            {tribes.map((x) => {
-              const on = activeTribe?.key === x.key;
-              return (
-                <li key={x.key}>
-                  <Link className={ch.stone} style={stoneStyle(x)} href={href(cat, on ? null : x.key)} scroll={false} aria-current={on ? "true" : undefined}>
-                    <StoneLabel t={x} />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+          <div className={s.filter}>
+            <p className={`label ${s.filterLabel}`}>{t.shop.tribeFilter}</p>
+            <ul className={ch.chips}>
+              {tribes.map((x) => {
+                const on = activeTribe?.key === x.key;
+                return (
+                  <li key={x.key}>
+                    <Link className={ch.stone} style={stoneStyle(x)} href={href(cat, on ? null : x.key)} scroll={false} aria-current={on ? "true" : undefined}>
+                      <StoneLabel t={x} />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
-        <p className={`small muted ${s.count}`} aria-live="polite" hidden={catEmpty}>
-          <bdi>{fill(items.length === 1 ? pick(t.shop, "countOne", t.shop.count) : t.shop.count, { n: items.length })}</bdi>
-          {activeTribe ? <> <Link className={s.clear} href={href(cat, null)} scroll={false}>{t.shop.clear}</Link></> : null}
-        </p>
-        <PriceNote items={items} className={s.priceNote} />
-      </header>
+        <div className={s.meta} hidden={catEmpty}>
+          <p className={s.count} aria-live="polite">
+            <bdi>{fill(items.length === 1 ? pick(t.shop, "countOne", t.shop.count) : t.shop.count, { n: items.length })}</bdi>
+            {activeTribe ? <Link className={s.clear} href={href(cat, null)} scroll={false}>{t.shop.clear}</Link> : null}
+          </p>
+          <PriceNote items={items} className={s.priceNote} />
+        </div>
+      </div>
       <div className={`wrap ${s.listing}`}>
         {items.length ? <Grid>{items.map((it, i) => <Tile key={it.id} item={it} eager={i < 4} />)}</Grid>
           : catEmpty ? (
-            <div className={s.empty}><h2>{t.shop.comingTitle}</h2><p className="muted">{t.shop.comingText}</p></div>
+            <div className={s.empty}><h2>{t.shop.comingTitle}</h2><p className="muted">{t.shop.comingText}</p>
+              <Link className="link" href={href(null, null)} scroll={false}>{t.item.backToShop}</Link></div>
           ) : (
             <div className={s.empty}><p className="muted">{t.shop.empty}</p>
               <Link className="link" href={href(cat, null)} scroll={false}>{t.shop.clear}</Link></div>

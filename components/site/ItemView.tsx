@@ -9,7 +9,6 @@ import { fill, priceOf, tr } from "@/lib/format";
 import { pick, type Dict } from "@/lib/i18n";
 import { LOCALES, type Locale, type Picture } from "@/lib/types";
 import { asset } from "@/lib/asset";
-import { useNear } from "./HomeParts";
 import { pictureSrcSet, pictureUrl } from "./Pic";
 import { useI18n } from "./Providers";
 import { PriceLine } from "./Tile";
@@ -20,6 +19,20 @@ const SITE = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
 // while the 3D code is on its way the stage keeps its box (and shows the poster under this empty holder)
 const TzitzitCanvas = dynamic(() => import("@/components/cloth/TzitzitCanvas"), { ssr: false, loading: () => <div className={s.canvasHold} aria-hidden="true" /> });
 const CHOOSE: Record<Locale, string> = { he: "בחרו מידה קודם", en: "Choose a size first", fr: "Choisissez d’abord une taille" };
+
+/** True once the element has come near the viewport (and stays true): the 3D code is not asked for before. */
+function useNear<T extends Element>(margin: string) {
+  const ref = useRef<T>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || near) return;
+    const io = new IntersectionObserver((e) => { if (e.some((x) => x.isIntersecting)) setNear(true); }, { rootMargin: margin });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [near, margin]);
+  return [ref, near] as const;
+}
 
 function viewLabel(t: Dict, p: Picture, i: number) {
   const k = p.view ? (`view_${p.view}` as "view_front" | "view_back" | "view_side" | "view_detail") : null;
@@ -56,10 +69,10 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
     };
   }, [itemName, locale]);
 
-  if (pending) return <div className={`onBlack ${s.page} ${s.pending}`} aria-busy="true"><p className="srOnly">{t.item.loading}</p></div>;
+  if (pending) return <div className={`${s.page} ${s.pending}`} aria-busy="true"><p className="srOnly">{t.item.loading}</p></div>;
   if (!item) {
     return (
-      <div className={`onBlack section ${s.page}`}>
+      <div className={`section ${s.page}`}>
         <div className={`wrap ${s.missing}`}>
           <h1>{t.item.notFoundTitle}</h1>
           <p className="muted">{t.item.notFoundText}</p>
@@ -91,7 +104,7 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
 
   const here = (l: Locale) => `${SITE}${asset(`/${l}/item/`)}?i=${encodeURIComponent(item.slug)}`;
   return (
-    <div className={`onBlack ${s.page}`}>
+    <div className={s.page}>
       <link rel="canonical" href={here(locale)} />
       {LOCALES.map((l) => <link key={l} rel="alternate" hrefLang={l} href={here(l)} />)}
       <link rel="alternate" hrefLang="x-default" href={here("he")} />
@@ -123,7 +136,7 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
         </div>
 
         <div className={s.info}>
-          {category ? <Link className={`small muted ${s.crumb}`} href={`/${locale}/shop/?cat=${category.key}`}>{tr(category.name, locale)}</Link> : null}
+          {category ? <Link className={`label ${s.crumb}`} href={`/${locale}/shop/?cat=${category.key}`}>{tr(category.name, locale)}</Link> : null}
           <h1 className={s.name}>{name}</h1>
           <PriceLine className={s.price} price={priceOf(item, chosen?.key)} />
 
@@ -155,12 +168,10 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
 
           {tribe ? (
             <aside className={s.tribe}>
-              <p className="small muted">{t.item.tribe}</p>
-              <p className={s.tribeName} style={{ color: tribe.onBlack }}>
-                <span className={s.dot} style={{ background: tribe.hex }} aria-hidden="true" />{tribe.name}
-              </p>
+              <p className="label">{t.item.tribe}</p>
+              <p className={s.tribeName}>{tribe.name}</p>
               <p className={`verse ${s.tribeVerse}`} lang="he" dir="rtl">{tribe.tagline.he}</p>
-              {tribe.tagline.tr ? <p className="muted">{tribe.tagline.tr}</p> : null}
+              {tribe.tagline.tr ? <p className={`muted ${s.tribeVerseTr}`}>{tribe.tagline.tr}</p> : null}
               <Link className="link" href={`/${locale}/tribes/${tribe.key}/`}>{fill(t.item.tribeLink, { name: tribe.plain })}</Link>
             </aside>
           ) : null}
@@ -168,17 +179,20 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
       </div>
 
       {item.cloth ? (
-        <section className={`wrap ${s.play}`}>
-          <div className={s.playText}>
-            <h2>{t.item.play3d}</h2>
-            <p className="muted">{t.item.play3dLine}</p>
-          </div>
-          <div ref={clothRef} className={s.playStage}>
-            {item.pictures[0] ? <img className={s.stagePoster} src={pictureUrl(item.pictures[0], 960)} alt="" loading="lazy" decoding="async" /> : null}
-            {clothNear ? (
-              <TzitzitCanvas spec={item.cloth} size={chosen?.key === "kid" ? "kid" : "adult"} label={`${name}, ${t.home.clothLabel}`} hint={t.home.clothHint}
-                poster={item.pictures[0] ? pictureUrl(item.pictures[0], 960) : undefined} className={s.canvas} />
-            ) : null}
+        <section className={s.play} aria-labelledby="play-h">
+          <div className={`wrap ${s.playIn}`}>
+            <div className={s.playText}>
+              <h2 id="play-h">{t.item.play3d}</h2>
+              <p className="muted">{t.item.play3dLine}</p>
+            </div>
+            <div ref={clothRef} className={s.playStage}>
+              {/* the canvas is transparent and brings its own poster, so this one leaves as soon as the canvas is asked for */}
+              {item.pictures[0] && !clothNear ? <img className={s.stagePoster} src={pictureUrl(item.pictures[0], 960)} alt="" loading="lazy" decoding="async" /> : null}
+              {clothNear ? (
+                <TzitzitCanvas spec={item.cloth} size={chosen?.key === "kid" ? "kid" : "adult"} label={`${name}, ${t.item.clothLabel}`} hint={t.item.clothHint}
+                  poster={item.pictures[0] ? pictureUrl(item.pictures[0], 960) : undefined} className={s.canvas} />
+              ) : null}
+            </div>
           </div>
         </section>
       ) : null}
