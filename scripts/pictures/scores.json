@@ -1,0 +1,566 @@
+{
+ "tz01": {
+  "front": [
+   4,
+   "clean hollow hood; slightly hard cut edges"
+  ],
+  "back": [
+   4,
+   "clean"
+  ],
+  "side": [
+   3,
+   "arm area is an empty notch"
+  ]
+ },
+ "tz02": {
+  "front": [
+   3,
+   "hood reduced to a thin rim, small bites near the hem"
+  ],
+  "back": [
+   3,
+   "clean, slight sleeve shadow at left edge"
+  ],
+  "side": [
+   2,
+   "framing too tight: hood dominates, lower body cut"
+  ]
+ },
+ "tz03": {
+  "front": [
+   3,
+   "clean; ragged right edge where the sleeve was"
+  ],
+  "back": [
+   3,
+   "small olive slivers at the sides"
+  ],
+  "side": [
+   2,
+   "large empty arm notch, ragged lower edge"
+  ]
+ },
+ "tz04": {
+  "front": [
+   2,
+   "left third of the front panel lost, hood only as strips"
+  ],
+  "back": [
+   3,
+   "clean"
+  ],
+  "side": [
+   2,
+   "arm notch, ragged"
+  ]
+ },
+ "tz05": {
+  "front": [
+   3,
+   "clean, hood is a thin rim"
+  ],
+  "back": [
+   4,
+   "clean"
+  ],
+  "side": [
+   2,
+   "arm notch cuts the panel"
+  ]
+ },
+ "tz06": {
+  "front": [
+   2,
+   "dark stripes eaten as holes, hood mostly lost"
+  ],
+  "back": [
+   2,
+   "hood cut off, sleeve stubs at the sides"
+  ],
+  "side": [
+   2,
+   "fragmented"
+  ]
+ },
+ "tz07": {
+  "front": [
+   2,
+   "ragged holes on the right half (cream confused with lit olive sleeve)"
+  ],
+  "back": [
+   3,
+   "mostly clean, small stub at the collar"
+  ],
+  "side": [
+   1,
+   "fragmented, unusable; kept as best effort"
+  ]
+ },
+ "tz08": {
+  "front": [
+   3,
+   "clean, no hood visible in this pose"
+  ],
+  "back": [
+   3,
+   "clean"
+  ],
+  "side": [
+   2,
+   "arm notch, fragmented lower part"
+  ]
+ },
+ "tz09": {
+  "front": [
+   2,
+   "right side ragged, hood a thin rim"
+  ],
+  "back": [
+   1,
+   "lower half eaten into drips; unusable"
+  ],
+  "side": [
+   2,
+   "lower body missing"
+  ]
+ },
+ "tz10": {
+  "front": [
+   3,
+   "clean"
+  ],
+  "back": [
+   3,
+   "clean, dark photo"
+  ],
+  "side": [
+   2,
+   "narrow, arm notch"
+  ]
+ },
+ "tz11": {
+  "front": [
+   2,
+   "olive sleeves of the under-shirt remain at both sides"
+  ],
+  "back": [
+   2,
+   "olive sleeves remain"
+  ],
+  "side": [
+   2,
+   "olive arm remains inside the armhole"
+  ]
+ },
+ "tz12": {
+  "front": [
+   2,
+   "under-shirt sleeves remain at the sides"
+  ],
+  "back": [
+   1,
+   "fragmented"
+  ],
+  "side": [
+   1,
+   "fragmented"
+  ]
+ },
+ "tz13": {
+  "front": [
+   2,
+   "white under-shirt sleeves and collar remain (white on white)"
+  ],
+  "back": [
+   3,
+   "head removed; small stub at the neck"
+  ]
+ },
+ "tz15": {
+  "front": [
+   2,
+   "holes along the centre, trousers remnant at the hem"
+  ],
+  "back": [
+   2,
+   "many holes"
+  ]
+ },
+ "tz16": {
+  "front": [
+   2,
+   "khaki on olive: bites at the right shoulder"
+  ],
+  "back": [
+   2,
+   "large holes in the back panel"
+  ],
+  "side": [
+   1,
+   "fragmented"
+  ]
+ },
+ "tz18": {
+  "front": [
+   2,
+   "holes around the neckline, lower-right corner bitten"
+  ],
+  "back": [
+   3,
+   "clean but cropped at the hem"
+  ],
+  "side": [
+   2,
+   "tight framing"
+  ]
+ },
+ "tz19": {
+  "front": [
+   3,
+   "clean, no hood on this item"
+  ],
+  "back": [
+   3,
+   "clean"
+  ]
+ },
+ "tz23": {
+  "front": [
+   2,
+   "right part fragmented"
+  ],
+  "back": [
+   3,
+   "clean, under-tee sliver at the right armhole"
+  ]
+ },
+ "tz28": {
+  "front": [
+   2,
+   "olive on olive: ragged edges, hood partly lost"
+  ],
+  "back": [
+   2,
+   "holes in the back panel"
+  ],
+  "side": [
+   2,
+   "lower part missing"
+  ]
+ },
+ "tz29": {
+  "front": [
+   3,
+   "clean hollow hood; some dark trim at the sides"
+  ],
+  "back": [
+   3,
+   "clean"
+  ]
+ },
+ "ls01": {
+  "front": [
+   4,
+   "clean; neck opening black"
+  ],
+  "back": [
+   4,
+   "clean"
+  ],
+  "side": [
+   3,
+   "clean, narrow"
+  ]
+ },
+ "ls02": {
+  "front": [
+   3,
+   "dark blob at the left cuff (hand remnant) - check"
+  ],
+  "back": [
+   4,
+   "clean"
+  ]
+ },
+ "ls03": {
+  "front": [
+   4,
+   "clean"
+  ]
+ },
+ "ls04": {
+  "front": [
+   4,
+   "clean"
+  ]
+ },
+ "ls06": {
+  "front": [
+   4,
+   "clean"
+  ]
+ },
+ "ls09": {
+  "front": [
+   4,
+   "clean"
+  ]
+ },
+ "ls10": {
+  "back": [
+   3,
+   "dark shirt, right sleeve edge slightly bitten"
+  ]
+ },
+ "ls12": {
+  "front": [
+   3,
+   "clean, soft edges"
+  ]
+ },
+ "ls13": {
+  "side": [
+   3,
+   "clean, dark bit at the cuff"
+  ]
+ },
+ "ls14": {
+  "front": [
+   4,
+   "clean"
+  ]
+ },
+ "ls15": {
+  "front": [
+   4,
+   "clean"
+  ]
+ },
+ "ls16": {
+  "front": [
+   3,
+   "black shirt: low contrast on black page"
+  ]
+ },
+ "pa01": {
+  "front": [
+   4,
+   "clean"
+  ],
+  "back": [
+   3,
+   "clean"
+  ],
+  "side": [
+   2,
+   "dark sock visible at the bottom"
+  ]
+ },
+ "tz26": {
+  "detail": [
+   1,
+   "detail photo ran through the garment cut-out: only a fragment of trim survives; needs a manual crop"
+  ],
+  "front": [
+   1,
+   "PERSON STILL VISIBLE - do not publish as is: under-tee and shorts fill the open front"
+  ],
+  "back": [
+   3,
+   "clean"
+  ],
+  "side": [
+   1,
+   "fragmented; under-tee visible"
+  ]
+ },
+ "tz20": {
+  "front": [
+   2,
+   "white shorts remain below the hem, under-tee slivers at the sleeves"
+  ],
+  "back": [
+   2,
+   "arm remnants at both sides, clutter at lower right"
+  ],
+  "side": [
+   1,
+   "PERSON STILL VISIBLE - do not publish as is: bare forearm with watch and under-tee sleeve remain"
+  ]
+ },
+ "tz21": {
+  "front": [
+   2,
+   "under-tee sleeves and hem, white shorts remain"
+  ],
+  "back": [
+   1,
+   "PERSON STILL VISIBLE - do not publish as is: under-tee sleeves and part of a hand remain"
+  ]
+ },
+ "tz22": {
+  "front": [
+   2,
+   "under-tee at the neckline, shorts sliver below the hem"
+  ],
+  "back": [
+   2,
+   "ring light of the room attached at the left shoulder"
+  ],
+  "side": [
+   1,
+   "PERSON STILL VISIBLE - do not publish as is: bare arm and under-tee sleeve remain"
+  ]
+ },
+ "tz24": {
+  "front": [
+   2,
+   "white shorts below the hem, clutter at the right hem"
+  ],
+  "back": [
+   2,
+   "room object attached at the left shoulder"
+  ],
+  "side": [
+   2,
+   "arm removed as a notch; shorts remain"
+  ]
+ },
+ "tz25": {
+  "front": [
+   3,
+   "clean, item tilted"
+  ],
+  "back": [
+   3,
+   "clean; dark shading is in the photo"
+  ]
+ },
+ "tz27": {
+  "front": [
+   2,
+   "under-tee at the collar and left armhole, watch bit at right"
+  ],
+  "back": [
+   2,
+   "arm slivers at both sides"
+  ],
+  "side": [
+   1,
+   "PERSON STILL VISIBLE - do not publish as is: hand and under-tee remain in the armhole"
+  ]
+ },
+ "tz30": {
+  "front": [
+   1,
+   "PERSON STILL VISIBLE - do not publish as is: strip of the model's hair remains at the top of the hood"
+  ],
+  "back": [
+   3,
+   "clean, lower body cropped by the photo framing"
+  ],
+  "side": [
+   2,
+   "shorts sliver at the bottom"
+  ]
+ },
+ "tz17": {
+  "front": [
+   2,
+   "white under-tee sleeves and hem remain around the cropped item"
+  ],
+  "back": [
+   2,
+   "white under-tee remains around the item"
+  ]
+ },
+ "tz14": {
+  "front": [
+   2,
+   "white under-shirt visible in the neckline"
+  ],
+  "back": [
+   2,
+   "under-shirt hem below the fringe"
+  ]
+ },
+ "te02": {
+  "side": [
+   2,
+   "ragged lower edge"
+  ]
+ },
+ "te03": {
+  "front": [
+   4,
+   "clean"
+  ],
+  "back": [
+   3,
+   "clean"
+  ],
+  "side": [
+   3,
+   "clean"
+  ]
+ },
+ "te04": {
+  "front": [
+   4,
+   "clean"
+  ],
+  "side": [
+   3,
+   "arm notch"
+  ]
+ },
+ "te05": {
+  "front": [
+   2,
+   "sand tee on olive trousers: ragged sides"
+  ],
+  "back": [
+   2,
+   "ragged right side"
+  ],
+  "side": [
+   2,
+   "ragged"
+  ]
+ },
+ "te06": {
+  "front": [
+   3,
+   "black tee: low contrast on black"
+  ],
+  "back": [
+   3,
+   "same"
+  ],
+  "side": [
+   2,
+   "barely readable on black"
+  ]
+ },
+ "te07": {
+  "back": [
+   3,
+   "photographed on a hanger; clean"
+  ]
+ },
+ "pa02": {
+  "front": [
+   4,
+   "clean"
+  ],
+  "back": [
+   4,
+   "clean"
+  ],
+  "side": [
+   3,
+   "clean"
+  ]
+ }
+}

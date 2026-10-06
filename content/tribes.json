@@ -1,0 +1,1144 @@
+[
+  {
+    "key": "reuven",
+    "order": 1,
+    "name": {
+      "he": "רְאוּבֵן",
+      "he_plain": "ראובן",
+      "en": "Reuven",
+      "fr": "Réouven"
+    },
+    "name_alt": {
+      "en": "Reuben",
+      "fr": "Ruben"
+    },
+    "mother": {
+      "he": "לאה",
+      "en": "Leah",
+      "fr": "Léa"
+    },
+    "meaning": {
+      "he": "שמו מלשון ראייה: לאה אמרה \"כי ראה ה׳ בעוניי\".",
+      "en": "From the word for seeing: Leah said that the LORD had looked upon her affliction.",
+      "fr": "Son nom vient du verbe voir, car Léa dit que l’Éternel avait vu sa détresse."
+    },
+    "stone": {
+      "he": "אֹדֶם",
+      "he_plain": "אודם",
+      "en": "Odem",
+      "gloss": {
+        "he": "רובי / קרנליאן",
+        "en": "ruby / carnelian",
+        "fr": "rubis / cornaline"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "אדום",
+        "en": "red",
+        "fr": "rouge"
+      },
+      "hex": "#B3261E",
+      "symbol": {
+        "he": "דודאים",
+        "en": "mandrakes",
+        "fr": "mandragores"
+      }
+    },
+    "camp": {
+      "he": "דרום (תימנה) – בראש דגל מחנה ראובן, ועימו שמעון וגד; שניים במסע.",
+      "en": "South — at the head of the banner (degel) of the camp of Reuven, with Shimon and Gad; second to set out.",
+      "fr": "Au sud, en tête de la bannière (déguel) du camp de Réouven, avec Chimon et Gad. Deuxième à se mettre en marche."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, ג",
+          "en": "Genesis 49:3",
+          "fr": "Genèse 49:3"
+        },
+        "source": "jacob",
+        "he": "רְאוּבֵן בְּכֹרִי אַתָּה כֹּחִי וְרֵאשִׁית אוֹנִי יֶתֶר שְׂאֵת וְיֶתֶר עָז",
+        "en": "Reuben, thou art my first-born, My might, and the first-fruits of my strength; The excellency of dignity, and the excellency of power.",
+        "fr": "Ruben! Tu fus mon premier-né, mon orgueil et les prémices de ma vigueur: le premier en dignité, le premier en puissance."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, ו",
+          "en": "Deuteronomy 33:6",
+          "fr": "Deutéronome 33:6"
+        },
+        "source": "moses",
+        "he": "יְחִי רְאוּבֵן וְאַל־יָמֹת וִיהִי מְתָיו מִסְפָּר",
+        "en": "Let Reuben live, and not die In that his men become few.",
+        "fr": "Que Ruben vive et soit immortel; que sa population soit innombrable!"
+      },
+      {
+        "ref": {
+          "he": "בראשית כט, לב",
+          "en": "Genesis 29:32",
+          "fr": "Genèse 29:32"
+        },
+        "source": "naming",
+        "he": "וַתַּהַר לֵאָה וַתֵּלֶד בֵּן וַתִּקְרָא שְׁמוֹ רְאוּבֵן כִּי אָמְרָה כִּי־רָאָה ה׳ בְּעָנְיִי כִּי עַתָּה יֶאֱהָבַנִי אִישִׁי",
+        "en": "And Leah conceived, and bore a son, and she called his name Reuben; for she said: ‘Because the LORD hath looked upon my affliction; for now my husband will love me.’",
+        "fr": "Léa conçut et enfanta un fils. Elle le nomma Ruben \"parce que, dit-elle, le Seigneur a vu mon humiliation, de sorte qu’à présent mon époux m’aimera.\""
+      }
+    ],
+    "essence": {
+      "he": "בכור יעקב. ראובן הוא שעמד להציל את יוסף מיד אחיו, וחז״ל אומרים שהיה הראשון שפתח בתשובה. משה בירך אותו בחיים: \"יחי ראובן ואל ימות\".",
+      "en": "Jacob’s firstborn. Reuven stepped forward to save Yosef from his brothers, and the Sages remember him as the first to open the way of repentance. Moses blessed him with life: ‘Let Reuben live, and not die.’",
+      "fr": "Le premier-né de Jacob. Réouven s’interposa pour sauver Yossef de ses frères, et nos Sages voient en lui le premier à avoir ouvert la voie du repentir, la techouva. Moïse le bénit par la vie, « Que Ruben vive »."
+    },
+    "tagline": {
+      "he": "בְּכֹרִי אַתָּה כֹּחִי וְרֵאשִׁית אוֹנִי",
+      "en": "My first-born, my might",
+      "fr": "Mon premier-né, mon orgueil"
+    }
+  },
+  {
+    "key": "shimon",
+    "order": 2,
+    "name": {
+      "he": "שִׁמְעוֹן",
+      "he_plain": "שמעון",
+      "en": "Shimon",
+      "fr": "Chimon"
+    },
+    "name_alt": {
+      "en": "Simeon",
+      "fr": "Siméon"
+    },
+    "mother": {
+      "he": "לאה",
+      "en": "Leah",
+      "fr": "Léa"
+    },
+    "meaning": {
+      "he": "שמו מלשון שמיעה: לאה אמרה \"כי שמע ה׳\" ונתן לה גם את הבן הזה.",
+      "en": "From the word for hearing: Leah said that the LORD had heard her and given her this son as well.",
+      "fr": "Son nom vient du verbe entendre, car Léa dit que l’Éternel l’avait entendue et lui avait donné aussi ce fils."
+    },
+    "stone": {
+      "he": "פִּטְדָה",
+      "he_plain": "פטדה",
+      "en": "Pitdah",
+      "gloss": {
+        "he": "טופז / פרידוט",
+        "en": "topaz / peridot",
+        "fr": "topaze / péridot"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "ירוק",
+        "en": "green",
+        "fr": "vert"
+      },
+      "hex": "#3E7C4F",
+      "symbol": {
+        "he": "העיר שכם",
+        "en": "city of Shechem",
+        "fr": "ville de Sichem"
+      }
+    },
+    "camp": {
+      "he": "דרום – תחת דגל מחנה ראובן, לצד גד.",
+      "en": "South — under the banner (degel) of the camp of Reuven, alongside Gad.",
+      "fr": "Au sud, sous la bannière (déguel) du camp de Réouven, aux côtés de Gad."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, ה",
+          "en": "Genesis 49:5",
+          "fr": "Genèse 49:5"
+        },
+        "source": "jacob",
+        "he": "שִׁמְעוֹן וְלֵוִי אַחִים כְּלֵי חָמָס מְכֵרֹתֵיהֶם",
+        "en": "Simeon and Levi are brethren; Weapons of violence their kinship.",
+        "fr": "Siméon et Lévi! Digne couple de frères; leurs armes sont des instruments de violence."
+      },
+      {
+        "ref": {
+          "he": "בראשית כט, לג",
+          "en": "Genesis 29:33",
+          "fr": "Genèse 29:33"
+        },
+        "source": "naming",
+        "he": "וַתַּהַר עוֹד וַתֵּלֶד בֵּן וַתֹּאמֶר כִּי־שָׁמַע ה׳ כִּי־שְׂנוּאָה אָנֹכִי וַיִּתֶּן־לִי גַּם־אֶת־זֶה וַתִּקְרָא שְׁמוֹ שִׁמְעוֹן",
+        "en": "And she conceived again, and bore a son; and said: ‘Because the LORD hath heard that I am hated, He hath therefore given me this son also.’ And she called his name Simeon.",
+        "fr": "Elle conçut de nouveau et enfanta un fils. Elle dit: \"Parce que le Seigneur a entendu que j’étais dédaignée, il m’a accordé aussi celui-là.\" Et elle l’appela Siméon."
+      }
+    ],
+    "essence": {
+      "he": "שבט של קנאות ועוז, שעמד על כבוד דינה אחותו. נחלתו ניתנה בתוך נחלת יהודה, ולפי המסורת יצאו ממנו סופרים ומלמדי תינוקות שנפוצו בכל ישראל.",
+      "en": "A tribe of zeal and fierce loyalty, remembered for defending the honour of their sister Dinah. Shimon’s portion lay within the land of Yehuda, and tradition tells that scribes and teachers of young children came from this tribe and spread throughout Israel.",
+      "fr": "Tribu du zèle et de la loyauté farouche, qui défendit l’honneur de sa sœur Dina. Son territoire se trouvait au sein de celui de Yehouda et, selon la tradition, des scribes et des maîtres d’école issus de Chimon se répandirent dans tout Israël."
+    },
+    "tagline": {
+      "he": "כִּי־שָׁמַע ה׳",
+      "en": "The LORD hath heard",
+      "fr": "Le Seigneur a entendu"
+    }
+  },
+  {
+    "key": "levi",
+    "order": 3,
+    "name": {
+      "he": "לֵוִי",
+      "he_plain": "לוי",
+      "en": "Levi",
+      "fr": "Lévi"
+    },
+    "name_alt": {
+      "en": "Levi",
+      "fr": "Lévi"
+    },
+    "mother": {
+      "he": "לאה",
+      "en": "Leah",
+      "fr": "Léa"
+    },
+    "meaning": {
+      "he": "שמו מלשון ליווי וחיבור: לאה קיוותה שמעתה יתלווה אליה בעלה.",
+      "en": "From the word for joining: Leah hoped that her husband would now be joined to her.",
+      "fr": "Son nom évoque l’attachement, car Léa espérait que son époux lui serait désormais attaché."
+    },
+    "stone": {
+      "he": "בָּרֶקֶת",
+      "he_plain": "ברקת",
+      "en": "Bareket",
+      "gloss": {
+        "he": "אזמרגד",
+        "en": "emerald",
+        "fr": "émeraude"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "שליש לבן, שליש שחור ושליש אדום",
+        "en": "one third white, one third black, one third red",
+        "fr": "un tiers blanc, un tiers noir, un tiers rouge"
+      },
+      "hex": "#91625F",
+      "symbol": {
+        "he": "אורים ותומים",
+        "en": "Urim and Thummim",
+        "fr": "Ourim et Toummim"
+      }
+    },
+    "camp": {
+      "he": "במרכז – מחנה הלוויים חונה סביב המשכן, בתוך המחנות.",
+      "en": "Centre — the camp of the Levites surrounds the Mishkan, in the midst of the camps.",
+      "fr": "Au centre, le camp des Lévites entoure le Michkan, au milieu des camps."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, ה",
+          "en": "Genesis 49:5",
+          "fr": "Genèse 49:5"
+        },
+        "source": "jacob",
+        "he": "שִׁמְעוֹן וְלֵוִי אַחִים כְּלֵי חָמָס מְכֵרֹתֵיהֶם",
+        "en": "Simeon and Levi are brethren; Weapons of violence their kinship.",
+        "fr": "Siméon et Lévi! Digne couple de frères; leurs armes sont des instruments de violence."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, י",
+          "en": "Deuteronomy 33:10",
+          "fr": "Deutéronome 33:10"
+        },
+        "source": "moses",
+        "he": "יוֹרוּ מִשְׁפָּטֶיךָ לְיַעֲקֹב וְתוֹרָתְךָ לְיִשְׂרָאֵל יָשִׂימוּ קְטוֹרָה בְּאַפֶּךָ וְכָלִיל עַל־מִזְבְּחֶךָ",
+        "en": "They shall teach Jacob Thine ordinances, And Israel Thy law; They shall put incense before Thee, And whole burnt-offering upon Thine altar.",
+        "fr": "ils enseignent tes lois à Jacob et ta doctrine à Israël; présentent l’encens devant ta face, et l’holocauste sur ton autel."
+      },
+      {
+        "ref": {
+          "he": "בראשית כט, לד",
+          "en": "Genesis 29:34",
+          "fr": "Genèse 29:34"
+        },
+        "source": "naming",
+        "he": "וַתַּהַר עוֹד וַתֵּלֶד בֵּן וַתֹּאמֶר עַתָּה הַפַּעַם יִלָּוֶה אִישִׁי אֵלַי כִּי־יָלַדְתִּי לוֹ שְׁלֹשָׁה בָנִים עַל־כֵּן קָרָא־שְׁמוֹ לֵוִי",
+        "en": "And she conceived again, and bore a son; and said: ‘Now this time will my husband be joined unto me, because I have borne him three sons.’ Therefore was his name called Levi.",
+        "fr": "Elle conçut de nouveau et enfanta un fils. Elle dit: \"Ah! désormais mon époux me sera attaché, puisque je lui ai donné trois fils.\" C’est pourquoi on l’appela Lévi."
+      }
+    ],
+    "essence": {
+      "he": "שבט המשרתים בקודש – הכוהנים והלוויים, שעבדו במשכן ובבית המקדש. ללוי לא ניתנה נחלה בארץ, כי ה׳ הוא נחלתו, ועליו נאמר: \"יורו משפטיך ליעקב ותורתך לישראל\".",
+      "en": "The tribe set apart for sacred service: the Kohanim and Levites, who served in the Mishkan and in the Temple. Levi received no territory of its own, for the LORD is its inheritance, and its calling is to teach Torah to all Israel.",
+      "fr": "La tribu consacrée au service sacré, celle des Cohanim et des Lévites, qui officiaient au Michkan puis au Temple. Lévi n’a pas reçu de territoire, car l’Éternel est son héritage, et sa vocation est d’enseigner la Torah à tout Israël."
+    },
+    "tagline": {
+      "he": "יוֹרוּ מִשְׁפָּטֶיךָ לְיַעֲקֹב",
+      "en": "They shall teach Jacob Thine ordinances",
+      "fr": "Ils enseignent tes lois à Jacob"
+    }
+  },
+  {
+    "key": "yehuda",
+    "order": 4,
+    "name": {
+      "he": "יְהוּדָה",
+      "he_plain": "יהודה",
+      "en": "Yehuda",
+      "fr": "Yehouda"
+    },
+    "name_alt": {
+      "en": "Judah",
+      "fr": "Juda"
+    },
+    "mother": {
+      "he": "לאה",
+      "en": "Leah",
+      "fr": "Léa"
+    },
+    "meaning": {
+      "he": "שמו מלשון הודאה: לאה אמרה \"הפעם אודה את ה׳\".",
+      "en": "From the word for thanks: Leah said, ‘This time will I praise the LORD.’",
+      "fr": "Son nom vient de la gratitude, car Léa dit « Pour le coup, je rends grâce à l’Éternel »."
+    },
+    "stone": {
+      "he": "נֹפֶךְ",
+      "he_plain": "נופך",
+      "en": "Nofekh",
+      "gloss": {
+        "he": "טורקיז / גרנט",
+        "en": "turquoise / carbuncle (garnet)",
+        "fr": "turquoise / escarboucle (grenat)"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "כעין השמיים",
+        "en": "sky blue, like the heavens",
+        "fr": "bleu ciel, à l’image des cieux"
+      },
+      "hex": "#3A78A8",
+      "symbol": {
+        "he": "אריה",
+        "en": "lion",
+        "fr": "lion"
+      }
+    },
+    "camp": {
+      "he": "מזרח (קדמה) – בראש דגל מחנה יהודה, ועימו יששכר וזבולון; ראשונים במסע.",
+      "en": "East — at the head of the banner (degel) of the camp of Yehuda, with Yissachar and Zevulun; first to set out.",
+      "fr": "À l’est, en tête de la bannière (déguel) du camp de Yehouda, avec Issakhar et Zevouloun. Premier à se mettre en marche."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, ט",
+          "en": "Genesis 49:9",
+          "fr": "Genèse 49:9"
+        },
+        "source": "jacob",
+        "he": "גּוּר אַרְיֵה יְהוּדָה מִטֶּרֶף בְּנִי עָלִיתָ כָּרַע רָבַץ כְּאַרְיֵה וּכְלָבִיא מִי יְקִימֶנּוּ",
+        "en": "Judah is a lion’s whelp; From the prey, my son, thou art gone up. He stooped down, he couched as a lion, And as a lioness; who shall rouse him up?",
+        "fr": "Tu es un jeune lion, Juda, quand tu reviens, ô mon fils, avec ta capture! Il se couche; c’est le repos du lion et du léopard; qui oserait le réveiller?"
+      },
+      {
+        "ref": {
+          "he": "דברים לג, ז",
+          "en": "Deuteronomy 33:7",
+          "fr": "Deutéronome 33:7"
+        },
+        "source": "moses",
+        "he": "וְזֹאת לִיהוּדָה וַיֹּאמַר שְׁמַע ה׳ קוֹל יְהוּדָה וְאֶל־עַמּוֹ תְּבִיאֶנּוּ יָדָיו רָב לוֹ וְעֵזֶר מִצָּרָיו תִּהְיֶה",
+        "en": "And this for Judah, and he said: Hear, LORD, the voice of Judah, And bring him in unto his people; His hands shall contend for him, And Thou shalt be a help against his adversaries.",
+        "fr": "À Juda, il adressa cette bénédiction: \"Écoute, Seigneur, le vœu de Juda, en l’associant à son peuple; que son bras s’en fasse le champion et lui serve d’auxiliaire contre ses ennemis.\""
+      },
+      {
+        "ref": {
+          "he": "בראשית כט, לה",
+          "en": "Genesis 29:35",
+          "fr": "Genèse 29:35"
+        },
+        "source": "naming",
+        "he": "וַתַּהַר עוֹד וַתֵּלֶד בֵּן וַתֹּאמֶר הַפַּעַם אוֹדֶה אֶת־ה׳ עַל־כֵּן קָרְאָה שְׁמוֹ יְהוּדָה וַתַּעֲמֹד מִלֶּדֶת",
+        "en": "And she conceived again, and bore a son; and she said: ‘This time will I praise the LORD.’ Therefore she called his name Judah; and she left off bearing.",
+        "fr": "Elle conçut encore et mit au monde un fils et elle dit: \"Pour le coup, je rends grâce à l’Éternel!\" C’est pourquoi elle le nomma Juda. Alors elle cessa d’enfanter."
+      }
+    ],
+    "essence": {
+      "he": "שבט המלכות וההנהגה. יעקב המשיל את יהודה לאריה ובירכו שלא יסור שבט ממנו, וממנו יצא דוד המלך. על שמו נקרא עם ישראל כולו – יהודים.",
+      "en": "The tribe of kingship and leadership. Jacob likened Yehuda to a lion and promised that the sceptre would not depart from him, and from this tribe came King David. It is from Yehuda’s name that the whole people came to be called Jews.",
+      "fr": "La tribu de la royauté et de la conduite du peuple. Jacob compara Yehouda à un lion et lui promit que le sceptre ne lui échapperait pas, et de cette tribu est issu le roi David. C’est de son nom que vient celui du peuple juif."
+    },
+    "tagline": {
+      "he": "גּוּר אַרְיֵה יְהוּדָה",
+      "en": "A lion’s whelp",
+      "fr": "Un jeune lion"
+    }
+  },
+  {
+    "key": "dan",
+    "order": 5,
+    "name": {
+      "he": "דָּן",
+      "he_plain": "דן",
+      "en": "Dan",
+      "fr": "Dan"
+    },
+    "name_alt": {
+      "en": "Dan",
+      "fr": "Dan"
+    },
+    "mother": {
+      "he": "בלהה",
+      "en": "Bilhah",
+      "fr": "Bilha"
+    },
+    "meaning": {
+      "he": "שמו מלשון דין: רחל אמרה שה׳ דן אותה, שמע בקולה ונתן לה בן.",
+      "en": "From the word for judgment: Rachel said that God had judged her, heard her voice and given her a son.",
+      "fr": "Son nom vient du jugement, car Rachel dit que Dieu l’avait jugée, avait écouté sa voix et lui avait donné un fils."
+    },
+    "stone": {
+      "he": "לֶשֶׁם",
+      "he_plain": "לשם",
+      "en": "Leshem",
+      "gloss": {
+        "he": "יקינתון / אופל",
+        "en": "jacinth / opal",
+        "fr": "hyacinthe / opale"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "כעין הספיר",
+        "en": "sapphire blue",
+        "fr": "bleu saphir"
+      },
+      "hex": "#1E4D9B",
+      "symbol": {
+        "he": "נחש",
+        "en": "serpent",
+        "fr": "serpent"
+      }
+    },
+    "camp": {
+      "he": "צפון – בראש דגל מחנה דן, ועימו אשר ונפתלי; אחרונים במסע, מאסף לכל המחנות.",
+      "en": "North — at the head of the banner (degel) of the camp of Dan, with Asher and Naftali; last to set out, the rearguard of all the camps.",
+      "fr": "Au nord, en tête de la bannière (déguel) du camp de Dan, avec Acher et Naftali. Dernier à se mettre en marche, arrière-garde de tous les camps."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, טז",
+          "en": "Genesis 49:16",
+          "fr": "Genèse 49:16"
+        },
+        "source": "jacob",
+        "he": "דָּן יָדִין עַמּוֹ כְּאַחַד שִׁבְטֵי יִשְׂרָאֵל",
+        "en": "Dan shall judge his people, As one of the tribes of Israel.",
+        "fr": "Dan sera l’arbitre de son peuple, sous lui se grouperont les tribus d’Israël."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, כב",
+          "en": "Deuteronomy 33:22",
+          "fr": "Deutéronome 33:22"
+        },
+        "source": "moses",
+        "he": "וּלְדָן אָמַר דָּן גּוּר אַרְיֵה יְזַנֵּק מִן־הַבָּשָׁן",
+        "en": "And of Dan he said: Dan is a lion’s whelp, That leapeth forth from Bashan.",
+        "fr": "Au sujet de Dan, il dit: \"Dan est un jeune lion qui s’élance du Basan.\""
+      },
+      {
+        "ref": {
+          "he": "בראשית ל, ו",
+          "en": "Genesis 30:6",
+          "fr": "Genèse 30:6"
+        },
+        "source": "naming",
+        "he": "וַתֹּאמֶר רָחֵל דָּנַנִּי אֱלֹהִים וְגַם שָׁמַע בְּקֹלִי וַיִּתֶּן־לִי בֵּן עַל־כֵּן קָרְאָה שְׁמוֹ דָּן",
+        "en": "And Rachel said: ‘God hath judged me, and hath also heard my voice, and hath given me a son.’ Therefore called she his name Dan.",
+        "fr": "Rachel dit alors: \"Le Seigneur m’a jugée et il a écouté ma voix aussi en me donnant un fils.\" C’est pourquoi elle le nomma Dan."
+      }
+    ],
+    "essence": {
+      "he": "\"דן ידין עמו\" – שבט של שופטים, וממנו יצא שמשון. במסעות המדבר נסע דגל מחנה דן אחרון, \"מאסף לכל המחנות\", ולפי המסורת השיב לכל אחד את מה שאבד לו בדרך.",
+      "en": "‘Dan shall judge his people’: a tribe of judges, from which Shimshon (Samson) arose. In the wilderness the banner of Dan marched last, the rearguard of all the camps, and tradition says it returned to each person whatever had been lost along the way.",
+      "fr": "« Dan sera l’arbitre de son peuple ». Tribu de juges, dont est issu Chimchon (Samson). Dans le désert, la bannière de Dan fermait la marche, arrière-garde de tous les camps, et la tradition rapporte qu’elle rendait à chacun ce qu’il avait perdu en chemin."
+    },
+    "tagline": {
+      "he": "דָּן יָדִין עַמּוֹ",
+      "en": "Dan shall judge his people",
+      "fr": "Dan sera l’arbitre de son peuple"
+    }
+  },
+  {
+    "key": "naftali",
+    "order": 6,
+    "name": {
+      "he": "נַפְתָּלִי",
+      "he_plain": "נפתלי",
+      "en": "Naftali",
+      "fr": "Naftali"
+    },
+    "name_alt": {
+      "en": "Naphtali",
+      "fr": "Nephtali"
+    },
+    "mother": {
+      "he": "בלהה",
+      "en": "Bilhah",
+      "fr": "Bilha"
+    },
+    "meaning": {
+      "he": "שמו מלשון נפתולים, מאבק: רחל אמרה שנאבקה עם אחותה וגם יכלה.",
+      "en": "From the word for wrestling: Rachel said, ‘With mighty wrestlings have I wrestled with my sister, and have prevailed.’",
+      "fr": "Son nom évoque la lutte, car Rachel dit avoir lutté avec sa sœur et l’avoir emporté."
+    },
+    "stone": {
+      "he": "אַחְלָמָה",
+      "he_plain": "אחלמה",
+      "en": "Achlamah",
+      "gloss": {
+        "he": "אמטיסט",
+        "en": "amethyst",
+        "fr": "améthyste"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "כיין צלול שאין אדמומיתו עזה",
+        "en": "like clear wine, not deeply red",
+        "fr": "comme un vin clair, d’un rouge peu soutenu"
+      },
+      "hex": "#A8475A",
+      "symbol": {
+        "he": "איילה",
+        "en": "doe (hind)",
+        "fr": "biche"
+      }
+    },
+    "camp": {
+      "he": "צפון – תחת דגל מחנה דן, לצד אשר.",
+      "en": "North — under the banner (degel) of the camp of Dan, alongside Asher.",
+      "fr": "Au nord, sous la bannière (déguel) du camp de Dan, aux côtés d’Acher."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, כא",
+          "en": "Genesis 49:21",
+          "fr": "Genèse 49:21"
+        },
+        "source": "jacob",
+        "he": "נַפְתָּלִי אַיָּלָה שְׁלֻחָה הַנֹּתֵן אִמְרֵי־שָׁפֶר",
+        "en": "Naphtali is a hind let loose: He giveth goodly words.",
+        "fr": "Nephtali est une biche qui s’élance; il apporte d’heureux messages."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, כג",
+          "en": "Deuteronomy 33:23",
+          "fr": "Deutéronome 33:23"
+        },
+        "source": "moses",
+        "he": "וּלְנַפְתָּלִי אָמַר נַפְתָּלִי שְׂבַע רָצוֹן וּמָלֵא בִּרְכַּת ה׳ יָם וְדָרוֹם יְרָשָׁה",
+        "en": "And of Naphtali he said: O Naphtali, satisfied with favour, And full with the blessing of the LORD: Possess thou the sea and the south.",
+        "fr": "À Nephtali, il dit: \"Ô Nephtali! Rassasié des grâces diverses, comblé des bénédictions du Seigneur, que le couchant et le midi soient ton héritage!\""
+      },
+      {
+        "ref": {
+          "he": "בראשית ל, ח",
+          "en": "Genesis 30:8",
+          "fr": "Genèse 30:8"
+        },
+        "source": "naming",
+        "he": "וַתֹּאמֶר רָחֵל נַפְתּוּלֵי אֱלֹהִים נִפְתַּלְתִּי עִם־אֲחֹתִי גַּם־יָכֹלְתִּי וַתִּקְרָא שְׁמוֹ נַפְתָּלִי",
+        "en": "And Rachel said: ‘With mighty wrestlings have I wrestled with my sister, and have prevailed.’ And she called his name Naphtali.",
+        "fr": "Et Rachel dit: \"C’est une lutte de Dieu que j’ai entreprise contre ma sœur et pourtant je triomphe!\" Et elle le nomma Nephtali."
+      }
+    ],
+    "essence": {
+      "he": "\"איילה שלוחה\" – שבט של זריזות וקלילות, הנותן \"אמרי שפר\", דברים נעימים. משה בירכו \"שבע רצון ומלא ברכת ה׳\", וים כינרת נפל בחלקו.",
+      "en": "‘A hind let loose’: the tribe of swiftness and grace, giving ‘goodly words’. Moses blessed Naftali as ‘satisfied with favour, and full with the blessing of the LORD’, and the Sea of Kinneret fell within its portion.",
+      "fr": "« Une biche qui s’élance ». Tribu de l’agilité et de la grâce, celle des belles paroles. Moïse bénit Naftali, rassasié de grâces et comblé des bénédictions de l’Éternel, et le lac de Kinnéret se trouvait dans son territoire."
+    },
+    "tagline": {
+      "he": "נַפְתָּלִי אַיָּלָה שְׁלֻחָה",
+      "en": "A hind let loose",
+      "fr": "Une biche qui s’élance"
+    }
+  },
+  {
+    "key": "gad",
+    "order": 7,
+    "name": {
+      "he": "גָּד",
+      "he_plain": "גד",
+      "en": "Gad",
+      "fr": "Gad"
+    },
+    "name_alt": {
+      "en": "Gad",
+      "fr": "Gad"
+    },
+    "mother": {
+      "he": "זלפה",
+      "en": "Zilpah",
+      "fr": "Zilpa"
+    },
+    "meaning": {
+      "he": "שמו מלשון מזל טוב: לאה אמרה \"בא גד\".",
+      "en": "From the word for good fortune: Leah said, ‘Fortune is come!’",
+      "fr": "Son nom signifie la bonne fortune, car Léa s’écria que la chance était venue."
+    },
+    "stone": {
+      "he": "שְׁבוֹ",
+      "he_plain": "שבו",
+      "en": "Shevo",
+      "gloss": {
+        "he": "אגת (אכטיס)",
+        "en": "agate",
+        "fr": "agate"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "לא לבן ולא שחור, אלא מעורב שחור ולבן",
+        "en": "neither white nor black, but a blend of the two (grey)",
+        "fr": "ni blanc ni noir, un mélange des deux (gris)"
+      },
+      "hex": "#6E7278",
+      "symbol": {
+        "he": "מחנה",
+        "en": "encampment of troops",
+        "fr": "campement de troupes"
+      }
+    },
+    "camp": {
+      "he": "דרום – תחת דגל מחנה ראובן, לצד שמעון.",
+      "en": "South — under the banner (degel) of the camp of Reuven, alongside Shimon.",
+      "fr": "Au sud, sous la bannière (déguel) du camp de Réouven, aux côtés de Chimon."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, יט",
+          "en": "Genesis 49:19",
+          "fr": "Genèse 49:19"
+        },
+        "source": "jacob",
+        "he": "גָּד גְּדוּד יְגוּדֶנּוּ וְהוּא יָגֻד עָקֵב",
+        "en": "Gad, a troop shall troop upon him; But he shall troop upon their heel.",
+        "fr": "Gad sera assailli d’ennemis, mais il les assaillira à son tour."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, כ",
+          "en": "Deuteronomy 33:20",
+          "fr": "Deutéronome 33:20"
+        },
+        "source": "moses",
+        "he": "וּלְגָד אָמַר בָּרוּךְ מַרְחִיב גָּד כְּלָבִיא שָׁכֵן וְטָרַף זְרוֹעַ אַף־קָדְקֹד",
+        "en": "And of Gad he said: Blessed be He that enlargeth Gad; He dwelleth as a lioness, And teareth the arm, yea, the crown of the head.",
+        "fr": "Au sujet de Gad, il dit: Hommage à celui qui agrandit Gad! Il se campe comme un léopard, met en pièces et le bras et la tête."
+      }
+    ],
+    "essence": {
+      "he": "שבט של גיבורי חיל. בני גד נחלו ממזרח לירדן, אך עברו חלוצים לפני אחיהם ונלחמו עימם עד שכל ישראל באו אל נחלתם. משה המשיל את גד ללביא השוכן בגבולו.",
+      "en": "A tribe of warriors. The people of Gad settled east of the Jordan, yet they crossed over armed, ahead of their brothers, and fought beside them until all Israel had come into its inheritance. Moses compared Gad to a lioness dwelling in its land.",
+      "fr": "Une tribu de vaillants guerriers. Les fils de Gad s’établirent à l’est du Jourdain, mais ils passèrent en armes devant leurs frères et combattirent à leurs côtés jusqu’à ce que tout Israël ait reçu son héritage. Moïse compare Gad à un fauve campé sur sa terre."
+    },
+    "tagline": {
+      "he": "בָּרוּךְ מַרְחִיב גָּד",
+      "en": "Blessed be He that enlargeth Gad",
+      "fr": "Hommage à celui qui agrandit Gad"
+    }
+  },
+  {
+    "key": "asher",
+    "order": 8,
+    "name": {
+      "he": "אָשֵׁר",
+      "he_plain": "אשר",
+      "en": "Asher",
+      "fr": "Acher"
+    },
+    "name_alt": {
+      "en": "Asher",
+      "fr": "Aser"
+    },
+    "mother": {
+      "he": "זלפה",
+      "en": "Zilpah",
+      "fr": "Zilpa"
+    },
+    "meaning": {
+      "he": "שמו מלשון אושר: לאה אמרה \"באושרי, כי אישרוני בנות\".",
+      "en": "From the word for happiness: Leah said that the daughters would call her happy.",
+      "fr": "Son nom vient du bonheur, car Léa dit « Il est né pour mon bonheur »."
+    },
+    "stone": {
+      "he": "תַּרְשִׁישׁ",
+      "he_plain": "תרשיש",
+      "en": "Tarshish",
+      "gloss": {
+        "he": "בריל / כריזוליט",
+        "en": "beryl / chrysolite",
+        "fr": "béryl / chrysolithe"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "כאבן יקרה שמתקשטות בה הנשים",
+        "en": "like a precious stone with which women adorn themselves",
+        "fr": "comme une pierre précieuse dont se parent les femmes"
+      },
+      "hex": "#6B7A2E",
+      "symbol": {
+        "he": "עץ זית",
+        "en": "olive tree",
+        "fr": "olivier"
+      }
+    },
+    "camp": {
+      "he": "צפון – תחת דגל מחנה דן, לצד נפתלי.",
+      "en": "North — under the banner (degel) of the camp of Dan, alongside Naftali.",
+      "fr": "Au nord, sous la bannière (déguel) du camp de Dan, aux côtés de Naftali."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, כ",
+          "en": "Genesis 49:20",
+          "fr": "Genèse 49:20"
+        },
+        "source": "jacob",
+        "he": "מֵאָשֵׁר שְׁמֵנָה לַחְמוֹ וְהוּא יִתֵּן מַעֲדַנֵּי־מֶלֶךְ",
+        "en": "As for Asher, his bread shall be fat, And he shall yield royal dainties.",
+        "fr": "Pour Asher, sa production sera abondante; c’est lui qui pourvoira aux jouissances des rois."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, כד",
+          "en": "Deuteronomy 33:24",
+          "fr": "Deutéronome 33:24"
+        },
+        "source": "moses",
+        "he": "וּלְאָשֵׁר אָמַר בָּרוּךְ מִבָּנִים אָשֵׁר יְהִי רְצוּי אֶחָיו וְטֹבֵל בַּשֶּׁמֶן רַגְלוֹ",
+        "en": "And of Asher he said: Blessed be Asher above sons; Let him be the favoured of his brethren, And let him dip his foot in oil.",
+        "fr": "Et au sujet d’Asher, il dit: Béni entre les fils soit Asher! Bienvenu auprès de ses frères, et baignant son pied dans l’huile."
+      },
+      {
+        "ref": {
+          "he": "בראשית ל, יג",
+          "en": "Genesis 30:13",
+          "fr": "Genèse 30:13"
+        },
+        "source": "naming",
+        "he": "וַתֹּאמֶר לֵאָה בְּאָשְׁרִי כִּי אִשְּׁרוּנִי בָּנוֹת וַתִּקְרָא אֶת־שְׁמוֹ אָשֵׁר",
+        "en": "And Leah said: ‘Happy am I! for the daughters will call me happy.’ And she called his name Asher.",
+        "fr": "Et Léa dit: \"Il est né pour mon bonheur! Oui, les filles m’ont nommée bienheureuse.\" Et elle l’appela Aser."
+      }
+    ],
+    "essence": {
+      "he": "שבט של שפע וברכה. נחלת אשר התברכה בשמן זית עד שנאמר עליו \"וטובל בשמן רגלו\", ומארצו יצאו \"מעדני מלך\". משה קרא לו \"ברוך מבנים\" ו\"רצוי אחיו\".",
+      "en": "A tribe of abundance and blessing. Asher’s portion was rich in olive oil — ‘let him dip his foot in oil’ — and yielded ‘royal dainties’. Moses called Asher blessed above sons and the favoured of his brethren.",
+      "fr": "Une tribu d’abondance et de bénédiction. Le territoire d’Acher regorgeait d’huile d’olive, au point que Moïse le voit « baignant son pied dans l’huile », et fournissait des mets dignes des rois. Il est béni entre les fils et bienvenu auprès de ses frères."
+    },
+    "tagline": {
+      "he": "בָּרוּךְ מִבָּנִים אָשֵׁר",
+      "en": "Blessed be Asher above sons",
+      "fr": "Béni entre les fils soit Asher"
+    }
+  },
+  {
+    "key": "yissachar",
+    "order": 9,
+    "name": {
+      "he": "יִשָּׂשכָר",
+      "he_plain": "יששכר",
+      "en": "Yissachar",
+      "fr": "Issakhar"
+    },
+    "name_alt": {
+      "en": "Issachar",
+      "fr": "Issachar"
+    },
+    "mother": {
+      "he": "לאה",
+      "en": "Leah",
+      "fr": "Léa"
+    },
+    "meaning": {
+      "he": "שמו מלשון שכר: לאה אמרה שה׳ נתן לה את שכרה.",
+      "en": "From the word for reward: Leah said, ‘God hath given me my hire.’",
+      "fr": "Son nom vient de la récompense, car Léa dit que Dieu lui avait donné son salaire."
+    },
+    "stone": {
+      "he": "סַפִּיר",
+      "he_plain": "ספיר",
+      "en": "Sapir",
+      "gloss": {
+        "he": "ספיר / לפיס לזולי",
+        "en": "sapphire / lapis lazuli",
+        "fr": "saphir / lapis-lazuli"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "שחור, דומה לכחול",
+        "en": "black, like kohl (blue-black)",
+        "fr": "noir, semblable au khôl (noir bleuté)"
+      },
+      "hex": "#232B3A",
+      "symbol": {
+        "he": "שמש וירח",
+        "en": "sun and moon",
+        "fr": "soleil et lune"
+      }
+    },
+    "camp": {
+      "he": "מזרח – תחת דגל מחנה יהודה, לצד זבולון.",
+      "en": "East — under the banner (degel) of the camp of Yehuda, alongside Zevulun.",
+      "fr": "À l’est, sous la bannière (déguel) du camp de Yehouda, aux côtés de Zevouloun."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, יד",
+          "en": "Genesis 49:14",
+          "fr": "Genèse 49:14"
+        },
+        "source": "jacob",
+        "he": "יִשָּׂשכָר חֲמֹר גָּרֶם רֹבֵץ בֵּין הַמִּשְׁפְּתָיִם",
+        "en": "Issachar is a large-boned ass, Couching down between the sheep-folds.",
+        "fr": "Issachar est un âne musculeux qui se couche entre les collines."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, יח",
+          "en": "Deuteronomy 33:18",
+          "fr": "Deutéronome 33:18"
+        },
+        "source": "moses",
+        "he": "וְלִזְבוּלֻן אָמַר שְׂמַח זְבוּלֻן בְּצֵאתֶךָ וְיִשָּׂשכָר בְּאֹהָלֶיךָ",
+        "en": "And of Zebulun he said: Rejoice, Zebulun, in thy going out, And, Issachar, in thy tents.",
+        "fr": "À Zabulon, il dit ces mots: Sois heureux, Zabulon, dans tes voyages, et toi, Issachar, dans tes tentes!"
+      },
+      {
+        "ref": {
+          "he": "דברי הימים א יב, לג",
+          "en": "I Chronicles 12:33",
+          "fr": "I Chroniques 12:33"
+        },
+        "source": "other",
+        "he": "וּמִבְּנֵי יִשָּׂשכָר יוֹדְעֵי בִינָה לַעִתִּים לָדַעַת מַה־יַּעֲשֶׂה יִשְׂרָאֵל רָאשֵׁיהֶם מָאתַיִם וְכָל־אֲחֵיהֶם עַל־פִּיהֶם",
+        "en": "And of the children of Issachar, men that had understanding of the times, to know what Israel ought to do; the heads of them were two hundred; and all their brethren were at their commandment.",
+        "fr": "Des gens d’Issachar, experts en la connaissance des temps pour décider la conduite à tenir par Israël, il vint deux cents chefs, auxquels obéissaient tous leurs frères."
+      }
+    ],
+    "essence": {
+      "he": "שבט לומדי התורה. את \"חמור גרם\" פירשו חז״ל על מי שנושא עול תורה, ובדברי הימים נקראו בני יששכר \"יודעי בינה לעתים\" – חכמים שידעו לקבוע חודשים ושנים ולהורות לישראל מה לעשות.",
+      "en": "The tribe of Torah scholars. The Sages read Jacob’s image of the strong donkey as one who bears the yoke of Torah, and Chronicles calls the children of Yissachar ‘men that had understanding of the times’ — sages who set the calendar and showed Israel what to do.",
+      "fr": "La tribu des érudits de la Torah. Nos Sages voient dans « l’âne musculeux » de Jacob celui qui porte le joug de la Torah, et les Chroniques décrivent les fils d’Issakhar comme « experts en la connaissance des temps », des sages qui fixaient le calendrier et guidaient Israël."
+    },
+    "tagline": {
+      "he": "יוֹדְעֵי בִינָה לַעִתִּים",
+      "en": "Understanding of the times",
+      "fr": "Experts en la connaissance des temps"
+    }
+  },
+  {
+    "key": "zevulun",
+    "order": 10,
+    "name": {
+      "he": "זְבוּלֻן",
+      "he_plain": "זבולון",
+      "en": "Zevulun",
+      "fr": "Zevouloun"
+    },
+    "name_alt": {
+      "en": "Zebulun",
+      "fr": "Zabulon"
+    },
+    "mother": {
+      "he": "לאה",
+      "en": "Leah",
+      "fr": "Léa"
+    },
+    "meaning": {
+      "he": "שמו מלשון זבול, בית מדור: לאה אמרה \"הפעם יזבלני אישי\" – מעתה ידור בעלה עימה.",
+      "en": "From the word for dwelling: Leah said, ‘Now will my husband dwell with me.’",
+      "fr": "Son nom évoque la demeure, car Léa dit que son époux habiterait désormais auprès d’elle."
+    },
+    "stone": {
+      "he": "יָהֲלֹם",
+      "he_plain": "יהלום",
+      "en": "Yahalom",
+      "gloss": {
+        "he": "יהלום / קוורץ צלול",
+        "en": "diamond / clear quartz",
+        "fr": "diamant / cristal de roche"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "לבן",
+        "en": "white",
+        "fr": "blanc"
+      },
+      "hex": "#C9CCD1",
+      "symbol": {
+        "he": "ספינה",
+        "en": "ship",
+        "fr": "navire"
+      }
+    },
+    "camp": {
+      "he": "מזרח – תחת דגל מחנה יהודה, לצד יששכר.",
+      "en": "East — under the banner (degel) of the camp of Yehuda, alongside Yissachar.",
+      "fr": "À l’est, sous la bannière (déguel) du camp de Yehouda, aux côtés d’Issakhar."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, יג",
+          "en": "Genesis 49:13",
+          "fr": "Genèse 49:13"
+        },
+        "source": "jacob",
+        "he": "זְבוּלֻן לְחוֹף יַמִּים יִשְׁכֹּן וְהוּא לְחוֹף אֳנִיֹּת וְיַרְכָתוֹ עַל־צִידֹן",
+        "en": "Zebulun shall dwell at the shore of the sea, And he shall be a shore for ships, And his flank shall be upon Zidon.",
+        "fr": "Zabulon occupera le littoral des mers; il offrira des ports aux vaisseaux et sa plage atteindra Sidon."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, יח",
+          "en": "Deuteronomy 33:18",
+          "fr": "Deutéronome 33:18"
+        },
+        "source": "moses",
+        "he": "וְלִזְבוּלֻן אָמַר שְׂמַח זְבוּלֻן בְּצֵאתֶךָ וְיִשָּׂשכָר בְּאֹהָלֶיךָ",
+        "en": "And of Zebulun he said: Rejoice, Zebulun, in thy going out, And, Issachar, in thy tents.",
+        "fr": "À Zabulon, il dit ces mots: Sois heureux, Zabulon, dans tes voyages, et toi, Issachar, dans tes tentes!"
+      },
+      {
+        "ref": {
+          "he": "בראשית ל, כ",
+          "en": "Genesis 30:20",
+          "fr": "Genèse 30:20"
+        },
+        "source": "naming",
+        "he": "וַתֹּאמֶר לֵאָה זְבָדַנִי אֱלֹהִים אֹתִי זֵבֶד טוֹב הַפַּעַם יִזְבְּלֵנִי אִישִׁי כִּי־יָלַדְתִּי לוֹ שִׁשָּׁה בָנִים וַתִּקְרָא אֶת־שְׁמוֹ זְבֻלוּן",
+        "en": "And Leah said: ‘God hath endowed me with a good dowry; now will my husband dwell with me, because I have borne him six sons.’ And she called his name Zebulun.",
+        "fr": "Et Léa dit: \"Le Seigneur m’a accordée, moi, comme un don précieux; désormais mon époux fera de moi sa compagne, car je lui ai enfanté six fils.\" Et elle appela celui-ci Zabulon."
+      }
+    ],
+    "essence": {
+      "he": "שבט של יורדי ים וסוחרים, השוכן \"לחוף ימים\". חז״ל מספרים שזבולון יצא לסחורה בספינות ופרנס את יששכר שעסק בתורה – ובזכות השותפות הזאת הקדים משה את זבולון ליששכר בברכתו.",
+      "en": "A tribe of seafarers and merchants, dwelling ‘at the shore of the sea’. The Sages teach that Zevulun went out in ships to trade and supported Yissachar, who sat and studied Torah — and for that partnership Moses named Zevulun first in his blessing.",
+      "fr": "Une tribu de marins et de marchands, établie sur le littoral des mers. Nos Sages enseignent que Zevouloun partait commercer sur ses navires et subvenait aux besoins d’Issakhar, qui étudiait la Torah. Pour ce partenariat, Moïse nomme Zevouloun en premier dans sa bénédiction."
+    },
+    "tagline": {
+      "he": "שְׂמַח זְבוּלֻן בְּצֵאתֶךָ",
+      "en": "Rejoice, Zebulun, in thy going out",
+      "fr": "Sois heureux, Zabulon, dans tes voyages"
+    }
+  },
+  {
+    "key": "yosef",
+    "order": 11,
+    "name": {
+      "he": "יוֹסֵף",
+      "he_plain": "יוסף",
+      "en": "Yosef",
+      "fr": "Yossef"
+    },
+    "name_alt": {
+      "en": "Joseph",
+      "fr": "Joseph"
+    },
+    "mother": {
+      "he": "רחל",
+      "en": "Rachel",
+      "fr": "Rachel"
+    },
+    "meaning": {
+      "he": "שמו מלשון הוספה: רחל התפללה \"יוסף ה׳ לי בן אחר\".",
+      "en": "From the word for adding: Rachel prayed, ‘The LORD add to me another son.’",
+      "fr": "Son nom vient du verbe ajouter, car Rachel pria que l’Éternel lui donne encore un autre fils."
+    },
+    "stone": {
+      "he": "שֹׁהַם",
+      "he_plain": "שוהם",
+      "en": "Shoham",
+      "gloss": {
+        "he": "אוניקס",
+        "en": "onyx",
+        "fr": "onyx"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "שחור עד מאוד",
+        "en": "deep black",
+        "fr": "noir profond"
+      },
+      "hex": "#1A1A1C",
+      "symbol": {
+        "he": "מצרים; על דגל אפרים שור, ועל דגל מנשה ראם",
+        "en": "Egypt; on Ephraim’s flag an ox, on Menashe’s a re’em (wild ox)",
+        "fr": "l’Égypte; sur le drapeau d’Éphraïm un taureau, sur celui de Ménaché un réem (bœuf sauvage)"
+      }
+    },
+    "camp": {
+      "he": "מערב (ימה) – דגל מחנה אפרים: אפרים בראש, ועימו מנשה – שני שבטי יוסף – ובנימין; שלישים במסע.",
+      "en": "West — the banner (degel) of the camp of Ephraim: Ephraim at the head with Menashe, the two tribes of Yosef, and Binyamin; third to set out.",
+      "fr": "À l’ouest, la bannière (déguel) du camp d’Éphraïm, avec Éphraïm en tête et Ménaché, les deux tribus de Yossef, ainsi que Binyamin. Troisième à se mettre en marche."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, כב",
+          "en": "Genesis 49:22",
+          "fr": "Genèse 49:22"
+        },
+        "source": "jacob",
+        "he": "בֵּן פֹּרָת יוֹסֵף בֵּן פֹּרָת עֲלֵי־עָיִן בָּנוֹת צָעֲדָה עֲלֵי־שׁוּר",
+        "en": "Joseph is a fruitful vine, A fruitful vine by a fountain; Its branches run over the wall.",
+        "fr": "C’est un rameau fertile que Joseph, un rameau fertile au bord d’une fontaine; il dépasse les autres rameaux le long de la muraille."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, יג",
+          "en": "Deuteronomy 33:13",
+          "fr": "Deutéronome 33:13"
+        },
+        "source": "moses",
+        "he": "וּלְיוֹסֵף אָמַר מְבֹרֶכֶת ה׳ אַרְצוֹ מִמֶּגֶד שָׁמַיִם מִטָּל וּמִתְּהוֹם רֹבֶצֶת תָּחַת",
+        "en": "And of Joseph he said: Blessed of the LORD be his land; For the precious things of heaven, for the dew, And for the deep that coucheth beneath,",
+        "fr": "Sur Joseph, il parla ainsi: Bénie du Seigneur est sa terre! Elle possède les dons du ciel, la rosée, comme ceux de l’abîme aux couches souterraines:"
+      },
+      {
+        "ref": {
+          "he": "בראשית ל, כד",
+          "en": "Genesis 30:24",
+          "fr": "Genèse 30:24"
+        },
+        "source": "naming",
+        "he": "וַתִּקְרָא אֶת־שְׁמוֹ יוֹסֵף לֵאמֹר יֹסֵף ה׳ לִי בֵּן אַחֵר",
+        "en": "And she called his name Joseph, saying: ‘The LORD add to me another son.’",
+        "fr": "Elle énonça son nom Joseph, en disant \"Dieu veuille me donner encore un second fils!\""
+      }
+    ],
+    "essence": {
+      "he": "יוסף הצדיק, \"בן פורת\" – שבט של פריון וברכה. הוא שכלכל את בית אביו במצרים, ויעקב נתן לו חלק כפול: שני בניו, אפרים ומנשה, היו לשני שבטים בישראל.",
+      "en": "Yosef the righteous, the ‘fruitful vine’: a tribe of fruitfulness and blessing. He sustained his father’s household in Egypt, and Jacob gave him a double portion — his two sons, Ephraim and Menashe, each became a tribe in Israel.",
+      "fr": "Yossef le Juste, « rameau fertile », tribu de la fécondité et de la bénédiction. Il nourrit la maison de son père en Égypte, et Jacob lui accorda une double part, puisque ses deux fils, Éphraïm et Ménaché, devinrent chacun une tribu d’Israël."
+    },
+    "tagline": {
+      "he": "בֵּן פֹּרָת יוֹסֵף",
+      "en": "A fruitful vine",
+      "fr": "Un rameau fertile"
+    }
+  },
+  {
+    "key": "binyamin",
+    "order": 12,
+    "name": {
+      "he": "בִּנְיָמִין",
+      "he_plain": "בנימין",
+      "en": "Binyamin",
+      "fr": "Binyamin"
+    },
+    "name_alt": {
+      "en": "Benjamin",
+      "fr": "Benjamin"
+    },
+    "mother": {
+      "he": "רחל",
+      "en": "Rachel",
+      "fr": "Rachel"
+    },
+    "meaning": {
+      "he": "רחל קראה לו \"בן אוני\", ויעקב אביו קרא לו בנימין – בן ימין.",
+      "en": "Rachel called him Ben-oni, but his father Jacob named him Binyamin, ‘son of the right hand’.",
+      "fr": "Rachel l’appela Ben-Oni, mais son père Jacob le nomma Binyamin, « fils de la droite »."
+    },
+    "stone": {
+      "he": "יָשְׁפֵה",
+      "he_plain": "ישפה",
+      "en": "Yashfeh",
+      "gloss": {
+        "he": "ג׳ספר",
+        "en": "jasper",
+        "fr": "jaspe"
+      }
+    },
+    "flag": {
+      "color": {
+        "he": "כעין כל שנים עשר הצבעים יחד",
+        "en": "all twelve colours together",
+        "fr": "les douze couleurs réunies"
+      },
+      "hex": "#A85C36",
+      "symbol": {
+        "he": "זאב",
+        "en": "wolf",
+        "fr": "loup"
+      }
+    },
+    "camp": {
+      "he": "מערב – תחת דגל מחנה אפרים, לצד מנשה.",
+      "en": "West — under the banner (degel) of the camp of Ephraim, alongside Menashe.",
+      "fr": "À l’ouest, sous la bannière (déguel) du camp d’Éphraïm, aux côtés de Ménaché."
+    },
+    "verses": [
+      {
+        "ref": {
+          "he": "בראשית מט, כז",
+          "en": "Genesis 49:27",
+          "fr": "Genèse 49:27"
+        },
+        "source": "jacob",
+        "he": "בִּנְיָמִין זְאֵב יִטְרָף בַּבֹּקֶר יֹאכַל עַד וְלָעֶרֶב יְחַלֵּק שָׁלָל",
+        "en": "Benjamin is a wolf that raveneth; In the morning he devoureth the prey, And at even he divideth the spoil.",
+        "fr": "Benjamin est un loup ravisseur: le matin il s’assouvit de carnage, le soir il partagera le butin."
+      },
+      {
+        "ref": {
+          "he": "דברים לג, יב",
+          "en": "Deuteronomy 33:12",
+          "fr": "Deutéronome 33:12"
+        },
+        "source": "moses",
+        "he": "לְבִנְיָמִן אָמַר יְדִיד ה׳ יִשְׁכֹּן לָבֶטַח עָלָיו חֹפֵף עָלָיו כָּל־הַיּוֹם וּבֵין כְּתֵפָיו שָׁכֵן",
+        "en": "Of Benjamin he said: The beloved of the LORD shall dwell in safety by Him; He covereth him all the day, And He dwelleth between his shoulders.",
+        "fr": "Sur Benjamin, il dit: \"Favori du Seigneur, il repose avec confiance auprès de lui, qui lui prête son abri pour toujours et qui réside entre ses épaules.\""
+      },
+      {
+        "ref": {
+          "he": "בראשית לה, יח",
+          "en": "Genesis 35:18",
+          "fr": "Genèse 35:18"
+        },
+        "source": "naming",
+        "he": "וַיְהִי בְּצֵאת נַפְשָׁהּ כִּי מֵתָה וַתִּקְרָא שְׁמוֹ בֶּן־אוֹנִי וְאָבִיו קָרָא־לוֹ בִנְיָמִין",
+        "en": "And it came to pass, as her soul was in departing—for she died—that she called his name Ben-oni; but his father called him Benjamin.",
+        "fr": "Or, au moment de rendre l’âme, car elle mourut, elle le nomma Ben-Oni; mais son père l’appela Benjamin."
+      }
+    ],
+    "essence": {
+      "he": "הצעיר בבני יעקב, והיחיד שנולד בארץ ישראל. יעקב המשילו לזאב, ומשה קרא לו \"ידיד ה׳\". חז״ל מלמדים שבית המקדש נבנה בחלקו – והשכינה שוכנת \"בין כתפיו\".",
+      "en": "The youngest of Jacob’s sons, and the only one born in the Land of Israel. Jacob likened him to a wolf, and Moses called him ‘the beloved of the LORD’. The Sages teach that the Holy Temple stood in Binyamin’s portion, the Divine Presence dwelling ‘between his shoulders’.",
+      "fr": "Le plus jeune des fils de Jacob, et le seul né en terre d’Israël. Jacob le compare à un loup et Moïse l’appelle le « favori du Seigneur ». Nos Sages enseignent que le Temple se dressait sur son territoire, la Présence divine résidant « entre ses épaules »."
+    },
+    "tagline": {
+      "he": "יְדִיד ה׳",
+      "en": "The beloved of the LORD",
+      "fr": "Favori du Seigneur"
+    }
+  }
+]

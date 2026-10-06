@@ -1,0 +1,370 @@
+{
+ "ls01": {
+  "back": [
+   4,
+   "clean"
+  ],
+  "front": [
+   3,
+   "watch and hand cut away at the right cuff"
+  ]
+ },
+ "ls02": {
+  "back": [
+   3,
+   "hand cut away at the left cuff"
+  ],
+  "front": [
+   2,
+   "hand-shaped gaps at both cuffs, uneven hem; no person visible"
+  ]
+ },
+ "ls03": {
+  "back": [
+   3,
+   "hand cut away at the left cuff"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls04": {
+  "back": [
+   4,
+   "clean cut-out"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls05": {
+  "back": [
+   4,
+   "clean cut-out"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls06": {
+  "back": [
+   3,
+   "hand at the left cuff and a red object beside the right sleeve cut away"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls07": {
+  "back": [
+   4,
+   "clean cut-out"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls08": {
+  "back": [
+   3,
+   "hand bit cut away at the right hem"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls09": {
+  "back": [
+   4,
+   "clean cut-out"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls10": {
+  "back": [
+   2,
+   "dark photo; objects between sleeves and body cut away as straight-edged gaps"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls11": {
+  "back": [
+   3,
+   "clean; gap where the right hand was"
+  ],
+  "front": [
+   3,
+   "clean; gap where the left hand was"
+  ]
+ },
+ "ls12": {
+  "back": [
+   4,
+   "clean cut-out"
+  ],
+  "front": [
+   2,
+   "gaps in the left sleeve print"
+  ]
+ },
+ "ls13": {
+  "back": [
+   3,
+   "white shorts cut away at the hem (straight cut)"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls14": {
+  "back": [
+   4,
+   "clean cut-out"
+  ],
+  "front": [
+   3,
+   "object between left sleeve and body cut away (straight edge)"
+  ]
+ },
+ "ls15": {
+  "back": [
+   4,
+   "clean cut-out"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "ls16": {
+  "back": [
+   3,
+   "fragment below the hem cut away (straight cut)"
+  ],
+  "front": [
+   2,
+   "notch at the left collar; black on black"
+  ]
+ },
+ "ls17": {
+  "back": [
+   3,
+   "trousers patch cut away at the right hem"
+  ],
+  "front": [
+   3,
+   "watch and hand cut away at the right cuff"
+  ]
+ },
+ "ls18": {
+  "back": [
+   4,
+   "clean cut-out"
+  ],
+  "front": [
+   3,
+   "clean cut-out"
+  ]
+ },
+ "te01": {
+  "front": [
+   3,
+   "trousers patch cut away at the left hem"
+  ]
+ },
+ "te02": {
+  "front": [
+   4,
+   "clean"
+  ],
+  "back": [
+   3,
+   "dark sliver cut away at the right hem"
+  ]
+ },
+ "te03": {
+  "front": [
+   4,
+   "clean"
+  ],
+  "back": [
+   3,
+   "clean"
+  ]
+ },
+ "te04": {
+  "front": [
+   4,
+   "clean"
+  ]
+ },
+ "te05": {
+  "front": [
+   3,
+   "clean after disabling the skin rule"
+  ],
+  "back": [
+   3,
+   "clean"
+  ]
+ },
+ "te06": {
+  "front": [
+   3,
+   "black on black, low contrast"
+  ],
+  "back": [
+   3,
+   "black on black, low contrast"
+  ]
+ },
+ "te07": {
+  "back": [
+   3,
+   "photographed on a hanger"
+  ]
+ },
+ "pa01": {
+  "front": [
+   3,
+   "underwear band cut away above the waistband"
+  ],
+  "back": [
+   3,
+   "clean"
+  ]
+ },
+ "pa02": {
+  "front": [
+   4,
+   "clean"
+  ],
+  "back": [
+   4,
+   "clean"
+  ],
+  "side": [
+   3,
+   "clean"
+  ]
+ },
+ "tz01": {
+  "front": [
+   4,
+   "clean hollow hood"
+  ],
+  "back": [
+   3,
+   "hand bit cut away at the left edge"
+  ]
+ },
+ "tz05": {
+  "front": [
+   3,
+   "hood is a thin rim; sleeve bits cut away at the left edge"
+  ],
+  "back": [
+   3,
+   "small hand bit cut away at the left edge"
+  ]
+ },
+ "tz10": {
+  "front": [
+   3,
+   "clean"
+  ]
+ },
+ "tz19": {
+  "front": [
+   3,
+   "no hood on this item"
+  ],
+  "back": [
+   3,
+   "clean"
+  ]
+ },
+ "tz25": {
+  "front": [
+   3,
+   "clean, item tilted"
+  ]
+ },
+ "tz29": {
+  "front": [
+   3,
+   "clean hollow hood"
+  ],
+  "back": [
+   3,
+   "clean"
+  ]
+ },
+ "tz32": {
+  "back": [
+   3,
+   "hem cut straight; skin bit at the right armhole cut away"
+  ]
+ },
+ "tz02": {
+  "back": [
+   3,
+   "sleeve sliver cut away at the left"
+  ]
+ },
+ "tz03": {
+  "back": [
+   3,
+   "sleeve sliver cut away at the left"
+  ]
+ },
+ "tz04": {
+  "back": [
+   3,
+   "sleeve fragment cut away at the left"
+  ]
+ },
+ "tz08": {
+  "back": [
+   3,
+   "sleeve bits cut away at the right"
+  ]
+ },
+ "tz13": {
+  "back": [
+   3,
+   "head removed, neck stub cut away"
+  ]
+ },
+ "tz26": {
+  "back": [
+   3,
+   "clean"
+  ]
+ },
+ "ne01": {
+  "detail": [
+   4,
+   "table photo, toned and vignetted"
+  ]
+ },
+ "br01": {
+  "detail": [
+   3,
+   "video frame (720p), soft; wrist visible by design"
+  ]
+ }
+}

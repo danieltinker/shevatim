@@ -1,0 +1,1260 @@
+{
+ "hero": {
+  "desktop": {
+   "mp4": "/media/hero/hero-desktop.mp4",
+   "mp4_720": "/media/hero/hero-desktop-720.mp4",
+   "poster": "/media/hero/hero-desktop.jpg",
+   "w": 1920,
+   "h": 1080
+  },
+  "mobile": {
+   "mp4": "/media/hero/hero-mobile.mp4",
+   "poster": "/media/hero/hero-mobile.jpg",
+   "w": 720,
+   "h": 1280
+  }
+ },
+ "clips": [
+  {
+   "key": "tzitzit-bw",
+   "mp4": "/media/clips/tzitzit-bw.mp4",
+   "poster": "/media/clips/tzitzit-bw.jpg",
+   "w": 960,
+   "h": 540,
+   "about": "black and white striped hooded tzitzit, man talking to camera"
+  },
+  {
+   "key": "tzitzit-blue",
+   "mp4": "/media/clips/tzitzit-blue.mp4",
+   "poster": "/media/clips/tzitzit-blue.jpg",
+   "w": 960,
+   "h": 540,
+   "about": "blue striped hooded tzitzit, pointing at camera"
+  },
+  {
+   "key": "longsleeve",
+   "mp4": "/media/clips/longsleeve.mp4",
+   "poster": "/media/clips/longsleeve.jpg",
+   "w": 960,
+   "h": 540,
+   "about": "black long sleeve shirt, arms open"
+  },
+  {
+   "key": "olive",
+   "mp4": "/media/clips/olive.mp4",
+   "poster": "/media/clips/olive.jpg",
+   "w": 960,
+   "h": 540,
+   "about": "olive striped tzitzit, getting out of a car smiling"
+  },
+  {
+   "key": "blue-sit",
+   "mp4": "/media/clips/blue-sit.mp4",
+   "poster": "/media/clips/blue-sit.jpg",
+   "w": 960,
+   "h": 540,
+   "about": "blue striped tzitzit, sitting on the cliff"
+  },
+  {
+   "key": "brown",
+   "mp4": "/media/clips/brown.mp4",
+   "poster": "/media/clips/brown.jpg",
+   "w": 960,
+   "h": 540,
+   "about": "clay striped tzitzit, arms open"
+  },
+  {
+   "key": "three",
+   "mp4": "/media/clips/three.mp4",
+   "poster": "/media/clips/three.jpg",
+   "w": 960,
+   "h": 540,
+   "about": "three friends on the cliff"
+  },
+  {
+   "key": "jewelry",
+   "mp4": "/media/clips/jewelry.mp4",
+   "poster": "/media/clips/jewelry.jpg",
+   "w": 720,
+   "h": 960,
+   "about": "shell bracelets and necklace in a mirror, vertical"
+  }
+ ],
+ "lookbook": [
+  {
+   "base": "/media/lookbook/yog05990",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG05990",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog05991",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG05991",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06000",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06000",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06001",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06001",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06003",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06003",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06004",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06004",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06024",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06024",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06026",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06026",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06027",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06027",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06028",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06028",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06034",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06034",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06035",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06035",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06036",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06036",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06039",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06039",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06040",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06040",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06042",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06042",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06043",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06043",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06044",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06044",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06046",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06046",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06048",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06048",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06052",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06052",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06053",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06053",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06055",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06055",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06056",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06056",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06057",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06057",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06061",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06061",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06062",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06062",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06063",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06063",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06064",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06064",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06066",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06066",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06074",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06074",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06077",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06077",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06084",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06084",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06085",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06085",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06092_2",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06092_2",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06106",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06106",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06117",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06117",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06121",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06121",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06122",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06122",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06127",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06127",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06138",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06138",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06139",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06139",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06140",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06140",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06143",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06143",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06144",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06144",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06145",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06145",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06146",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06146",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06148",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06148",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06152",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06152",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06160",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06160",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06161",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06161",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06162",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06162",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06163",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06163",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06167",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06167",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06172",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06172",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06173",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06173",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/488dae55",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1600,
+   "h": 1066,
+   "kind": "campaign",
+   "source": "488dae55-edf3-4f35-9e5c-8ebf637f7bdd",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/2df53b95",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1600,
+   "h": 1066,
+   "kind": "campaign",
+   "source": "2df53b95-6576-4ba4-876e-6d7c482cb702",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/example-",
+   "sizes": [
+    640
+   ],
+   "ext": "webp",
+   "w": 948,
+   "h": 1264,
+   "kind": "campaign",
+   "source": "example-expected_result-stripped-item-from-model",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/30919567",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1600,
+   "h": 1066,
+   "kind": "campaign",
+   "source": "30919567-9ba6-41ae-b2f6-6e890daf27fc",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/27ccf423",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1600,
+   "h": 1066,
+   "kind": "campaign",
+   "source": "27ccf423-933c-49b8-a182-6c584a148869",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/7dc6da87",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1600,
+   "h": 1066,
+   "kind": "campaign",
+   "source": "7dc6da87-d347-43d9-b9c3-7dce17d0862c",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/img_1991",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1991",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/img_1995",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1995",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/img_2035",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_2035",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/img_2036",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_2036",
+   "pick": false
+  }
+ ],
+ "team": [
+  {
+   "base": "/media/team/img_1921",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1921",
+   "pick": true
+  },
+  {
+   "base": "/media/team/img_1933",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1933",
+   "pick": true
+  },
+  {
+   "base": "/media/team/img_1919",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1919",
+   "pick": true
+  },
+  {
+   "base": "/media/team/img_1930",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1930",
+   "pick": false
+  },
+  {
+   "base": "/media/team/img_1918",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1918",
+   "pick": false
+  },
+  {
+   "base": "/media/team/img_1913",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1913",
+   "pick": false
+  },
+  {
+   "base": "/media/team/img_1909",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1909",
+   "pick": false
+  },
+  {
+   "base": "/media/team/img_1925",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1925",
+   "pick": false
+  },
+  {
+   "base": "/media/team/img_1955",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1955",
+   "pick": true
+  },
+  {
+   "base": "/media/team/img_1956",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1956",
+   "pick": false
+  },
+  {
+   "base": "/media/team/img_1951",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1951",
+   "pick": true
+  },
+  {
+   "base": "/media/team/img_1952",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1952",
+   "pick": false
+  },
+  {
+   "base": "/media/team/img_1948",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1948",
+   "pick": false
+  },
+  {
+   "base": "/media/team/img_1905",
+   "sizes": [
+    640,
+    1280
+   ],
+   "ext": "webp",
+   "w": 1500,
+   "h": 2000,
+   "kind": "campaign",
+   "source": "IMG_1905",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06146",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06146",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06122",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06122",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06085",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06085",
+   "pick": true
+  },
+  {
+   "base": "/media/lookbook/yog06027",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06027",
+   "pick": false
+  },
+  {
+   "base": "/media/lookbook/yog06034",
+   "sizes": [
+    640,
+    1280,
+    2000
+   ],
+   "ext": "webp",
+   "w": 2000,
+   "h": 1333,
+   "kind": "campaign",
+   "source": "YOG06034",
+   "pick": false
+  }
+ ],
+ "brand": {
+  "wordmarkWhite": "/media/brand/wordmark-white.png",
+  "wordmarkBlack": "/media/brand/wordmark-black.png",
+  "wordmarkWhiteSmall": "/media/brand/wordmark-white-600.png",
+  "wordmarkBlackSmall": "/media/brand/wordmark-black-600.png",
+  "wordmarkAspect": 2.587,
+  "og": "/media/brand/og.jpg"
+ }
+}

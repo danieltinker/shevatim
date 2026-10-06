@@ -1,0 +1,42 @@
+import type { Metadata, Viewport } from "next";
+import { notFound } from "next/navigation";
+import "@fontsource-variable/frank-ruhl-libre";
+import "@fontsource-variable/heebo";
+import "../globals.css";
+import { dirOf, getDict, isLocale } from "@/lib/i18n";
+import { LOCALES } from "@/lib/types";
+import Providers from "@/components/site/Providers";
+import Header from "@/components/site/Header";
+import Footer from "@/components/site/Footer";
+import { tribeViews } from "@/components/site/tribes";
+import { brandName, ICONS, metadataBase } from "@/components/site/meta";
+
+export const dynamicParams = false;
+export function generateStaticParams() { return LOCALES.map((locale) => ({ locale })); }
+export const viewport: Viewport = { themeColor: "#000000", width: "device-width", initialScale: 1 };
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const t = getDict(locale);
+  return { metadataBase, title: { default: t.meta.title, template: `%s · ${brandName(locale)}` }, description: t.meta.description, icons: ICONS };
+}
+
+export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const t = getDict(locale);
+  const tribes = tribeViews(locale).map((x) => ({ key: x.key, plain: x.plain }));
+  return (
+    <html lang={locale} dir={dirOf(locale)}>
+      <body>
+        <Providers locale={locale} dict={t}>
+          <a className="skip" href="#main">{t.nav.skip}</a>
+          <Header tribes={tribes} />
+          <main id="main">{children}</main>
+          <Footer />
+        </Providers>
+      </body>
+    </html>
+  );
+}

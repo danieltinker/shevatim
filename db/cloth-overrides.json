@@ -1,0 +1,83 @@
+{
+  "tz02": {
+    "shape": "hooded-poncho",
+    "texture": "/media/items/tz02/fabric-1024.webp#offset",
+    "baseColor": "#E9E2CC",
+    "trim": "none",
+    "trimColor": "#EFE8D8",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  },
+  "tz07": {
+    "shape": "poncho",
+    "texture": "/media/items/tz07/fabric-1024.webp",
+    "baseColor": "#EDE6CF",
+    "trim": "none",
+    "trimColor": "#EFE8D8",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  },
+  "tz10": {
+    "shape": "hooded-poncho",
+    "texture": "/media/items/tz10/fabric-1024.webp",
+    "baseColor": "#EEF0EA",
+    "trim": "fringe",
+    "trimColor": "#F1EFE6",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  },
+  "tz18": {
+    "shape": "cropped",
+    "texture": "/media/items/tz18/fabric-1024.webp#hood",
+    "baseColor": "#8A8468",
+    "trim": "lace",
+    "trimColor": "#F1ECE0",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  },
+  "tz19": {
+    "shape": "cropped",
+    "texture": "/media/items/tz19/fabric-1024.webp",
+    "baseColor": "#ECE4CC",
+    "trim": "lace",
+    "trimColor": "#F4EFE2",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  },
+  "tz20": {
+    "shape": "hooded-poncho",
+    "texture": "/media/items/tz20/fabric-1024.webp#goldband",
+    "baseColor": "#EDE5D0",
+    "trim": "tassels",
+    "trimColor": "#EDE5D0",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  },
+  "tz25": {
+    "shape": "poncho",
+    "texture": "/media/items/tz25/fabric-1024.webp",
+    "baseColor": "#8D9098",
+    "trim": "none",
+    "trimColor": "#EFE8D8",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  },
+  "tz27": {
+    "shape": "poncho",
+    "texture": "/media/items/tz27/fabric-1024.webp#offset",
+    "baseColor": "#EDEBE4",
+    "trim": "fringe",
+    "trimColor": "#F1EFE8",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  },
+  "tz29": {
+    "shape": "cropped",
+    "texture": "/media/items/tz29/fabric-1024.webp#hood",
+    "baseColor": "#EFE8D6",
+    "trim": "tassels",
+    "trimColor": "#EFE8D6",
+    "stringColor": "#F2EEE4",
+    "techelet": true
+  }
+}

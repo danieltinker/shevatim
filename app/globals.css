@@ -1,0 +1,76 @@
+/* Shevatim: night studio, day desert. Tokens from docs/DESIGN.md. */
+:root {
+  --black: #000; --chalk: #E9E5DC; --bone: #F3EFE7; --ink: #0B0A09;
+  --muted-on-black: #A9A49A; --muted-on-chalk: #5D584F;
+  --tekhelet: #2F5FA8; --tekhelet-on-black: #8FB2E6;
+  --line-on-black: rgba(243, 239, 231, .16); --line-on-chalk: rgba(11, 10, 9, .14);
+  --font-display: "Frank Ruhl Libre Variable", "Frank Ruhl Libre", "Times New Roman", serif;
+  --font-ui: "Heebo Variable", "Heebo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --fs-display: clamp(56px, 11.6vw, 168px);
+  --fs-h1: clamp(40px, 6.1vw, 88px);
+  --fs-h2: clamp(28px, 3.3vw, 48px);
+  --fs-h3: clamp(20px, 1.8vw, 26px);
+  --fs-body: clamp(16px, 1.15vw, 17px);
+  --fs-small: clamp(13px, .95vw, 14px);
+  --gutter: 16px; --header-h: 56px; --ann-h: 0px;
+  /* ground: black by default */
+  --bg: var(--black); --fg: var(--bone); --muted: var(--muted-on-black); --accent: var(--tekhelet-on-black); --line: var(--line-on-black);
+  color-scheme: dark;
+}
+@media (min-width: 768px) { :root { --gutter: 32px; } }
+@media (min-width: 1024px) { :root { --gutter: 48px; --header-h: 64px; } }
+
+.onBlack { --bg: var(--black); --fg: var(--bone); --muted: var(--muted-on-black); --accent: var(--tekhelet-on-black); --line: var(--line-on-black); background: var(--bg); color: var(--fg); }
+.onChalk { --bg: var(--chalk); --fg: var(--ink); --muted: var(--muted-on-chalk); --accent: var(--tekhelet); --line: var(--line-on-chalk); background: var(--bg); color: var(--fg); }
+.hasAnn { --ann-h: 32px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-block-start: calc(var(--header-h) + 8px); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--black); color: var(--bone);
+  font-family: var(--font-ui); font-size: var(--fs-body); line-height: 1.55; font-weight: 400;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: clip;
+}
+img, video { max-inline-size: 100%; }
+h1, h2, h3, p, ul, ol, figure, blockquote { margin: 0; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.1; text-wrap: balance; }
+h1 { font-size: var(--fs-h1); } h2 { font-size: var(--fs-h2); } h3 { font-size: var(--fs-h3); font-weight: 600; }
+p { text-wrap: pretty; }
+a { color: inherit; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--tekhelet); color: var(--bone); }
+
+.wrap { max-inline-size: 1680px; margin-inline: auto; }
+.section { padding: clamp(56px, 8vw, 120px) var(--gutter); }
+.measure { max-inline-size: 62ch; }
+.muted { color: var(--muted); }
+.small { font-size: var(--fs-small); }
+.srOnly { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-block-size: 52px; padding: 12px 28px; border: 1px solid var(--fg); border-radius: 0;
+  background: var(--fg); color: var(--bg); font-weight: 500; font-size: 16px; line-height: 1.2; text-decoration: none; text-align: center;
+  transition: background-color .2s ease, color .2s ease;
+}
+.btn:hover { background: transparent; color: var(--fg); }
+.btn[disabled], .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+.btnGhost { background: transparent; color: var(--fg); }
+.btnGhost:hover { background: var(--fg); color: var(--bg); }
+.link {
+  color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 6px;
+  font-weight: 500; display: inline-block; padding-block: 10px;
+}
+.link:hover { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+
+/* Hebrew verses: the printed-book voice */
+.verse { font-family: var(--font-display); font-weight: 500; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.7; text-wrap: pretty; }
+.verseTr { font-size: var(--fs-body); line-height: 1.55; margin-block-start: 8px; }
+.verseRef { font-size: var(--fs-small); color: var(--muted); margin-block-start: 8px; }
+
+.skip { position: absolute; inset-block-start: -100px; inset-inline-start: 8px; z-index: 100; background: var(--bone); color: var(--ink); padding: 12px 16px; }
+.skip:focus { inset-block-start: 8px; }

@@ -1,0 +1,33 @@
+.hero {
+  position: relative; overflow: hidden; background: #000; color: var(--bone);
+  block-size: calc(100svh - var(--ann-h)); min-block-size: 480px;
+  margin-block-start: calc(-1 * var(--header-h));
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.media { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+/* a soft black gradient at the bottom only, for the wordmark and the line */
+.shade { position: absolute; inset-inline: 0; inset-block-end: 0; block-size: 62%; pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, .86) 0%, rgba(0, 0, 0, .62) 34%, rgba(0, 0, 0, .22) 70%, rgba(0, 0, 0, 0) 100%); }
+.copy {
+  position: relative; z-index: 1; inline-size: 100%; padding: 0 var(--gutter) clamp(28px, 6vh, 64px);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.mark { margin: 0; line-height: 0; }
+.mark img { inline-size: min(84vw, 760px, 96vh); block-size: auto; display: block; }
+.line { font-family: var(--font-display); font-weight: 500; font-size: clamp(22px, 2.4vw, 34px); line-height: 1.25; margin-block-start: -8px; }
+.cta { margin-block-start: clamp(18px, 3vh, 28px); }
+.toggle {
+  position: absolute; z-index: 2; inset-block-end: 16px; inset-inline-end: var(--gutter);
+  inline-size: 44px; block-size: 44px; border-radius: 50%; display: grid; place-items: center;
+  background: transparent; color: rgba(243, 239, 231, .8); border: 1px solid rgba(243, 239, 231, .32);
+}
+.toggle:hover { color: var(--bone); border-color: rgba(243, 239, 231, .7); }
+@media (min-width: 768px) { .toggle { inset-inline-end: auto; inset-inline-start: var(--gutter); inset-block-end: clamp(20px, 4vh, 32px); } }
+
+/* the one orchestrated moment */
+@media (prefers-reduced-motion: no-preference) {
+  .mark, .line, .cta { animation: up .9s cubic-bezier(.2, .7, .2, 1) both; }
+  .line { animation-delay: .18s; }
+  .cta { animation-delay: .32s; }
+}
+@keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }

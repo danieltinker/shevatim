@@ -1,0 +1,71 @@
+.ann {
+  block-size: 32px; display: flex; align-items: center; justify-content: center; padding-inline: var(--gutter);
+  background: #000; color: var(--bone); font-size: 13px; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border-block-end: 1px solid var(--line-on-black);
+}
+:global(html:has([data-ann])) { --ann-h: 32px; }
+
+.header {
+  position: sticky; inset-block-start: 0; z-index: 50; block-size: var(--header-h);
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding-inline: var(--gutter);
+  background: #000; color: var(--bone); border-block-end: 1px solid var(--line-on-black);
+  transition: background-color .3s ease, border-color .3s ease;
+}
+.clear { background: transparent; border-color: transparent; }
+/* legibility over the bright desert film: a soft shade behind the transparent header only */
+.clear::before {
+  content: ""; position: absolute; inset: 0; block-size: 180%; z-index: -1; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .55), rgba(0, 0, 0, 0));
+}
+@media (prefers-reduced-motion: reduce) { .header { transition: none; } }
+
+.start { display: flex; align-items: center; justify-self: start; min-inline-size: 0; }
+.end { display: flex; align-items: center; justify-self: end; gap: 8px; }
+.mark { display: block; line-height: 0; }
+.mark img { block-size: 40px; inline-size: auto; display: block; }
+@media (min-width: 1024px) { .mark img { block-size: 46px; } }
+
+.menuBtn { inline-size: 44px; block-size: 44px; margin-inline-start: -10px; display: grid; place-items: center; background: none; border: 0; border-radius: 50%; }
+.burger { display: grid; gap: 7px; inline-size: 22px; }
+.burger i { display: block; block-size: 1.5px; background: currentColor; transition: transform .2s ease; }
+.burgerOpen i:first-child { transform: translateY(4.25px) rotate(45deg); }
+.burgerOpen i:last-child { transform: translateY(-4.25px) rotate(-45deg); }
+.links { display: none; }
+.links a { text-decoration: none; font-size: 15px; font-weight: 500; padding-block: 12px; white-space: nowrap; }
+.links a:hover { color: var(--tekhelet-on-black); }
+.catLink { display: none; }
+@media (min-width: 1024px) {
+  .menuBtn { display: none; }
+  .links { display: flex; gap: clamp(14px, 1.5vw, 26px); }
+}
+@media (min-width: 1500px) { .catLink { display: inline; } .shopLink { display: none; } }
+
+.lang { list-style: none; display: flex; margin: 0; padding: 0; gap: 0; }
+.lang a {
+  display: grid; place-items: center; min-inline-size: 44px; min-block-size: 44px; padding-inline: 6px;
+  text-decoration: none; font-size: 14px; font-weight: 500; color: var(--muted-on-black);
+}
+.clear .lang a { color: rgba(243, 239, 231, .82); }
+.lang a[aria-current="true"] { color: var(--bone); text-decoration: underline; text-decoration-color: var(--tekhelet-on-black); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.lang a:hover { color: var(--bone); }
+.langDesk { display: none; }
+@media (min-width: 768px) { .langDesk { display: flex; } }
+
+.bag { display: flex; align-items: center; gap: 4px; min-inline-size: 44px; min-block-size: 44px; justify-content: center; text-decoration: none; margin-inline-end: -8px; }
+.count { font-size: 14px; font-weight: 600; min-inline-size: 1ch; font-variant-numeric: tabular-nums; }
+.count:empty { display: none; }
+
+.panel {
+  position: fixed; inset: 0; inset-block-start: 0; z-index: 40; background: #000; color: var(--bone);
+  padding: calc(var(--header-h) + var(--ann-h) + 24px) var(--gutter) 32px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 24px;
+}
+.panel[hidden] { display: none; }
+.panel ul { list-style: none; margin: 0; padding: 0; }
+.big a { display: block; font-family: var(--font-display); font-weight: 700; font-size: 40px; line-height: 1.25; text-decoration: none; padding-block: 4px; }
+.sub { display: flex; flex-wrap: wrap; gap: 0 20px; margin-block-start: 20px !important; padding-block-start: 16px !important; border-block-start: 1px solid var(--line-on-black); }
+.sub a { display: inline-block; padding-block: 11px; text-decoration: none; font-size: 17px; }
+.langPanel { margin-block-start: auto; border-block-start: 1px solid var(--line-on-black); padding-block-start: 8px !important; }
+.langPanel a { min-inline-size: 56px; font-size: 16px; }
+@media (min-width: 768px) { .langPanel { display: none; } }
+@media (min-width: 1024px) { .panel { display: none; } }

@@ -1,0 +1,460 @@
+{
+ "tz01": {
+  "front": {
+   "source": "IMG_6082.jpg",
+   "score": 4,
+   "notes": "clean hollow hood"
+  },
+  "back": {
+   "source": "IMG_6083.jpg",
+   "score": 3,
+   "notes": "hand bit cut away at the left edge"
+  }
+ },
+ "tz02": {
+  "back": {
+   "source": "IMG_6094.jpg",
+   "score": 3,
+   "notes": "sleeve sliver cut away at the left"
+  }
+ },
+ "tz03": {
+  "back": {
+   "source": "IMG_6098.jpg",
+   "score": 3,
+   "notes": "sleeve sliver cut away at the left"
+  }
+ },
+ "tz04": {
+  "back": {
+   "source": "IMG_6103.jpg",
+   "score": 3,
+   "notes": "sleeve fragment cut away at the left"
+  }
+ },
+ "tz05": {
+  "front": {
+   "source": "IMG_6110.jpg",
+   "score": 3,
+   "notes": "hood is a thin rim; sleeve bits cut away at the left edge"
+  },
+  "back": {
+   "source": "IMG_6108.jpg",
+   "score": 3,
+   "notes": "small hand bit cut away at the left edge"
+  }
+ },
+ "tz06": {},
+ "tz07": {},
+ "tz08": {
+  "back": {
+   "source": "IMG_6120.jpg",
+   "score": 3,
+   "notes": "sleeve bits cut away at the right"
+  }
+ },
+ "tz09": {},
+ "tz10": {
+  "front": {
+   "source": "IMG_6131.jpg",
+   "score": 3,
+   "notes": "clean"
+  }
+ },
+ "tz11": {},
+ "tz12": {},
+ "tz13": {
+  "back": {
+   "source": "IMG_6190.jpg",
+   "score": 3,
+   "notes": "head removed, neck stub cut away"
+  }
+ },
+ "tz14": {},
+ "tz15": {},
+ "tz16": {},
+ "tz17": {},
+ "tz18": {},
+ "tz19": {
+  "front": {
+   "source": "IMG_6230.jpg",
+   "score": 3,
+   "notes": "no hood on this item"
+  },
+  "back": {
+   "source": "IMG_6229.jpg",
+   "score": 3,
+   "notes": "clean"
+  }
+ },
+ "tz20": {},
+ "tz21": {},
+ "tz22": {},
+ "tz23": {},
+ "tz24": {},
+ "tz25": {
+  "front": {
+   "source": "IMG_6275.jpg",
+   "score": 3,
+   "notes": "clean, item tilted"
+  }
+ },
+ "tz26": {
+  "back": {
+   "source": "IMG_6278.jpg",
+   "score": 3,
+   "notes": "clean"
+  }
+ },
+ "tz27": {},
+ "tz28": {},
+ "tz29": {
+  "front": {
+   "source": "IMG_7341.jpg",
+   "score": 3,
+   "notes": "clean hollow hood"
+  },
+  "back": {
+   "source": "IMG_7342.jpg",
+   "score": 3,
+   "notes": "clean"
+  }
+ },
+ "tz30": {},
+ "tz31": {},
+ "tz32": {
+  "back": {
+   "source": "IMG_8457_2.jpg",
+   "score": 3,
+   "notes": "hem cut straight; skin bit at the right armhole cut away"
+  }
+ },
+ "ls01": {
+  "back": {
+   "source": "IMG_6174.jpg",
+   "score": 4,
+   "notes": "clean"
+  },
+  "front": {
+   "source": "IMG_6176.jpg",
+   "score": 3,
+   "notes": "watch and hand cut away at the right cuff"
+  }
+ },
+ "ls02": {
+  "back": {
+   "source": "IMG_6177.jpg",
+   "score": 3,
+   "notes": "hand cut away at the left cuff"
+  },
+  "front": {
+   "source": "IMG_6179.jpg",
+   "score": 2,
+   "notes": "hand-shaped gaps at both cuffs, uneven hem; no person visible"
+  }
+ },
+ "ls03": {
+  "back": {
+   "source": "IMG_6180.jpg",
+   "score": 3,
+   "notes": "hand cut away at the left cuff"
+  },
+  "front": {
+   "source": "IMG_6182.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls04": {
+  "back": {
+   "source": "IMG_6183.jpg",
+   "score": 4,
+   "notes": "clean cut-out"
+  },
+  "front": {
+   "source": "IMG_6185.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls05": {
+  "back": {
+   "source": "IMG_6186.jpg",
+   "score": 4,
+   "notes": "clean cut-out"
+  },
+  "front": {
+   "source": "IMG_6188.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls06": {
+  "back": {
+   "source": "IMG_6195.jpg",
+   "score": 3,
+   "notes": "hand at the left cuff and a red object beside the right sleeve cut away"
+  },
+  "front": {
+   "source": "IMG_6197.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls07": {
+  "back": {
+   "source": "IMG_6222.jpg",
+   "score": 4,
+   "notes": "clean cut-out"
+  },
+  "front": {
+   "source": "IMG_6224.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls08": {
+  "back": {
+   "source": "IMG_6244.jpg",
+   "score": 3,
+   "notes": "hand bit cut away at the right hem"
+  },
+  "front": {
+   "source": "IMG_6242.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls09": {
+  "back": {
+   "source": "IMG_6252.jpg",
+   "score": 4,
+   "notes": "clean cut-out"
+  },
+  "front": {
+   "source": "IMG_6249.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls10": {
+  "back": {
+   "source": "IMG_6256.jpg",
+   "score": 2,
+   "notes": "dark photo; objects between sleeves and body cut away as straight-edged gaps"
+  },
+  "front": {
+   "source": "IMG_6254.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls11": {
+  "back": {
+   "source": "IMG_6259.jpg",
+   "score": 3,
+   "notes": "clean; gap where the right hand was"
+  },
+  "front": {
+   "source": "IMG_6257.jpg",
+   "score": 3,
+   "notes": "clean; gap where the left hand was"
+  }
+ },
+ "ls12": {
+  "back": {
+   "source": "IMG_6262.jpg",
+   "score": 4,
+   "notes": "clean cut-out"
+  },
+  "front": {
+   "source": "IMG_6260.jpg",
+   "score": 2,
+   "notes": "gaps in the left sleeve print"
+  }
+ },
+ "ls13": {
+  "back": {
+   "source": "IMG_6265.jpg",
+   "score": 3,
+   "notes": "white shorts cut away at the hem (straight cut)"
+  },
+  "front": {
+   "source": "IMG_6263.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls14": {
+  "back": {
+   "source": "IMG_6270.jpg",
+   "score": 4,
+   "notes": "clean cut-out"
+  },
+  "front": {
+   "source": "IMG_6268.jpg",
+   "score": 3,
+   "notes": "object between left sleeve and body cut away (straight edge)"
+  }
+ },
+ "ls15": {
+  "back": {
+   "source": "IMG_6289.jpg",
+   "score": 4,
+   "notes": "clean cut-out"
+  },
+  "front": {
+   "source": "IMG_8437_2.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "ls16": {
+  "back": {
+   "source": "IMG_7337.jpg",
+   "score": 3,
+   "notes": "fragment below the hem cut away (straight cut)"
+  },
+  "front": {
+   "source": "IMG_7339.jpg",
+   "score": 2,
+   "notes": "notch at the left collar; black on black"
+  }
+ },
+ "ls17": {
+  "back": {
+   "source": "IMG_7348.jpg",
+   "score": 3,
+   "notes": "trousers patch cut away at the right hem"
+  },
+  "front": {
+   "source": "IMG_7350.jpg",
+   "score": 3,
+   "notes": "watch and hand cut away at the right cuff"
+  }
+ },
+ "ls18": {
+  "back": {
+   "source": "IMG_8443_2.jpg",
+   "score": 4,
+   "notes": "clean cut-out"
+  },
+  "front": {
+   "source": "IMG_8441_2.jpg",
+   "score": 3,
+   "notes": "clean cut-out"
+  }
+ },
+ "te01": {
+  "front": {
+   "source": "IMG_6206.jpg",
+   "score": 3,
+   "notes": "trousers patch cut away at the left hem"
+  }
+ },
+ "te02": {
+  "front": {
+   "source": "IMG_6215.jpg",
+   "score": 4,
+   "notes": "clean"
+  },
+  "back": {
+   "source": "IMG_6213.jpg",
+   "score": 3,
+   "notes": "dark sliver cut away at the right hem"
+  }
+ },
+ "te03": {
+  "front": {
+   "source": "IMG_7322.jpg",
+   "score": 4,
+   "notes": "clean"
+  },
+  "back": {
+   "source": "IMG_7320.jpg",
+   "score": 3,
+   "notes": "clean"
+  }
+ },
+ "te04": {
+  "front": {
+   "source": "IMG_7325.jpg",
+   "score": 4,
+   "notes": "clean"
+  }
+ },
+ "te05": {
+  "front": {
+   "source": "IMG_7332.jpg",
+   "score": 3,
+   "notes": "clean after disabling the skin rule"
+  },
+  "back": {
+   "source": "IMG_7329.jpg",
+   "score": 3,
+   "notes": "clean"
+  }
+ },
+ "te06": {
+  "front": {
+   "source": "IMG_7336.jpg",
+   "score": 3,
+   "notes": "black on black, low contrast"
+  },
+  "back": {
+   "source": "IMG_7334.jpg",
+   "score": 3,
+   "notes": "black on black, low contrast"
+  }
+ },
+ "te07": {
+  "back": {
+   "source": "IMG_7813.jpg",
+   "score": 3,
+   "notes": "photographed on a hanger"
+  }
+ },
+ "pa01": {
+  "front": {
+   "source": "IMG_6200.jpg",
+   "score": 3,
+   "notes": "underwear band cut away above the waistband"
+  },
+  "back": {
+   "source": "IMG_6198.jpg",
+   "score": 3,
+   "notes": "clean"
+  }
+ },
+ "pa02": {
+  "front": {
+   "source": "IMG_6204.jpg",
+   "score": 4,
+   "notes": "clean"
+  },
+  "back": {
+   "source": "IMG_6202.jpg",
+   "score": 4,
+   "notes": "clean"
+  },
+  "side": {
+   "source": "IMG_6203.jpg",
+   "score": 3,
+   "notes": "clean"
+  }
+ },
+ "ne01": {
+  "detail": {
+   "source": "IMG_6526.jpg",
+   "score": 4,
+   "notes": "table photo, toned and vignetted"
+  }
+ },
+ "br01": {
+  "detail": {
+   "source": "c_jewelry.mp4 frame f_033.png",
+   "score": 3,
+   "notes": "video frame (720p), soft; wrist visible by design"
+  }
+ }
+}

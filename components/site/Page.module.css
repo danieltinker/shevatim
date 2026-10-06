@@ -1,0 +1,75 @@
+.page { min-block-size: 70vh; padding-block-end: clamp(56px, 8vw, 120px); }
+.pageHead > * { min-inline-size: 0; }
+.pageHead { padding-block: clamp(32px, 5vw, 72px) clamp(24px, 3vw, 40px); display: grid; gap: 14px; }
+.display { font-size: var(--fs-display); font-weight: 800; line-height: 1; }
+:global(html[lang="he"]) .display { line-height: 1.05; }
+.h2 { font-size: var(--fs-h3); font-weight: 600; margin-block-end: clamp(20px, 2.5vw, 32px); }
+
+.stickyStrip { position: sticky; inset-block-start: var(--header-h); z-index: 20; background: #000; border-block: 1px solid var(--line); }
+.tribeBlock { padding: clamp(48px, 7vw, 104px) var(--gutter) 0; scroll-margin-block-start: calc(var(--header-h) + 72px); }
+.tribeHead { display: grid; gap: 6px 48px; margin-block-end: clamp(20px, 3vw, 36px); padding-block-start: 20px; border-block-start: 1px solid var(--line); }
+.tribeName { font-size: clamp(48px, 8vw, 120px); font-weight: 800; line-height: 1; }
+:global(html[lang="he"]) .tribeName { line-height: 1.15; }
+.tribeName a { text-decoration: inherit; color: inherit; }
+.stoneLine { display: flex; align-items: center; gap: 10px; font-weight: 500; margin-block-start: 6px; }
+.dot { inline-size: 18px; block-size: 12px; border-radius: 2px; box-shadow: inset 0 0 0 1px var(--line); flex: none; }
+.oneVerse { font-size: clamp(22px, 2.2vw, 32px) !important; line-height: 1.6 !important; margin-block-start: 12px; }
+.oneVerseTr { font-size: var(--fs-body); }
+@media (min-width: 900px) {
+  .tribeHead { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; }
+  .tribeWho { grid-row: span 2; }
+  .oneVerse { margin: 0; align-self: end; }
+  :global(html:not([lang="he"])) .oneVerse { text-align: end; }
+}
+
+.shopHead { gap: 20px; padding-block-end: 20px; }
+.tabs { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px 24px; flex-wrap: wrap; border-block-end: 1px solid var(--line); }
+.tabs a { display: inline-block; padding-block: 12px; text-decoration: none; font-weight: 500; color: var(--muted); border-block-end: 2px solid transparent; margin-block-end: -1px; white-space: nowrap; }
+.tabs a:hover { color: var(--fg); }
+.tabs a[aria-current="page"] { color: var(--fg); border-color: var(--accent); }
+@media (max-width: 767px) {
+  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+  .tabs::-webkit-scrollbar { display: none; }
+}
+.filterLabel { margin-block-end: 8px; }
+.count[hidden] { display: none; }
+.count { display: flex; gap: 16px; align-items: center; min-block-size: 44px; }
+.clear { color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; padding-block: 12px; }
+.listing { padding-inline: var(--gutter); }
+.empty { padding-block: clamp(48px, 10vw, 140px); display: grid; gap: 10px; justify-items: start; max-inline-size: 46ch; }
+
+.tribeItems { }
+.moreBlock { margin-block-start: clamp(56px, 7vw, 96px); }
+
+/* tribe story (chalk) */
+.story { padding-block-start: clamp(32px, 5vw, 72px); }
+.storyName { font-family: var(--font-display); font-weight: 800; line-height: .95; font-size: clamp(64px, min(17vw, calc(100cqi / (var(--len) * 0.6))), 240px); white-space: nowrap; }
+:global(html[lang="he"]) .storyName { line-height: 1.15; }
+.storyTop { container-type: inline-size; }
+.tagline { font-size: clamp(24px, 2.6vw, 38px) !important; margin-block-start: 8px; max-inline-size: 24em; }
+.storyGrid { display: grid; gap: 40px; margin-block-start: clamp(32px, 5vw, 64px); }
+.facts { display: grid; gap: 0; margin: 0; }
+.facts div { display: grid; grid-template-columns: 9.5em 1fr; gap: 12px; padding-block: 14px; border-block-start: 1px solid var(--line); }
+.facts dt { color: var(--muted); font-size: var(--fs-small); padding-block-start: 2px; }
+.facts dd { margin: 0; font-weight: 500; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.swatch { inline-size: 44px; block-size: 28px; border-radius: 2px; box-shadow: inset 0 0 0 1px var(--line); flex: none; }
+.essence { font-family: var(--font-display); font-size: clamp(22px, 2vw, 28px); line-height: 1.45; font-weight: 500; margin-block-end: 28px; max-inline-size: 30em; }
+.storyVerses { display: grid; gap: 36px; align-content: start; }
+.storyVerses blockquote { border-inline-start: 2px solid var(--line); padding-inline-start: 20px; }
+.storyVerses h2 { font-family: var(--font-ui); font-size: var(--fs-small); font-weight: 500; color: var(--muted); }
+@media (min-width: 1024px) { .storyGrid { grid-template-columns: 5fr 7fr; gap: 72px; } }
+.pager { display: flex; justify-content: space-between; gap: 16px; padding: 0 var(--gutter) 8px; margin-block-start: clamp(40px, 5vw, 72px); }
+.pager a { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.4vw, 34px); text-decoration: none; padding-block: 8px; display: inline-flex; flex-direction: column; }
+.pager a span { font-family: var(--font-ui); font-size: var(--fs-small); font-weight: 400; color: var(--muted); }
+.pager a:hover { color: var(--accent); }
+.pager a:last-child { text-align: end; align-items: flex-end; }
+
+/* text pages */
+.prose { display: grid; gap: 18px; max-inline-size: 62ch; }
+.prose h1 { margin-block-end: 12px; }
+.note { border: 1px solid var(--fg); padding: 16px 20px; font-weight: 500; }
+.list { margin: 0; padding-inline-start: 1.3em; display: grid; gap: 12px; }
+.aboutPics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-block-start: clamp(32px, 5vw, 64px); }
+.aboutPics figure { margin: 0; overflow: hidden; }
+.aboutPics .wide { grid-column: 1 / -1; }
+@media (min-width: 900px) { .aboutPics { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; } .aboutPics .wide { grid-column: span 2; } }

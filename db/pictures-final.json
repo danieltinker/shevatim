@@ -1,0 +1,1028 @@
+{
+ "tz01": [
+  {
+   "view": "front",
+   "base": "/media/items/tz01/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/tz01/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz02": [
+  {
+   "view": "back",
+   "base": "/media/items/tz02/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz03": [
+  {
+   "view": "back",
+   "base": "/media/items/tz03/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz04": [
+  {
+   "view": "back",
+   "base": "/media/items/tz04/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz05": [
+  {
+   "view": "front",
+   "base": "/media/items/tz05/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/tz05/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz06": [],
+ "tz07": [],
+ "tz08": [
+  {
+   "view": "back",
+   "base": "/media/items/tz08/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz09": [],
+ "tz10": [
+  {
+   "view": "front",
+   "base": "/media/items/tz10/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz11": [],
+ "tz12": [],
+ "tz13": [
+  {
+   "view": "back",
+   "base": "/media/items/tz13/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz14": [],
+ "tz15": [],
+ "tz16": [],
+ "tz17": [],
+ "tz18": [],
+ "tz19": [
+  {
+   "view": "front",
+   "base": "/media/items/tz19/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/tz19/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz20": [],
+ "tz21": [],
+ "tz22": [],
+ "tz23": [],
+ "tz24": [],
+ "tz25": [
+  {
+   "view": "front",
+   "base": "/media/items/tz25/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz26": [
+  {
+   "view": "back",
+   "base": "/media/items/tz26/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz27": [],
+ "tz28": [],
+ "tz29": [
+  {
+   "view": "front",
+   "base": "/media/items/tz29/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/tz29/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "tz30": [],
+ "tz31": [],
+ "tz32": [
+  {
+   "view": "back",
+   "base": "/media/items/tz32/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls01": [
+  {
+   "view": "back",
+   "base": "/media/items/ls01/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls01/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls02": [
+  {
+   "view": "back",
+   "base": "/media/items/ls02/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls02/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls03": [
+  {
+   "view": "back",
+   "base": "/media/items/ls03/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls03/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls04": [
+  {
+   "view": "back",
+   "base": "/media/items/ls04/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls04/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls05": [
+  {
+   "view": "back",
+   "base": "/media/items/ls05/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls05/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls06": [
+  {
+   "view": "back",
+   "base": "/media/items/ls06/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls06/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls07": [
+  {
+   "view": "back",
+   "base": "/media/items/ls07/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls07/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls08": [
+  {
+   "view": "back",
+   "base": "/media/items/ls08/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls08/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls09": [
+  {
+   "view": "back",
+   "base": "/media/items/ls09/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls09/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls10": [
+  {
+   "view": "back",
+   "base": "/media/items/ls10/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls10/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls11": [
+  {
+   "view": "back",
+   "base": "/media/items/ls11/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls11/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls12": [
+  {
+   "view": "back",
+   "base": "/media/items/ls12/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls12/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls13": [
+  {
+   "view": "back",
+   "base": "/media/items/ls13/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls13/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls14": [
+  {
+   "view": "back",
+   "base": "/media/items/ls14/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls14/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls15": [
+  {
+   "view": "back",
+   "base": "/media/items/ls15/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls15/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls16": [
+  {
+   "view": "back",
+   "base": "/media/items/ls16/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls16/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls17": [
+  {
+   "view": "back",
+   "base": "/media/items/ls17/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls17/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ls18": [
+  {
+   "view": "back",
+   "base": "/media/items/ls18/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "front",
+   "base": "/media/items/ls18/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "te01": [
+  {
+   "view": "front",
+   "base": "/media/items/te01/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "te02": [
+  {
+   "view": "front",
+   "base": "/media/items/te02/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/te02/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "te03": [
+  {
+   "view": "front",
+   "base": "/media/items/te03/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/te03/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "te04": [
+  {
+   "view": "front",
+   "base": "/media/items/te04/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "te05": [
+  {
+   "view": "front",
+   "base": "/media/items/te05/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/te05/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "te06": [
+  {
+   "view": "front",
+   "base": "/media/items/te06/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/te06/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "te07": [
+  {
+   "view": "back",
+   "base": "/media/items/te07/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "pa01": [
+  {
+   "view": "front",
+   "base": "/media/items/pa01/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/pa01/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "pa02": [
+  {
+   "view": "front",
+   "base": "/media/items/pa02/front",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "back",
+   "base": "/media/items/pa02/back",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  },
+  {
+   "view": "side",
+   "base": "/media/items/pa02/side",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "ne01": [
+  {
+   "view": "detail",
+   "base": "/media/items/ne01/detail",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ],
+ "br01": [
+  {
+   "view": "detail",
+   "base": "/media/items/br01/detail",
+   "sizes": [
+    480,
+    960,
+    1600
+   ],
+   "ext": "webp",
+   "w": 1200,
+   "h": 1600,
+   "kind": "product"
+  }
+ ]
+}

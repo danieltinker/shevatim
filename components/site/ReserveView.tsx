@@ -1,0 +1,252 @@
+"use client";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { createReservation } from "@/lib/api";
+import { bag, useBag } from "@/lib/bag";
+import { useCatalog } from "@/lib/catalog";
+import { fill, formatPrice, isEmail, isPhone, priceOf, tr } from "@/lib/format";
+import { ApiError, type L10n } from "@/lib/types";
+import { pictureUrl } from "./Pic";
+import { useI18n } from "./Providers";
+import s from "./Reserve.module.css";
+
+const LAST = "shv.last";
+interface Receipt { code: string; total: number | null; lines: { name: L10n; variant: L10n | null; qty: number; price: number | null }[] }
+type Field = "name" | "phone" | "email";
+
+export function ReserveView() {
+  const { locale, t } = useI18n();
+  const catalog = useCatalog();
+  const lines = useBag();
+  const router = useRouter();
+  const [ready, setReady] = useState(false);
+  const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
+  const [failure, setFailure] = useState<string | null>(null);
+  const [waLink, setWaLink] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const form = useRef<HTMLFormElement>(null);
+  const alertRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => { setReady(true); }, []);
+
+  const rows = lines.map((l) => {
+    const item = catalog.items.find((i) => i.id === l.itemId && i.status === "published");
+    const v = item && l.variantKey ? item.variants.find((x) => x.key === l.variantKey) ?? null : null;
+    const gone = !item || item.soldOut || (!!l.variantKey && (!v || !v.available));
+    return { l, item, v, gone, price: item ? priceOf(item, l.variantKey) : null };
+  });
+  const anyGone = rows.some((r) => r.gone);
+  const total = rows.every((r) => r.price != null) ? rows.reduce((n, r) => n + (r.price ?? 0) * r.l.qty, 0) : null;
+  const open = catalog.settings.reservationsOpen;
+
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (busy) return;
+    const f = new FormData(e.currentTarget);
+    const name = String(f.get("name") ?? "").trim(), phone = String(f.get("phone") ?? "").trim();
+    const email = String(f.get("email") ?? "").trim(), note = String(f.get("note") ?? "").trim();
+    const errs: Partial<Record<Field, string>> = {};
+    if (name.length < 2) errs.name = t.reserve.errName;
+    if (!isPhone(phone)) errs.phone = t.reserve.errPhone;
+    if (email && !isEmail(email)) errs.email = t.reserve.errEmail;
+    setErrors(errs);
+    const first = (["name", "phone", "email"] as Field[]).find((k) => errs[k]);
+    if (first) {
+      setFailure(t.reserve.errFix);
+      (form.current?.elements.namedItem(first) as HTMLElement | null)?.focus();
+      return;
+    }
+    setFailure(null); setWaLink(null); setBusy(true);
+    try {
+      const res = await createReservation({
+        customer: { name, phone, email }, locale, note,
+        lines: lines.map((l) => ({ itemId: l.itemId, variantKey: l.variantKey, qty: l.qty })),
+        website: String(f.get("website") ?? ""),
+      });
+      const receipt: Receipt = {
+        code: res.code, total: res.total,
+        lines: rows.filter((r) => r.item).map((r) => ({ name: r.item!.name, variant: r.v?.label ?? null, qty: r.l.qty, price: r.price })),
+      };
+      try { window.sessionStorage.setItem(LAST, JSON.stringify(receipt)); } catch { /* ignore */ }
+      router.push(`/${locale}/reserve/done/?code=${encodeURIComponent(res.code)}`);
+      bag.clear();
+    } catch (err) {
+      const code = err instanceof ApiError ? err.code : "unknown";
+      const known = ["invalid", "closed", "item_unavailable", "too_many", "network"] as const;
+      const k = (known as readonly string[]).includes(code) ? (`err_${code}` as `err_${(typeof known)[number]}`) : "err_unknown";
+      setFailure(t.reserve[k]);
+      // the bag and everything typed stay as they are; if the shop has WhatsApp, offer it as another way through
+      if (code === "network" && catalog.settings.whatsapp) {
+        const text = [
+          t.reserve.whatsappLead,
+          ...rows.filter((r) => r.item).map((r) => `${r.l.qty} × ${tr(r.item!.name, locale)}${r.v ? ` (${tr(r.v.label, locale)})` : ""} [${r.item!.code}]`),
+          `${t.reserve.name}: ${name}`, `${t.reserve.phone}: ${phone}`, ...(email ? [`${t.reserve.email}: ${email}`] : []), ...(note ? [`${t.reserve.note}: ${note}`] : []),
+        ].join("\n");
+        setWaLink(`https://wa.me/${catalog.settings.whatsapp}?text=${encodeURIComponent(text)}`);
+      }
+      setBusy(false);
+      requestAnimationFrame(() => alertRef.current?.focus());
+    }
+  }
+
+  if (ready && rows.length === 0) {
+    return (
+      <div className={`onBlack section ${s.page}`}>
+        <div className={`wrap ${s.empty}`}>
+          <h1>{t.reserve.emptyTitle}</h1>
+          <p className="muted">{t.reserve.emptyText}</p>
+          <Link className="btn" href={`/${locale}/collection/`}>{t.reserve.emptyCta}</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`onBlack section ${s.page}`}>
+      <div className={`wrap ${s.grid}`}>
+        <section className={s.bag} aria-labelledby="bag-h">
+          <h1 id="bag-h" className={s.h1}>{t.reserve.title}</h1>
+          <ul className={s.lines} aria-busy={!ready}>
+            {rows.map(({ l, item, v, gone, price }) => {
+              const name = item ? tr(item.name, locale) : l.itemId;
+              return (
+                <li key={`${l.itemId}:${l.variantKey}`} className={s.line}>
+                  <Link className={s.thumb} href={item ? `/${locale}/item/?i=${encodeURIComponent(item.slug)}` : `/${locale}/shop/`} tabIndex={-1} aria-hidden="true">
+                    {item?.pictures[0] ? <img src={pictureUrl(item.pictures[0], 240)} alt="" width={96} height={128} loading="lazy" /> : null}
+                  </Link>
+                  <div className={s.lineText}>
+                    <p className={s.lineName}>{item ? <Link href={`/${locale}/item/?i=${encodeURIComponent(item.slug)}`}>{name}</Link> : <bdi>{name}</bdi>}</p>
+                    {v ? <p className="small muted"><bdi>{tr(v.label, locale)}</bdi></p> : null}
+                    <p className="small muted">{price == null ? t.shop.priceLater : <bdi dir="ltr">{formatPrice(price)}</bdi>}</p>
+                    {gone ? <p className={`small ${s.gone}`}>{t.reserve.gone}</p> : null}
+                    <div className={s.lineActions}>
+                      <div className={s.qty} dir="ltr" role="group" aria-label={`${t.reserve.qty}: ${name}`}>
+                        <button type="button" aria-label={t.reserve.less} onClick={() => bag.setQty(l.itemId, l.variantKey, l.qty - 1)}>−</button>
+                        <bdi aria-live="polite">{l.qty}</bdi>
+                        <button type="button" aria-label={t.reserve.more} disabled={l.qty >= 9} onClick={() => bag.setQty(l.itemId, l.variantKey, l.qty + 1)}>+</button>
+                      </div>
+                      <button type="button" className={s.remove} onClick={() => bag.remove(l.itemId, l.variantKey)}>{t.reserve.remove}<span className="srOnly">: {name}</span></button>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          {rows.length ? (
+            <p className={s.total}>
+              <span>{t.reserve.total}</span>
+              <span>{total == null ? t.reserve.totalLater : <bdi dir="ltr">{formatPrice(total)}</bdi>}</span>
+            </p>
+          ) : null}
+        </section>
+
+        {!open ? (
+          <section className={s.formBox} aria-labelledby="paused-h">
+            <h2 id="paused-h" className={s.h2}>{t.reserve.pausedTitle}</h2>
+            <p className={`muted ${s.formLine}`}>{t.reserve.pausedText}</p>
+            <Link className="link" href={`/${locale}/collection/`}>{t.done.back}</Link>
+          </section>
+        ) : (
+        <section className={s.formBox} aria-labelledby="form-h">
+          <h2 id="form-h" className={s.h2}>{t.reserve.formTitle}</h2>
+          <p className={`muted ${s.formLine}`}>{t.reserve.formLine}</p>
+          <form ref={form} className={s.form} onSubmit={submit} noValidate>
+            <div className={s.field}>
+              <label htmlFor="f-name">{t.reserve.name}</label>
+              <input id="f-name" name="name" type="text" autoComplete="name" required aria-invalid={!!errors.name} aria-describedby={errors.name ? "e-name" : undefined} />
+              {errors.name ? <p id="e-name" className={s.err}>{errors.name}</p> : null}
+            </div>
+            <div className={s.field}>
+              <label htmlFor="f-phone">{t.reserve.phone}</label>
+              <input id="f-phone" name="phone" type="tel" inputMode="tel" dir="ltr" autoComplete="tel" required aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "e-phone" : "h-phone"} />
+              {errors.phone ? <p id="e-phone" className={s.err}>{errors.phone}</p> : <p id="h-phone" className={s.hint}>{t.reserve.phoneHint}</p>}
+            </div>
+            <div className={s.field}>
+              <label htmlFor="f-email">{t.reserve.email} <span className={s.opt}>({t.reserve.optional})</span></label>
+              <input id="f-email" name="email" type="email" inputMode="email" dir="ltr" autoComplete="email" aria-invalid={!!errors.email} aria-describedby={errors.email ? "e-email" : undefined} />
+              {errors.email ? <p id="e-email" className={s.err}>{errors.email}</p> : null}
+            </div>
+            <div className={s.field}>
+              <label htmlFor="f-note">{t.reserve.note} <span className={s.opt}>({t.reserve.optional})</span></label>
+              <textarea id="f-note" name="note" rows={3} maxLength={600} aria-describedby="h-note" />
+              <p id="h-note" className={s.hint}>{t.reserve.noteHint}</p>
+            </div>
+            <div className={s.hp} aria-hidden="true">
+              <label htmlFor="f-website">{t.reserve.website}</label>
+              <input id="f-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+            </div>
+            <p ref={alertRef} tabIndex={-1} role="alert" className={failure ? s.alert : s.alertEmpty}>{failure}</p>
+            {waLink ? <a className="btn btnGhost" href={waLink} target="_blank" rel="noopener noreferrer">{t.reserve.whatsappInstead}</a> : null}
+            <button type="submit" className={`btn ${s.send}`} disabled={busy || !open || anyGone || rows.length === 0}>{busy ? t.reserve.sending : t.reserve.send}</button>
+            <p className={`small muted ${s.termsLine}`}>{t.reserve.terms} <Link href={`/${locale}/terms/`}>{t.nav.terms}</Link>.</p>
+          </form>
+        </section>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function DoneView({ code }: { code: string | null }) {
+  const { locale, t } = useI18n();
+  const { settings } = useCatalog();
+  const [receipt, setReceipt] = useState<Receipt | null>(null);
+  useEffect(() => {
+    try {
+      const r = JSON.parse(window.sessionStorage.getItem(LAST) ?? "null") as Receipt | null;
+      if (r && r.code === code) setReceipt(r);
+    } catch { /* ignore */ }
+  }, [code]);
+  if (!code) {
+    return (
+      <div className={`onChalk section ${s.page}`}>
+        <div className={`wrap ${s.empty}`}><p>{t.done.noCode}</p><Link className="btn" href={`/${locale}/collection/`}>{t.done.back}</Link></div>
+      </div>
+    );
+  }
+  const wa = settings.whatsapp
+    ? `https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(
+        [fill(t.done.whatsappText, { code }), ...(receipt?.lines ?? []).map((l) => `${l.qty} × ${tr(l.name, locale)}${l.variant ? ` (${tr(l.variant, locale)})` : ""}`)].join("\n"))}`
+    : null;
+  return (
+    <div className={`onChalk section ${s.page}`}>
+      <div className={`wrap ${s.done}`}>
+        <div>
+          <h1>{t.done.title}</h1>
+          <p className={s.codeLabel}>{t.done.code}</p>
+          <p className={s.code}><bdi dir="ltr">{code}</bdi></p>
+          <p className="muted">{t.done.keep}</p>
+        </div>
+        <div className={s.doneSide}>
+          <section>
+            <h2 className={s.h2}>{t.done.next}</h2>
+            <p>{t.done.next1}</p>
+            <p>{t.done.next2}</p>
+          </section>
+          {receipt?.lines.length ? (
+            <section>
+              <h2 className={s.h2}>{t.done.what}</h2>
+              <ul className={s.receipt}>
+                {receipt.lines.map((l, i) => (
+                  <li key={i}>
+                    <span><bdi>{l.qty}</bdi> × {tr(l.name, locale)}{l.variant ? <span className="muted">, <bdi>{tr(l.variant, locale)}</bdi></span> : null}</span>
+                    <span className="muted small">{l.price == null ? t.shop.priceLater : <bdi dir="ltr">{formatPrice(l.price * l.qty)}</bdi>}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className={s.total}><span>{t.reserve.total}</span><span>{receipt.total == null ? t.reserve.totalLater : <bdi dir="ltr">{formatPrice(receipt.total)}</bdi>}</span></p>
+            </section>
+          ) : null}
+          <div className={s.doneActions}>
+            {wa ? <a className="btn" href={wa} target="_blank" rel="noopener noreferrer">{t.done.whatsapp}</a> : null}
+            {settings.calLink ? <a className="btn btnGhost" href={settings.calLink} target="_blank" rel="noopener noreferrer">{t.done.call}</a> : null}
+            <Link className="link" href={`/${locale}/collection/`}>{t.done.back}</Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+export function DoneFromQuery() {
+  return <DoneView code={useSearchParams().get("code")} />;
+}

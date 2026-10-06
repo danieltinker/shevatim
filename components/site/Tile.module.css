@@ -1,0 +1,19 @@
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; }
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 20px; } }
+@media (min-width: 1024px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 24px; } }
+.five { }
+@media (min-width: 1024px) { .five { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+.tile { display: flex; flex-direction: column; text-decoration: none; color: var(--fg); min-inline-size: 0; }
+.frame { position: relative; display: block; aspect-ratio: 3 / 4; background: #000; overflow: hidden; }
+.pic { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; display: block; }
+.second { opacity: 0; transition: opacity .25s ease; }
+@media (hover: hover) and (pointer: fine) { .tile:hover .second { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .second { transition: none; } }
+.sold {
+  position: absolute; inset-block-start: 10px; inset-inline-start: 10px; padding: 3px 8px;
+  background: var(--bone); color: var(--ink); font-size: 12px; font-weight: 500;
+}
+.name { margin-block-start: 12px; font-size: 15px; font-weight: 500; line-height: 1.35; text-wrap: balance; }
+.price { margin-block-start: 3px; font-size: 13px; line-height: 1.4; color: var(--muted); }
+.tile:focus-visible { outline-offset: 6px; }
