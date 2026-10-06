@@ -18,10 +18,13 @@ Two themes, set by `data-theme` on `<html>` (`light` is the default; the visitor
 | `--surface` | `#EBE0CD` warm beige | `#2D2118` | alternate sections, cards, the header once scrolled |
 | `--stage` | `#DACBB1` dune | `#3B2C20` | behind product pictures (they are cut-outs with transparency) |
 | `--fg` | `#33261B` earth | `#F2E8D8` cream | text |
-| `--muted` | `#6E5D4B` | `#B9A78F` | secondary text |
-| `--accent` | `#8A5A30` clay | `#D5AC7A` sand gold | links, focus ring, the active control, one small detail per view |
+| `--muted` | `#625341` | `#B9A78F` | secondary text |
+| `--accent` | `#784B25` clay | `#D5AC7A` sand gold | links, focus ring, the active control, one small detail per view |
 | `--accent-ink` | `#FBF6EC` | `#231911` | text on an accent fill |
 | `--line` | `rgba(51,38,27,.16)` | `rgba(242,232,216,.16)` | hairlines |
+| `--line-strong` | see `app/globals.css` | | borders of inputs and outlined buttons |
+| `--warn` | `#8C3B1F` burnt clay | `#E9A587` | form errors only |
+| `--on-film` | `#F2E8D8` | `#F2E8D8` | text and controls laid over the hero film, in both themes |
 No black (`#000`) and no pure white anywhere, in either theme. No blue, red, green or yellow in the interface:
 the tribes are no longer colour-coded. The only "colour" is what the photographs and the cloth bring.
 Text contrast: body and secondary text at least 4.5:1 on `--bg`, `--surface` and `--stage`, in both themes.

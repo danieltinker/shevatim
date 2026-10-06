@@ -72,7 +72,7 @@ N = 2 ** 22                      # loop length in samples (a whole number of AAC
 DUR = N / SR                     # 95.109 s
 SEED = 5787
 
-TARGET_LUFS = -18.0              # integrated loudness of the file
+TARGET_LUFS = -28.0              # integrated loudness of the file: quiet in the file itself, because phones ignore a page's volume setting
 PLUCK_LEVEL = 1.7                # peak of the loudest dry pluck, relative to the drone's RMS
 PAD_LEVEL = 0.55                 # RMS of the full dry pad chord, relative to the drone's RMS
 PAD_WET = 1.0                    # reverb RMS relative to the dry pad

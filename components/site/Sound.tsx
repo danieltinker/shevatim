@@ -8,9 +8,12 @@ import { useI18n } from "./Providers";
 
 export const SOUND_KEY = "shv-sound";
 const TRACK = "/media/audio/midbar-ambient.m4a";
-const MUSIC_LEVEL = 0.2;       // the track never competes with the film or with reading
-const MUSIC_UNDER_FILM = 0.08; // and steps back while the film's own sound is heard
-const FILM_LEVEL = 0.7;
+// The files themselves are quiet (the track about -28 LUFS, the film's sound about -21): iPhones ignore a page's
+// volume setting and play every file at full level, so the level has to be right in the file. The numbers below
+// are the fine adjustment, the fades and the step back under the film, on the browsers that honour them.
+const MUSIC_LEVEL = 0.8;       // the track never competes with the film or with reading
+const MUSIC_UNDER_FILM = 0.3;  // and steps back while the film's own sound is heard
+const FILM_LEVEL = 0.85;
 
 type Ctx = { on: boolean; toggle: () => void; attachFilm: (v: HTMLVideoElement | null) => void };
 const SoundCtx = createContext<Ctx>({ on: false, toggle: () => undefined, attachFilm: () => undefined });
@@ -39,16 +42,18 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const io = useRef<IntersectionObserver | null>(null);
   const cancelMusic = useRef<() => void>(() => undefined);
   const cancelFilm = useRef<() => void>(() => undefined);
+  const unmutedAt = useRef(0);
+  const filmRefused = useRef(false); // this browser paused the film when it was unmuted: leave it silent until the next tap on the button
 
   const apply = useCallback(() => {
     const wantOn = onRef.current && !document.hidden;
     const v = film.current;
-    const filmAudible = wantOn && !!v && filmSeen.current && !v.paused;
+    const filmAudible = wantOn && !!v && filmSeen.current && !v.paused && !filmRefused.current;
     // the film
     if (v) {
       cancelFilm.current();
       if (filmAudible) {
-        if (v.muted) { v.volume = 0; v.muted = false; }
+        if (v.muted) { v.volume = 0; v.muted = false; unmutedAt.current = performance.now(); }
         cancelFilm.current = fade(v, FILM_LEVEL, 500);
       } else if (!v.muted) {
         cancelFilm.current = fade(v, 0, 250, () => { v.muted = true; });
@@ -74,6 +79,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
   const set = useCallback((next: boolean) => {
     onRef.current = next;
+    filmRefused.current = false;
     setOn(next);
     try { window.localStorage.setItem(SOUND_KEY, next ? "on" : "off"); } catch { /* ignore */ }
     apply();
@@ -87,7 +93,11 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     if (!v) { apply(); return; }
     io.current = new IntersectionObserver(([e]) => { filmSeen.current = e.isIntersecting && e.intersectionRatio > 0.35; apply(); }, { threshold: [0, 0.35, 0.6] });
     io.current.observe(v);
-    v.addEventListener("pause", apply);
+    v.addEventListener("pause", () => {
+      // a browser that does not allow this film to be heard pauses it the moment it is unmuted: the film goes on, silent
+      if (performance.now() - unmutedAt.current < 600 && !v.ended) { unmutedAt.current = 0; filmRefused.current = true; v.muted = true; void v.play().catch(() => undefined); return; }
+      apply();
+    });
     v.addEventListener("play", apply);
   }, [apply]);
 
@@ -97,11 +107,14 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     if (saved) { onRef.current = true; setOn(true); apply(); }
     // a remembered "on" can only start after the first tap or key on this page
     const kick = () => { if (onRef.current) apply(); };
+    // (phones count a finished tap, not the touch going down)
     window.addEventListener("pointerdown", kick, { passive: true });
+    window.addEventListener("click", kick, { passive: true });
     window.addEventListener("keydown", kick);
     document.addEventListener("visibilitychange", apply);
     return () => {
       window.removeEventListener("pointerdown", kick);
+      window.removeEventListener("click", kick);
       window.removeEventListener("keydown", kick);
       document.removeEventListener("visibilitychange", apply);
       io.current?.disconnect();

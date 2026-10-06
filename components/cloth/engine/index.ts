@@ -239,7 +239,9 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
       if (cavity < 1 && rim > 0) {
         shader.vertexShader = shader.vertexShader.replace("#include <common>", "#include <common>\nattribute float tzDepth;\nvarying float vTzDepth;").replace("#include <begin_vertex>", "#include <begin_vertex>\n vTzDepth = tzDepth;");
         shader.fragmentShader = shader.fragmentShader.replace("#include <common>", "#include <common>\nvarying float vTzDepth;")
-          .replace("#include <opaque_fragment>", `#include <opaque_fragment>\n if (!gl_FrontFacing) gl_FragColor.rgb *= mix(${rim.toFixed(3)}, ${cavity.toFixed(3)}, smoothstep(0.0, ${depth.toFixed(3)}, vTzDepth));`);
+          // the pocket is shaded evenly: most of the lit result (with its hard shadow-map patches) gives way to the
+          // cloth's own colour, which then falls off smoothly from the opening to the back
+          .replace("#include <opaque_fragment>", `#include <opaque_fragment>\n if (!gl_FrontFacing) gl_FragColor.rgb = mix(gl_FragColor.rgb, diffuseColor.rgb * 0.95, 0.8) * mix(${rim.toFixed(3)}, ${cavity.toFixed(3)}, smoothstep(0.0, ${depth.toFixed(3)}, vTzDepth));`);
       } else if (cavity < 1) shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>\n if (!gl_FrontFacing) gl_FragColor.rgb *= ${cavity.toFixed(3)};`);
     };
     return m;
@@ -259,7 +261,7 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     const tint = new Color(spec.baseColor || "#efe8d8");
     const bodyMat = clothMaterial(plainTex, tint.clone(), mask, 0.45); // seen through the neck or a sleeve, the inside of the garment is in its own shade
     // the inside of the hood is shaded cloth, not a black hole: the garments stand on sand and earth grounds now
-    const hoodMat = clothMaterial(plainTex, tint.clone(), null, 0.24, 0.82, 0.5);
+    const hoodMat = clothMaterial(plainTex, tint.clone(), null, 0.34, 0.86, 0.6);
     // real scale: one swatch = 50 cm; weave tile = 16 mm
     weaveTex.repeat.set(0.5 / 0.016, 0.5 / 0.016);
     const hxr = width / (body.ru - 1), hyr = (2 * halfLen) / (body.rv - 1);
