@@ -24,17 +24,18 @@
     "main": "ניווט ראשי"
   },
   "hero": {
-    "cta": "לשריין מהקולקציה",
+    "cta": "גלו את הקולקציה",
     "pause": "עצירת הסרט",
     "play": "הפעלת הסרט"
   },
   "home": {
     "collectionLabel": "הקולקציה",
-    "collectionLink": "לכל שנים־עשר השבטים",
+    "collectionCta": "לכל הקולקציה",
+    "allPieces": "כל הפריטים",
     "clothTitle": "לגעת בבד",
     "clothLine": "תפסו את הציצית, גררו אותה ותראו איך הבד נופל.",
     "clothLabel": "ציצית בתלת־ממד שאפשר לגרור",
-    "categoriesTitle": "החנות",
+    "categoriesTitle": "החנות לפי קטגוריות",
     "comingSoon": "בקרוב",
     "lookbookTitle": "מהצילומים במדבר יהודה",
     "crewTitle": "החבורה",
@@ -55,8 +56,8 @@
     "prev": "השבט הקודם",
     "next": "השבט הבא",
     "choose": "בחירת שבט",
-    "five": "החמישה של {name}",
-    "page": "לעמוד של שבט {name}",
+    "pieces": "הפריטים של {name}",
+    "page": "על שבט {name}",
     "stone": "האבן בחושן (במדבר רבה ב, ז)",
     "flag": "צבע הדגל",
     "emblem": "הסמל שעל הדגל",

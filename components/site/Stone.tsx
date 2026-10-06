@@ -2,9 +2,12 @@ import type { CSSProperties } from "react";
 import type { TribeView } from "./tribes";
 import s from "./Choshen.module.css";
 
-/** One stone of the Choshen: the tribe's flag colour with its name set inside. */
+/** One stone of the Choshen. Every stone is the same quiet tile now, drawn entirely by the stylesheet
+ *  (ground, hairline, and the accent fill of the chosen one), so there is nothing left to set inline.
+ *  The function stays because listings still spread its result onto their stones. */
 export function stoneStyle(t: TribeView): CSSProperties {
-  return { background: t.stoneBg, color: t.stoneText };
+  void t;
+  return {};
 }
 export function StoneLabel({ t }: { t: TribeView }) {
   return (
@@ -15,7 +18,7 @@ export function StoneLabel({ t }: { t: TribeView }) {
   );
 }
 
-/** The thin strip of twelve under the hero and on tribe pages: plain links, no script needed. */
+/** A strip of the twelve as plain links (tribe pages): no script needed. */
 export default function ChoshenStrip({ tribes, hrefFor, label, current }: {
   tribes: TribeView[]; hrefFor: (t: TribeView) => string; label: string; current?: string;
 }) {

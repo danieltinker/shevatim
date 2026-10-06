@@ -24,17 +24,18 @@
     "main": "Navigation principale"
   },
   "hero": {
-    "cta": "Réserver dans la collection",
+    "cta": "Découvrir la collection",
     "pause": "Mettre le film en pause",
     "play": "Lire le film"
   },
   "home": {
     "collectionLabel": "La collection",
-    "collectionLink": "Voir les douze tribus",
+    "collectionCta": "Voir la collection",
+    "allPieces": "Toutes les pièces",
     "clothTitle": "Touchez le tissu",
     "clothLine": "Attrapez le tsitsit, faites-le glisser et regardez comment le tissu tombe.",
     "clothLabel": "Un tsitsit en 3D que l’on peut faire glisser",
-    "categoriesTitle": "La boutique",
+    "categoriesTitle": "La boutique par catégorie",
     "comingSoon": "Bientôt",
     "lookbookTitle": "Photos de la séance dans le désert de Judée",
     "crewTitle": "L’équipe",
@@ -55,8 +56,8 @@
     "prev": "Tribu précédente",
     "next": "Tribu suivante",
     "choose": "Choisir une tribu",
-    "five": "{name} : les cinq pièces",
-    "page": "{name} : son histoire",
+    "pieces": "Les pièces de {name}",
+    "page": "L’histoire de {name}",
     "stone": "Pierre du Hochen (Bamidbar Rabba 2, 7)",
     "flag": "Couleur du drapeau",
     "emblem": "Emblème du drapeau",

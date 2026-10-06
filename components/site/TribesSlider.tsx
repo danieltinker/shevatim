@@ -1,67 +1,46 @@
 "use client";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useCatalog } from "@/lib/catalog";
-import { currentCollection, fill, slotItems } from "@/lib/format";
-import { colon } from "@/lib/i18n";
+import { fill } from "@/lib/format";
 import { useI18n } from "./Providers";
 import { StoneLabel, stoneStyle } from "./Stone";
-import Tile from "./Tile";
-import { tribeNameStyle, type TribeView } from "./tribes";
+import { firstSentences, type TribeView } from "./tribes";
 import Verse from "./Verse";
 import ch from "./Choshen.module.css";
 import s from "./Tribes.module.css";
 
+/** The twelve tribes, told calmly: the stones choose a tribe; for the chosen one its name, one verse, two
+ *  sentences and the way to its pieces. One tribe at a time, never on a timer. */
 export default function TribesSlider({ tribes, title, lede }: { tribes: TribeView[]; title: string; lede: string }) {
   const { locale, t } = useI18n();
-  const catalog = useCatalog();
   const [idx, setIdx] = useState(0);
+  const [moved, setMoved] = useState(false); // the change of tribe is animated; the first paint is not
   const root = useRef<HTMLElement>(null);
   const touch = useRef<{ x: number; y: number } | null>(null);
-  const plate = useRef<HTMLUListElement>(null);
   const n = tribes.length;
   const tribe = tribes[idx];
   const rtl = locale === "he";
 
-  const go = useCallback((i: number, writeHash = true) => {
+  const go = useCallback((i: number) => {
     const next = ((i % n) + n) % n;
     setIdx(next);
-    if (writeHash) window.history.replaceState(null, "", `#${tribes[next].key}`);
+    setMoved(true);
+    window.history.replaceState(null, "", `#${tribes[next].key}`);
   }, [n, tribes]);
 
-  // #reuven opens that tribe (also from the strip of stones under the hero)
+  // #reuven opens that tribe; #tribes opens the section
   useEffect(() => {
-    const fromHash = (scroll: boolean) => {
+    const fromHash = () => {
       const key = decodeURIComponent(window.location.hash.slice(1));
       const i = tribes.findIndex((x) => x.key === key);
-      if (i < 0) { if (key === "tribes" && scroll) root.current?.scrollIntoView(); return; }
+      if (i < 0) { if (key === "tribes") root.current?.scrollIntoView(); return; }
       setIdx(i);
-      if (scroll) root.current?.scrollIntoView();
-    };
-    fromHash(true);
-    const on = () => fromHash(true);
-    window.addEventListener("hashchange", on);
-    // a stone anywhere on the page (the strip under the film) opens its slide, even when the hash is already set
-    const click = (e: MouseEvent) => {
-      const a = (e.target as Element | null)?.closest?.('a[href^="#"]');
-      const i = a ? tribes.findIndex((x) => `#${x.key}` === a.getAttribute("href")) : -1;
-      if (i < 0) return;
-      e.preventDefault();
-      setIdx(i);
-      window.history.replaceState(null, "", `#${tribes[i].key}`);
       root.current?.scrollIntoView();
     };
-    document.addEventListener("click", click);
-    return () => { window.removeEventListener("hashchange", on); document.removeEventListener("click", click); };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    return () => window.removeEventListener("hashchange", fromHash);
   }, [tribes]);
-
-  // on phones the stones are a sideways strip: keep the chosen one in view (without moving the page)
-  useEffect(() => {
-    const list = plate.current, li = list?.children[idx] as HTMLElement | undefined;
-    if (!list || !li || list.scrollWidth <= list.clientWidth) return;
-    const a = li.getBoundingClientRect(), b = list.getBoundingClientRect();
-    list.scrollBy({ left: a.left + a.width / 2 - (b.left + b.width / 2), behavior: "smooth" });
-  }, [idx]);
 
   const onKey = (e: React.KeyboardEvent) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
@@ -78,63 +57,51 @@ export default function TribesSlider({ tribes, title, lede }: { tribes: TribeVie
     go(idx + (forward ? 1 : -1));
   };
 
-  const five = slotItems(catalog, currentCollection(catalog), tribe.key);
-  const verses = tribe.verses.filter((v) => v.source === "jacob" || v.source === "moses").slice(0, 2);
-  const shown = verses.length ? verses : tribe.verses.slice(0, 2);
+  // French elides before a vowel: "de Acher" is written "d’Acher"
+  const named = (text: string) => {
+    const out = fill(text, { name: tribe.plain });
+    return locale === "fr" ? out.replace(/\b([dD])e (?=[AEIOUÉÈÊ])/g, "$1’") : out;
+  };
+  const verse = tribe.verses[0];
 
   return (
-    <section id="tribes" ref={root} className={`onChalk section ${s.section}`} aria-roledescription="carousel" aria-label={title}>
+    <section id="tribes" ref={root} className={`section ${s.section}`} aria-roledescription="carousel" aria-label={title}>
       <div className="wrap">
         <header className={s.head}>
           <h2>{title}</h2>
-          <p className="measure">{lede}</p>
+          <p>{lede}</p>
         </header>
 
         <div className={s.stage} tabIndex={0} role="group" aria-label={`${title}, ${tribe.plain}`} onKeyDown={onKey}
           onTouchStart={(e) => { touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }} onTouchEnd={onTouchEnd}>
-          <div className={s.controls}>
-            <ul ref={plate} className={ch.plate} aria-label={t.tribes.choose}>
-              {tribes.map((x, i) => (
-                <li key={x.key}>
-                  <button type="button" className={ch.stone} style={stoneStyle(x)} aria-pressed={i === idx} onClick={() => go(i)}>
-                    <StoneLabel t={x} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className={s.nav}>
-              <button type="button" className={s.arrow} onClick={() => go(idx - 1)} aria-label={t.tribes.prev}>
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14.5 5l-7 7 7 7" /></svg>
-              </button>
-              <span className={s.counter} aria-live="polite">{t.tribes.of.split(/(\{n\}|\{total\})/).map((part, i) => part === "{n}" ? <bdi key={i}>{idx + 1}</bdi> : part === "{total}" ? <bdi key={i}>{n}</bdi> : part)}</span>
-              <button type="button" className={s.arrow} onClick={() => go(idx + 1)} aria-label={t.tribes.next}>
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9.5 5l7 7-7 7" /></svg>
-              </button>
-            </div>
+          <ul className={ch.plate} aria-label={t.tribes.choose}>
+            {tribes.map((x, i) => (
+              <li key={x.key}>
+                <button type="button" className={ch.stone} style={stoneStyle(x)} aria-pressed={i === idx} onClick={() => go(i)}>
+                  <StoneLabel t={x} />
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <div className={s.nav}>
+            <button type="button" className={s.arrow} onClick={() => go(idx - 1)} aria-label={t.tribes.prev} title={t.tribes.prev}>
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14.5 5l-7 7 7 7" /></svg>
+            </button>
+            <span className={s.counter} aria-live="polite">{t.tribes.of.split(/(\{n\}|\{total\})/).map((part, i) => part === "{n}" ? <bdi key={i}>{idx + 1}</bdi> : part === "{total}" ? <bdi key={i}>{n}</bdi> : part)}</span>
+            <button type="button" className={s.arrow} onClick={() => go(idx + 1)} aria-label={t.tribes.next} title={t.tribes.next}>
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9.5 5l7 7-7 7" /></svg>
+            </button>
           </div>
 
-          <article key={tribe.key} className={s.slide} aria-roledescription="slide" aria-label={tribe.plain}>
-            <div className={s.who}>
-              <h3 className={s.name} style={tribeNameStyle(tribe, "chalk")}>{tribe.name}</h3>
-              <p className={s.stoneLine}>
-                <span className={s.dot} style={{ background: tribe.hex }} aria-hidden="true" />
-                <span><span lang={locale === "he" ? undefined : "he-Latn"}>{tribe.stone}</span>, {tribe.stoneGloss}</span>
-              </p>
-              <p className={s.emblem}><span>{t.tribes.emblem}{colon(locale)}</span> {tribe.symbol}</p>
-              <p className={s.essence}>{tribe.essence}</p>
-              <Link className="link" href={`/${locale}/tribes/${tribe.key}/`}>{fill(t.tribes.page, { name: tribe.plain })}</Link>
-            </div>
-            <div className={s.verses}>
-              {shown.map((v) => <Verse key={v.ref} v={v} className={s.verse} />)}
-            </div>
-            {five.length ? (
-              <div className={s.five}>
-                <h4 className={s.fiveTitle}>{fill(t.tribes.five, { name: tribe.plain })}</h4>
-                <div className={s.fiveRow}>
-                  {five.map((it) => <Tile key={it.id} item={it} sizes="(min-width: 1024px) 19vw, 44vw" />)}
-                </div>
-              </div>
-            ) : null}
+          <article key={tribe.key} className={`${s.slide} ${moved ? s.fresh : ""}`} aria-roledescription="slide" aria-label={tribe.plain}>
+            <h3 className={s.name}>{tribe.name}</h3>
+            {verse ? <Verse v={verse} className={s.verse} /> : null}
+            <p className={s.essence}>{firstSentences(tribe.essence, 2)}</p>
+            <p className={s.links}>
+              <Link className="link" href={`/${locale}/shop/?tribe=${tribe.key}`}>{named(t.tribes.pieces)}</Link>
+              <Link className={s.quiet} href={`/${locale}/tribes/${tribe.key}/`}>{named(t.tribes.page)}</Link>
+            </p>
           </article>
         </div>
       </div>

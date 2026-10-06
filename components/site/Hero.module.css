@@ -1,35 +1,56 @@
+/* The first screen. Everything written over the film is the same cream in both themes; the shade under it is
+   the theme's own earth (--shade), never black. Inside the hero the tokens are re-pointed, so the shared
+   button, the round controls and the focus ring all come out cream on earth. */
 .hero {
-  position: relative; overflow: hidden; background: #000; color: var(--bone);
-  block-size: calc(100svh - var(--ann-h)); min-block-size: 480px;
+  --cream: #F2E8D8;
+  --fg: var(--cream); --bg: rgb(var(--shade)); --accent: var(--cream);
+  position: relative; overflow: hidden; background: rgb(var(--shade)); color: var(--cream);
+  block-size: calc(100svh - var(--ann-h)); min-block-size: 520px;
   margin-block-start: calc(-1 * var(--header-h));
   display: flex; align-items: flex-end; justify-content: center;
 }
 .media { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
-/* a soft black gradient at the bottom only, for the wordmark and the line */
-.shade { position: absolute; inset-inline: 0; inset-block-end: 0; block-size: 62%; pointer-events: none;
-  background: linear-gradient(to top, rgba(0, 0, 0, .86) 0%, rgba(0, 0, 0, .62) 34%, rgba(0, 0, 0, .22) 70%, rgba(0, 0, 0, 0) 100%); }
+/* a warm earth shade that rises from the bottom edge and is gone a little above the wordmark */
+.shade {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(to top, rgba(var(--shade), .82) 0%, rgba(var(--shade), .64) 26%, rgba(var(--shade), .4) 44%, rgba(var(--shade), .14) 60%, rgba(var(--shade), 0) 74%);
+}
 .copy {
-  position: relative; z-index: 1; inline-size: 100%; padding: 0 var(--gutter) clamp(28px, 6vh, 64px);
+  position: relative; z-index: 2; inline-size: 100%; padding: 0 var(--gutter) clamp(44px, 9vh, 96px);
   display: flex; flex-direction: column; align-items: center; text-align: center;
 }
 .mark { margin: 0; line-height: 0; }
-.mark img { inline-size: min(84vw, 620px, 80vh); block-size: auto; display: block; }
-.line { font-family: var(--font-display); font-weight: 500; font-size: clamp(22px, 2.4vw, 34px); line-height: 1.25; margin-block-start: -8px; }
-.cta { margin-block-start: clamp(18px, 3vh, 28px); }
-.toggle {
-  position: absolute; z-index: 2; inset-block-end: 16px; inset-inline-end: var(--gutter);
-  inline-size: 44px; block-size: 44px; border-radius: 50%; display: grid; place-items: center;
-  background: transparent; color: rgba(243, 239, 231, .8); border: 1px solid rgba(243, 239, 231, .32);
+.ink {
+  display: block; inline-size: min(64vw, 480px, 52vh); aspect-ratio: 1252 / 484; background: var(--cream);
+  -webkit-mask: var(--mark) center / contain no-repeat; mask: var(--mark) center / contain no-repeat;
 }
-.toggle:hover { color: var(--bone); border-color: rgba(243, 239, 231, .7); }
-/* phones: the pause button sits in the corner under the call to action, so the copy ends above it */
-@media (max-width: 767px) { .copy { padding-block-end: max(76px, 6vh); } }
-@media (min-width: 768px) { .toggle { inset-inline-end: auto; inset-inline-start: var(--gutter); inset-block-end: clamp(20px, 4vh, 32px); } }
+@media (max-width: 420px) and (max-resolution: 2dppx) { .ink { -webkit-mask-image: var(--mark-small); mask-image: var(--mark-small); } }
+.line { font-family: var(--font-display); font-weight: 500; font-size: clamp(19px, 1.9vw, 26px); line-height: 1.3; margin-block-start: clamp(8px, 1.6vh, 16px); }
+.cta { margin-block-start: clamp(24px, 4.2vh, 40px); min-inline-size: 208px; }
 
-/* the one orchestrated moment */
-@media (prefers-reduced-motion: no-preference) {
-  .mark, .line, .cta { animation: up .9s cubic-bezier(.2, .7, .2, 1) both; }
-  .line { animation-delay: .18s; }
-  .cta { animation-delay: .32s; }
+/* sound and pause: two small round controls in the bottom corner */
+.controls { position: absolute; z-index: 3; inset-block-end: clamp(20px, 4vh, 32px); inset-inline-end: var(--gutter); display: flex; gap: 8px; }
+.controls .ctl {
+  background: rgba(var(--shade), .42); color: var(--cream);
+  border: 1px solid color-mix(in srgb, var(--cream) 30%, transparent);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  transition: background-color .2s ease, border-color .2s ease;
 }
-@keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@media (hover: hover) { .controls .ctl:hover { background: rgba(var(--shade), .7); border-color: color-mix(in srgb, var(--cream) 70%, transparent); } }
+/* phones: the controls sit in the corner under the button, so the copy ends above them */
+@media (max-width: 767px) {
+  .copy { padding-block-end: 88px; }
+  .controls { inset-block-end: 20px; }
+}
+
+/* the one orchestrated moment: the wordmark, the line and the button rise and settle in turn, once */
+@media (prefers-reduced-motion: no-preference) {
+  .mark, .line, .cta { animation: rise 1.2s cubic-bezier(.16, 1, .3, 1) both; }
+  .mark { animation-delay: .15s; }
+  .line { animation-delay: .5s; }
+  .cta { animation-delay: .78s; }
+  .controls { animation: appear .9s ease 1.2s both; }
+}
+@media (prefers-reduced-motion: reduce) { .controls .ctl { transition: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes appear { from { opacity: 0; } to { opacity: 1; } }
