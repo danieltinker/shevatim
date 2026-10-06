@@ -1,9 +1,12 @@
-"""Review / final contact sheets, 12 views per sheet at 400x533, shadows lifted so dark leftovers and halos show.
+"""Review / final contact sheets, 12 views per sheet at 400x533, the cut-out laid on black with the shadows lifted so
+dark leftovers show (for halos and fringes on the shop's grounds use sheet.py --grounds).
 usage: review.py <prefix> code:view ...   (or 'candidates' / 'final' to take the list from sources / pictures-final.json)"""
 import sys, os, json, cv2, numpy as np
-HERE = os.path.dirname(os.path.abspath(__file__)); OUT = os.path.join(HERE, '../../public/media/items')
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+from paths import OUT, SOURCES_JSON, DB
+from sheet import on_ground
 def tile(code, view, lift=True):
-    im = cv2.imread(os.path.join(OUT, code, view + '-960.webp'))
+    im = on_ground(os.path.join(OUT, code, view + '-960.webp'), (0, 0, 0))
     if im is None: im = np.zeros((960, 720, 3), np.uint8)
     im = cv2.resize(im, (400, 533), interpolation=cv2.INTER_AREA)
     if lift: im = (255 * (im / 255.0) ** 0.55).astype(np.uint8)
@@ -18,10 +21,10 @@ def sheets(prefix, items, lift=True):
     return (len(items) + 11) // 12
 if __name__ == '__main__':
     if sys.argv[2] == 'candidates':
-        S = json.load(open(os.path.join(HERE, '../../db/picture-sources.json')))
+        S = json.load(open(SOURCES_JSON))
         items = [(c, v) for c in S for v in ('back', 'front', 'side') if v in S[c] and (v != 'side' or c.startswith('pa')) and c[:2] in sys.argv[3].split(',')]
     elif sys.argv[2] == 'final':
-        F = json.load(open(os.path.join(HERE, '../../db/pictures-final.json')))
+        F = json.load(open(os.path.join(DB, 'pictures-final.json')))
         items = [(c, p['view']) for c in F for p in F[c] if p.get('kind', 'product') == 'product']
     else: items = [a.split(':') for a in sys.argv[2:]]
     print(sheets(sys.argv[1], items, lift=sys.argv[2] != 'final'))
