@@ -5,7 +5,9 @@ State as of 6 Oct 2026, 09:30 UTC. Built by Halom for the Shevatim brand.
 ## Redesign "Midbar" (branch `desert`, 6 Oct 2026): waiting for approval
 Made after the brand owner's notes on the first version (too black, too many colours, crowded home page, wanted
 sound and a light/dark switch). Design rules: `docs/DESIGN.md`. It is **not on the live site yet**: Vercel builds
-every push to `desert` as a preview; merging `desert` into `main` puts it live.
+every push to `desert` as a preview (https://shevatim-git-desert-danielb534-6388s-projects.vercel.app, behind
+the Vercel login); merging `desert` into `main` puts it live. The preview has no database address (the two
+variables are set for Production only), so it shows the built-in catalogue and cannot take a reservation.
 - Palette: cream sand, beige, dune, clay and earth only. Light theme by default; a small sun/moon button switches
   to a walnut-brown dark theme (remembered per visitor). The tribes are no longer colour-coded.
 - Home page order: film with one line and one button, the collection (four pieces), a compact row of the six
@@ -48,8 +50,8 @@ Not done / to check by a person:
   announcement, open/closed).
 
 ## Open, in order of urgency
-1. **Back-office password is not set** (checked 09:21 UTC: `shevatim.admin` is empty). In Supabase → SQL Editor:
-   `select shevatim.set_admin_password('<a long password of your own>');`
+1. **Back-office password**: Daniel reports it was set on 6 Oct (SQL Editor, `shevatim.set_admin_password`). Not
+   re-checked from here; log in once at `/admin/` to confirm.
 2. **Contact details are empty**: WhatsApp, e-mail, Instagram, cal.com link. Until they are set in the back
    office, the footer shows no contact and the confirmation page has no WhatsApp or booking button.
 3. **No reservation has been placed on the live site yet.** The database functions were exercised from a real
