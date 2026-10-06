@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "db": "node scripts/dev-db.mjs",
-    "seed": "python3 scripts/make-seed.py"
+    "seed": "node db/seed.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "0.5.8",

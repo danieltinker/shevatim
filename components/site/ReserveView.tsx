@@ -217,7 +217,7 @@ export function ReserveView() {
             <p ref={alertRef} tabIndex={-1} role="alert" className={failure ? s.alert : s.alertEmpty}>{failure}</p>
             {waLink ? <a className="btn btnGhost" href={waLink} target="_blank" rel="noopener noreferrer">{t.reserve.whatsappInstead}</a> : null}
             <button type="submit" className={`btn ${s.send}`} disabled={busy || !open || anyGone || rows.length === 0}>{busy ? t.reserve.sending : t.reserve.send}</button>
-            <p className={`small muted ${s.termsLine}`}>{t.reserve.terms} <Link href={`/${locale}/terms/`}>{t.nav.terms}</Link>.</p>
+            <p className={`small muted ${s.termsLine}`}>{t.reserve.terms} <Link href={`/${locale}/terms/`}>{t.reserve.termsLink}</Link>.</p>
           </form>
         </section>
         )}

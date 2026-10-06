@@ -83,9 +83,13 @@ export function ClothSection() {
   );
 }
 
-const CLIP: Record<string, string> = { tzitziyot: "tzitzit-bw", shirts: "longsleeve", pants: "three", bracelets: "jewelry" };
-// kippot: no item yet, so a campaign picture cropped onto the white knitted kippah
+const CLIP: Record<string, string> = { tzitziyot: "tzitzit-bw", shirts: "longsleeve" };
+// The other tiles are campaign pictures cropped onto the item: the olive pants beside the camel, the shell necklace
+// on a chest, a wrist stacked with bracelets, and (no kippah item yet) the white knitted kippah.
 const STILL: Record<string, { base: string; position?: string; zoom?: number; origin?: string }> = {
+  pants: { base: "/media/lookbook/yog06048", position: "78% 100%", zoom: 1.5, origin: "80% 100%" },
+  necklaces: { base: "/media/lookbook/yog06040", position: "100% 50%", zoom: 1.9, origin: "100% 54%" },
+  bracelets: { base: "/media/lookbook/yog06085", position: "36% 50%", zoom: 1.9, origin: "36% 50%" },
   kippot: { base: "/media/lookbook/yog06092_2", position: "62% 0%", zoom: 2.1, origin: "60% 14%" },
 };
 

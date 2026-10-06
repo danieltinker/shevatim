@@ -343,6 +343,19 @@
      "view": "front"
     },
     {
+     "base": "/media/items/tz03/back",
+     "sizes": [
+      480,
+      960,
+      1600
+     ],
+     "ext": "webp",
+     "w": 1200,
+     "h": 1600,
+     "kind": "product",
+     "view": "back"
+    },
+    {
      "base": "/media/items/tz03/3d-back",
      "sizes": [
       480,
@@ -367,19 +380,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz03/back",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "back"
     }
    ],
    "tribe": "dan",
@@ -557,6 +557,19 @@
      "view": "front"
     },
     {
+     "base": "/media/items/tz05/back",
+     "sizes": [
+      480,
+      960,
+      1600
+     ],
+     "ext": "webp",
+     "w": 1200,
+     "h": 1600,
+     "kind": "product",
+     "view": "back"
+    },
+    {
      "base": "/media/items/tz05/3d-back",
      "sizes": [
       480,
@@ -581,32 +594,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz05/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
-    },
-    {
-     "base": "/media/items/tz05/back",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "back"
     }
    ],
    "tribe": "yehuda",
@@ -1090,19 +1077,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz10/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "yehuda",
@@ -1385,19 +1359,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz13/back",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "back"
     }
    ],
    "tribe": "levi",
@@ -1962,19 +1923,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz19/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     },
     {
      "base": "/media/items/tz19/back",
@@ -2552,19 +2500,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz25/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "yissachar",
@@ -2635,6 +2570,19 @@
      "view": "front"
     },
     {
+     "base": "/media/items/tz26/back",
+     "sizes": [
+      480,
+      960,
+      1600
+     ],
+     "ext": "webp",
+     "w": 1200,
+     "h": 1600,
+     "kind": "product",
+     "view": "back"
+    },
+    {
      "base": "/media/items/tz26/3d-back",
      "sizes": [
       480,
@@ -2659,19 +2607,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz26/back",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "back"
     }
    ],
    "tribe": "dan",
@@ -2954,19 +2889,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz29/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     },
     {
      "base": "/media/items/tz29/back",
@@ -3262,19 +3184,6 @@
      "h": 1600,
      "kind": "render",
      "view": "side"
-    },
-    {
-     "base": "/media/items/tz32/back",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "back"
     }
    ],
    "tribe": "naftali",
@@ -3363,19 +3272,6 @@
      "h": 1600,
      "kind": "product",
      "view": "back"
-    },
-    {
-     "base": "/media/items/ls01/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "yissachar",
@@ -3456,19 +3352,6 @@
      "h": 1600,
      "kind": "product",
      "view": "back"
-    },
-    {
-     "base": "/media/items/ls02/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "reuven",
@@ -3921,19 +3804,6 @@
      "h": 1600,
      "kind": "product",
      "view": "back"
-    },
-    {
-     "base": "/media/items/ls07/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "binyamin",
@@ -4189,19 +4059,6 @@
    ],
    "pictures": [
     {
-     "base": "/media/items/ls10/back",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "back"
-    },
-    {
      "base": "/media/items/ls10/front",
      "sizes": [
       480,
@@ -4293,19 +4150,6 @@
      "h": 1600,
      "kind": "product",
      "view": "back"
-    },
-    {
-     "base": "/media/items/ls11/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "naftali",
@@ -4386,19 +4230,6 @@
      "h": 1600,
      "kind": "product",
      "view": "back"
-    },
-    {
-     "base": "/media/items/ls12/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "yissachar",
@@ -4467,19 +4298,6 @@
     }
    ],
    "pictures": [
-    {
-     "base": "/media/items/ls13/back",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "back"
-    },
     {
      "base": "/media/items/ls13/front",
      "sizes": [
@@ -4572,19 +4390,6 @@
      "h": 1600,
      "kind": "product",
      "view": "back"
-    },
-    {
-     "base": "/media/items/ls14/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "dan",
@@ -4758,19 +4563,6 @@
      "h": 1600,
      "kind": "product",
      "view": "back"
-    },
-    {
-     "base": "/media/items/ls16/front",
-     "sizes": [
-      480,
-      960,
-      1600
-     ],
-     "ext": "webp",
-     "w": 1200,
-     "h": 1600,
-     "kind": "product",
-     "view": "front"
     }
    ],
    "tribe": "yissachar",
