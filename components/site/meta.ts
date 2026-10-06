@@ -5,7 +5,10 @@ import media from "@/content/media.json";
 import { asset } from "@/lib/asset";
 import type { Locale } from "@/lib/types";
 
-const SITE = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
+// The public address, for absolute share-preview links. Set NEXT_PUBLIC_SITE_URL to pin it; on Vercel it otherwise
+// follows the project's production domain (a custom domain once one is attached).
+const SITE = (process.env.NEXT_PUBLIC_SITE_URL
+  ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "")).replace(/\/$/, "");
 export const metadataBase = SITE ? new URL(SITE) : undefined;
 // A build served from a temporary address (a preview host) sets NEXT_PUBLIC_NOINDEX=1 so search engines skip it.
 const NOINDEX = process.env.NEXT_PUBLIC_NOINDEX === "1";
