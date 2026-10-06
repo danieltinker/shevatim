@@ -7,7 +7,7 @@ import { asset } from "@/lib/asset";
 import { bagCount, useBag } from "@/lib/bag";
 import { useCatalog } from "@/lib/catalog";
 import { fill, tr } from "@/lib/format";
-import { LANG_KEY, LANG_LABEL, LANG_NAME } from "@/lib/i18n";
+import { LANG_KEY, LANG_LABEL, LANG_NAME, pick } from "@/lib/i18n";
 import { LOCALES, type Locale } from "@/lib/types";
 import { useI18n } from "./Providers";
 import s from "./Header.module.css";
@@ -45,6 +45,7 @@ export default function Header({ tribes }: { tribes: { key: string; plain: strin
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
   const btn = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
   const ann = tr(catalog.settings.announcement, locale).trim();
   const cats = catalog.categories.filter((c) => c.visible).sort((a, b) => a.sort - b.sort);
 
@@ -58,10 +59,29 @@ export default function Header({ tribes }: { tribes: { key: string; plain: strin
   useEffect(() => { setOpen(false); }, [path]);
   useEffect(() => {
     if (!open) return;
-    const key = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); btn.current?.focus(); } };
+    // the open menu is a dialog: focus moves into it, Tab stays inside it (the menu button, which closes it,
+    // and the links of the panel), Escape closes it, and closing gives focus back to the menu button
+    const stops = () => [btn.current, ...(panel.current ? Array.from(panel.current.querySelectorAll<HTMLElement>("a[href], button")) : [])]
+      .filter((el): el is HTMLElement => !!el && el.getClientRects().length > 0);
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setOpen(false); return; }
+      if (e.key !== "Tab") return;
+      const list = stops();
+      if (!list.length) return;
+      const i = list.indexOf(document.activeElement as HTMLElement);
+      const next = e.shiftKey ? (i <= 0 ? list.length - 1 : i - 1) : (i < 0 || i === list.length - 1 ? 0 : i + 1);
+      e.preventDefault();
+      list[next].focus();
+    };
     document.addEventListener("keydown", key);
     document.documentElement.style.overflow = "hidden";
-    return () => { document.removeEventListener("keydown", key); document.documentElement.style.overflow = ""; };
+    const toggler = btn.current;
+    stops()[1]?.focus();
+    return () => {
+      document.removeEventListener("keydown", key);
+      document.documentElement.style.overflow = "";
+      toggler?.focus({ preventScroll: true });
+    };
   }, [open]);
 
   const home = `/${locale}/`;
@@ -87,7 +107,7 @@ export default function Header({ tribes }: { tribes: { key: string; plain: strin
         </Link>
         <div className={s.end}>
           <LangSwitch className={s.langDesk} />
-          <Link prefetch={false} className={s.bag} href={`${home}reserve/`} aria-label={count ? fill(t.nav.bagCount, { n: count }) : t.nav.bag}>
+          <Link prefetch={false} className={s.bag} href={`${home}reserve/`} aria-label={count ? fill(count === 1 ? pick(t.nav, "bagCountOne", t.nav.bagCount) : t.nav.bagCount, { n: count }) : t.nav.bag}>
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M5 8h14l-1 12H6L5 8Z" /><path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
             </svg>
@@ -95,7 +115,7 @@ export default function Header({ tribes }: { tribes: { key: string; plain: strin
           </Link>
         </div>
       </header>
-      <div id="site-menu" className={`${s.panel} ${open ? s.panelOpen : ""}`} hidden={!open}>
+      <div id="site-menu" ref={panel} role="dialog" aria-modal="true" aria-label={t.nav.menu} className={`${s.panel} ${open ? s.panelOpen : ""}`} hidden={!open}>
         <nav aria-label={t.nav.main}>
           <ul className={s.big}>
             <li><Link prefetch={false} href={`${home}collection/`}>{t.nav.collection}</Link></li>

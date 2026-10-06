@@ -4,8 +4,10 @@
 .grid { display: grid; gap: 24px; }
 .gallery { display: grid; gap: 10px; min-inline-size: 0; }
 .stageBox { min-inline-size: 0; }
-.main { aspect-ratio: 3 / 4; background: #000; overflow: hidden; display: grid; place-items: center; max-block-size: 86vh; inline-size: 100%; }
-.main img { inline-size: 100%; block-size: 100%; object-fit: contain; display: block; }
+/* the picture is laid over the box, so the whole garment always fits inside it (a percentage height does not
+   resolve inside an auto grid row, which used to crop the hem on wide screens) */
+.main { position: relative; aspect-ratio: 3 / 4; background: #000; overflow: hidden; display: grid; place-items: center; max-block-size: 86vh; inline-size: 100%; }
+.main img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; display: block; }
 .noPic { display: grid; gap: 8px; justify-items: center; text-align: center; padding: 24px; }
 .noPic span { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h2); line-height: 1.15; }
 .noPic small { color: var(--muted); font-size: var(--fs-small); }
@@ -33,6 +35,7 @@
 .opt input:checked + span { border-color: var(--fg); box-shadow: inset 0 0 0 1px var(--fg); }
 .opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 3px; }
 .opt input:disabled + span { opacity: .4; text-decoration: line-through; }
+.needChoice { margin-block-start: 10px; font-size: var(--fs-small); color: #F0A58F; font-weight: 500; }
 .add { margin-block-start: 20px; inline-size: 100%; max-inline-size: 460px; }
 .added { min-block-size: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: var(--fs-small); margin-block-start: 6px; }
 .desc { margin-block-start: 12px; max-inline-size: 52ch; }
@@ -53,7 +56,9 @@
 
 .play { margin-block-start: clamp(56px, 8vw, 120px); padding: clamp(32px, 5vw, 64px) var(--gutter) 0; border-block-start: 1px solid var(--line); display: grid; gap: 24px; align-items: center; }
 .playText { display: grid; gap: 10px; }
-.playStage { inline-size: 100%; max-inline-size: min(560px, 60vh); margin-inline: auto; touch-action: pan-y; }
-.canvas { inline-size: 100%; display: block; }
+/* the stage keeps its 3:4 box whatever is inside it (poster, loading code, live cloth) */
+.playStage { position: relative; inline-size: 100%; max-inline-size: min(560px, 60vh); aspect-ratio: 3 / 4; margin-inline: auto; touch-action: pan-y; background: #000; overflow: hidden; }
+.stagePoster { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; display: block; }
+.canvas { position: relative; inline-size: 100%; display: block; }
 .canvasHold { aspect-ratio: 3 / 4; }
 @media (min-width: 900px) { .play { grid-template-columns: 5fr 7fr; gap: 64px; } .playStage { max-inline-size: min(560px, 60vh); } }

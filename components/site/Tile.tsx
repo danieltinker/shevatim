@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
+import { useSyncExternalStore } from "react";
 import { formatPrice, tr } from "@/lib/format";
+import { pick } from "@/lib/i18n";
 import type { Item } from "@/lib/types";
 import { useI18n } from "./Providers";
 import { pictureSrcSet, pictureUrl } from "./Pic";
@@ -11,9 +13,30 @@ export function PriceLine({ price, className }: { price: number | null; classNam
   return <span className={className}>{price == null ? t.shop.priceLater : <bdi dir="ltr">{formatPrice(price)}</bdi>}</span>;
 }
 
-/** Product tile: the picture floats on black (no edge), then the name and the price line. */
+/** One sentence for the head of a listing, shown only when a piece in it has no price yet (instead of
+ *  repeating it under every tile). */
+export function PriceNote({ items, className }: { items: Item[]; className?: string }) {
+  const { t } = useI18n();
+  if (!items.some((i) => i.price == null)) return null;
+  return <p className={className}>{pick(t.shop, "priceNote", t.shop.priceLater)}</p>;
+}
+
+// Can this screen hover? Decided in the browser after hydration (the server and the first client render say
+// no), so phones never download the second picture of a tile, which they could not show anyway.
+const HOVER = "(hover: hover) and (pointer: fine)";
+function subscribeHover(cb: () => void) {
+  const mq = window.matchMedia(HOVER);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+export function useCanHover(): boolean {
+  return useSyncExternalStore(subscribeHover, () => window.matchMedia(HOVER).matches, () => false);
+}
+
+/** Product tile: the picture floats on black (no edge), then the name and, when there is one, the price. */
 export default function Tile({ item, sizes, eager }: { item: Item; sizes?: string; eager?: boolean }) {
   const { locale, t } = useI18n();
+  const canHover = useCanHover();
   const [first, second] = item.pictures;
   const name = tr(item.name, locale);
   const sz = sizes ?? "(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw";
@@ -24,14 +47,14 @@ export default function Tile({ item, sizes, eager }: { item: Item; sizes?: strin
           <img className={s.pic} src={pictureUrl(first, 480)} srcSet={pictureSrcSet(first)} sizes={sz} width={first.w} height={first.h}
             alt={first.alt?.[locale] || name} loading={eager ? "eager" : "lazy"} decoding="async" />
         ) : null}
-        {second ? (
+        {second && canHover ? (
           <img className={`${s.pic} ${s.second}`} src={pictureUrl(second, 480)} srcSet={pictureSrcSet(second)} sizes={sz} width={second.w} height={second.h}
             alt="" loading="lazy" decoding="async" />
         ) : null}
         {item.soldOut ? <span className={s.sold}>{t.shop.soldOut}</span> : null}
       </span>
       <span className={s.name}>{name}</span>
-      <PriceLine className={s.price} price={item.price} />
+      {item.price != null ? <PriceLine className={s.price} price={item.price} /> : null}
     </Link>
   );
 }

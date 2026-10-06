@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCatalog } from "@/lib/catalog";
 import { currentCollection, fill, slotItems } from "@/lib/format";
+import { colon } from "@/lib/i18n";
 import { useI18n } from "./Providers";
 import { StoneLabel, stoneStyle } from "./Stone";
 import Tile from "./Tile";
@@ -89,7 +90,7 @@ export default function TribesSlider({ tribes, title, lede }: { tribes: TribeVie
           <p className="measure">{lede}</p>
         </header>
 
-        <div className={s.stage} tabIndex={0} onKeyDown={onKey}
+        <div className={s.stage} tabIndex={0} role="group" aria-label={`${title}, ${tribe.plain}`} onKeyDown={onKey}
           onTouchStart={(e) => { touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }} onTouchEnd={onTouchEnd}>
           <div className={s.controls}>
             <ul ref={plate} className={ch.plate} aria-label={t.tribes.choose}>
@@ -119,7 +120,7 @@ export default function TribesSlider({ tribes, title, lede }: { tribes: TribeVie
                 <span className={s.dot} style={{ background: tribe.hex }} aria-hidden="true" />
                 <span><span lang={locale === "he" ? undefined : "he-Latn"}>{tribe.stone}</span>, {tribe.stoneGloss}</span>
               </p>
-              <p className={s.emblem}><span>{t.tribes.emblem}:</span> {tribe.symbol}</p>
+              <p className={s.emblem}><span>{t.tribes.emblem}{colon(locale)}</span> {tribe.symbol}</p>
               <p className={s.essence}>{tribe.essence}</p>
               <Link className="link" href={`/${locale}/tribes/${tribe.key}/`}>{fill(t.tribes.page, { name: tribe.plain })}</Link>
             </div>

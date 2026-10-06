@@ -9,10 +9,11 @@ import { currentCollection, slotItems, tr } from "@/lib/format";
 import type { Item, Picture, TribeKey } from "@/lib/types";
 import Pic, { pictureUrl } from "./Pic";
 import { useI18n } from "./Providers";
-import Tile, { Grid } from "./Tile";
+import Tile, { Grid, PriceNote } from "./Tile";
 import s from "./Home.module.css";
 
-const TzitzitCanvas = dynamic(() => import("@/components/cloth/TzitzitCanvas"), { ssr: false });
+// while the 3D code is on its way the stage keeps its box (and shows the poster under this empty holder)
+const TzitzitCanvas = dynamic(() => import("@/components/cloth/TzitzitCanvas"), { ssr: false, loading: () => <div className={s.canvasHold} aria-hidden="true" /> });
 
 /** True once the element has come near the viewport (and stays true). */
 export function useNear<T extends Element>(margin = "300px") {
@@ -47,6 +48,7 @@ export function CollectionTeaser() {
           </div>
           <div className={s.colText}>
             <p className="measure">{tr(col.description, locale)}</p>
+            <PriceNote items={four} className={s.priceNote} />
             <Link className="link" href={`/${locale}/collection/`}>{t.home.collectionLink}</Link>
           </div>
         </header>
@@ -73,8 +75,8 @@ export function ClothSection() {
           <Link className="link" href={`/${locale}/item/?i=${encodeURIComponent(item.slug)}`}>{tr(item.name, locale)}</Link>
         </div>
         <div ref={ref} className={s.clothStage}>
-          {near ? <TzitzitCanvas spec={item.cloth} poster={poster} label={t.home.clothLabel} hint={t.home.clothHint} className={s.canvas} />
-            : poster ? <img className={s.canvas} src={poster} alt="" loading="lazy" style={{ aspectRatio: "3 / 4", objectFit: "contain", width: "100%" }} /> : null}
+          {poster ? <img className={s.stagePoster} src={poster} alt="" loading="lazy" decoding="async" /> : null}
+          {near ? <TzitzitCanvas spec={item.cloth} poster={poster} label={t.home.clothLabel} hint={t.home.clothHint} className={s.canvas} /> : null}
         </div>
       </div>
     </section>

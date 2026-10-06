@@ -4,7 +4,7 @@ import s from "./Choshen.module.css";
 
 /** One stone of the Choshen: the tribe's flag colour with its name set inside. */
 export function stoneStyle(t: TribeView): CSSProperties {
-  return { background: t.hex, color: t.stoneText };
+  return { background: t.stoneBg, color: t.stoneText };
 }
 export function StoneLabel({ t }: { t: TribeView }) {
   return (

@@ -2,9 +2,11 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/heebo";
 import "@fontsource-variable/frank-ruhl-libre";
 import "./admin.css";
+import { ICONS } from "@/components/site/meta";
 
 export const metadata: Metadata = {
   title: "שבטים · ניהול",
+  icons: ICONS,
   robots: { index: false, follow: false, nocache: true },
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#E9E5DC" };

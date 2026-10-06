@@ -4,8 +4,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createReservation } from "@/lib/api";
 import { bag, useBag } from "@/lib/bag";
-import { useCatalog } from "@/lib/catalog";
-import { fill, formatPrice, isEmail, isPhone, priceOf, tr } from "@/lib/format";
+import { refreshCatalog, useCatalog } from "@/lib/catalog";
+import { fill, formatPrice, isEmail, isPhone, isReservationCode, normalizePhone, priceOf, tr } from "@/lib/format";
+import { colon, pick } from "@/lib/i18n";
 import { ApiError, type L10n } from "@/lib/types";
 import { pictureUrl } from "./Pic";
 import { useI18n } from "./Providers";
@@ -23,27 +24,41 @@ export function ReserveView() {
   const [ready, setReady] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const [failure, setFailure] = useState<string | null>(null);
+  const [invalid, setInvalid] = useState<string | null>(null); // the server refused the details: said at the first field
+  const [flagged, setFlagged] = useState(false);              // the server said a piece is no longer available
   const [waLink, setWaLink] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const form = useRef<HTMLFormElement>(null);
   const alertRef = useRef<HTMLParagraphElement>(null);
-  useEffect(() => { setReady(true); }, []);
+  const listRef = useRef<HTMLUListElement>(null);
+  useEffect(() => { bag.load(); setReady(true); }, []);
 
   const rows = lines.map((l) => {
     const item = catalog.items.find((i) => i.id === l.itemId && i.status === "published");
     const v = item && l.variantKey ? item.variants.find((x) => x.key === l.variantKey) ?? null : null;
-    const gone = !item || item.soldOut || (!!l.variantKey && (!v || !v.available));
+    // the same rule as the server: the piece must exist and be in stock, and its size must be a real, available one
+    const gone = !item || item.soldOut || (item.variants.length ? !v || !v.available : !!l.variantKey);
     return { l, item, v, gone, price: item ? priceOf(item, l.variantKey) : null };
   });
   const anyGone = rows.some((r) => r.gone);
   const total = rows.every((r) => r.price != null) ? rows.reduce((n, r) => n + (r.price ?? 0) * r.l.qty, 0) : null;
   const open = catalog.settings.reservationsOpen;
+  const totalText = pick(t.reserve, "totalPending", t.reserve.totalLater);
+
+  // after a line leaves the bag, focus goes to the line that took its place, or to the heading
+  const drop = (itemId: string, variantKey: string | null, i: number) => {
+    bag.remove(itemId, variantKey);
+    requestAnimationFrame(() => {
+      const next = listRef.current?.querySelectorAll<HTMLButtonElement>("[data-remove]")[i];
+      (next ?? document.getElementById("bag-h"))?.focus();
+    });
+  };
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (busy) return;
     const f = new FormData(e.currentTarget);
-    const name = String(f.get("name") ?? "").trim(), phone = String(f.get("phone") ?? "").trim();
+    const name = String(f.get("name") ?? "").trim(), phone = normalizePhone(String(f.get("phone") ?? ""));
     const email = String(f.get("email") ?? "").trim(), note = String(f.get("note") ?? "").trim();
     const errs: Partial<Record<Field, string>> = {};
     if (name.length < 2) errs.name = t.reserve.errName;
@@ -51,6 +66,7 @@ export function ReserveView() {
     if (email && !isEmail(email)) errs.email = t.reserve.errEmail;
     setErrors(errs);
     const first = (["name", "phone", "email"] as Field[]).find((k) => errs[k]);
+    setInvalid(null);
     if (first) {
       setFailure(t.reserve.errFix);
       (form.current?.elements.namedItem(first) as HTMLElement | null)?.focus();
@@ -74,13 +90,24 @@ export function ReserveView() {
       const code = err instanceof ApiError ? err.code : "unknown";
       const known = ["invalid", "closed", "item_unavailable", "too_many", "network"] as const;
       const k = (known as readonly string[]).includes(code) ? (`err_${code}` as `err_${(typeof known)[number]}`) : "err_unknown";
+      if (code === "invalid") {
+        // say it where the details are, and put the cursor there
+        setInvalid(t.reserve.err_invalid); setFailure(null); setBusy(false);
+        requestAnimationFrame(() => (form.current?.elements.namedItem("name") as HTMLElement | null)?.focus());
+        return;
+      }
       setFailure(t.reserve[k]);
+      if (code === "item_unavailable") {
+        // the catalogue this page holds is out of date: read it again so the line that is gone is marked
+        setFlagged(true);
+        void refreshCatalog();
+      }
       // the bag and everything typed stay as they are; if the shop has WhatsApp, offer it as another way through
       if (code === "network" && catalog.settings.whatsapp) {
         const text = [
           t.reserve.whatsappLead,
           ...rows.filter((r) => r.item).map((r) => `${r.l.qty} × ${tr(r.item!.name, locale)}${r.v ? ` (${tr(r.v.label, locale)})` : ""} [${r.item!.code}]`),
-          `${t.reserve.name}: ${name}`, `${t.reserve.phone}: ${phone}`, ...(email ? [`${t.reserve.email}: ${email}`] : []), ...(note ? [`${t.reserve.note}: ${note}`] : []),
+          `${t.reserve.name}${colon(locale)} ${name}`, `${t.reserve.phone}${colon(locale)} ${phone}`, ...(email ? [`${t.reserve.email}${colon(locale)} ${email}`] : []), ...(note ? [`${t.reserve.note}${colon(locale)} ${note}`] : []),
         ].join("\n");
         setWaLink(`https://wa.me/${catalog.settings.whatsapp}?text=${encodeURIComponent(text)}`);
       }
@@ -89,11 +116,21 @@ export function ReserveView() {
     }
   }
 
-  if (ready && rows.length === 0) {
+  // until the saved bag has been read nothing below the heading is drawn, so the form cannot jump when the lines arrive
+  if (!ready) {
+    return (
+      <div className={`onBlack section ${s.page}`} aria-busy="true">
+        <div className={`wrap ${s.grid}`}>
+          <section className={s.bag} aria-labelledby="bag-h"><h1 id="bag-h" className={s.h1}>{t.reserve.title}</h1></section>
+        </div>
+      </div>
+    );
+  }
+  if (rows.length === 0) {
     return (
       <div className={`onBlack section ${s.page}`}>
         <div className={`wrap ${s.empty}`}>
-          <h1>{t.reserve.emptyTitle}</h1>
+          <h1 id="bag-h" className={s.h1} tabIndex={-1}>{t.reserve.emptyTitle}</h1>
           <p className="muted">{t.reserve.emptyText}</p>
           <Link className="btn" href={`/${locale}/collection/`}>{t.reserve.emptyCta}</Link>
         </div>
@@ -105,12 +142,12 @@ export function ReserveView() {
     <div className={`onBlack section ${s.page}`}>
       <div className={`wrap ${s.grid}`}>
         <section className={s.bag} aria-labelledby="bag-h">
-          <h1 id="bag-h" className={s.h1}>{t.reserve.title}</h1>
-          <ul className={s.lines} aria-busy={!ready}>
-            {rows.map(({ l, item, v, gone, price }) => {
+          <h1 id="bag-h" className={s.h1} tabIndex={-1}>{t.reserve.title}</h1>
+          <ul ref={listRef} className={s.lines}>
+            {rows.map(({ l, item, v, gone, price }, i) => {
               const name = item ? tr(item.name, locale) : l.itemId;
               return (
-                <li key={`${l.itemId}:${l.variantKey}`} className={s.line}>
+                <li key={`${l.itemId}:${l.variantKey}`} className={`${s.line} ${gone ? s.lineGone : ""}`}>
                   <Link className={s.thumb} href={item ? `/${locale}/item/?i=${encodeURIComponent(item.slug)}` : `/${locale}/shop/`} tabIndex={-1} aria-hidden="true">
                     {item?.pictures[0] ? <img src={pictureUrl(item.pictures[0], 240)} alt="" width={96} height={128} loading="lazy" /> : null}
                   </Link>
@@ -118,14 +155,14 @@ export function ReserveView() {
                     <p className={s.lineName}>{item ? <Link href={`/${locale}/item/?i=${encodeURIComponent(item.slug)}`}>{name}</Link> : <bdi>{name}</bdi>}</p>
                     {v ? <p className="small muted"><bdi>{tr(v.label, locale)}</bdi></p> : null}
                     <p className="small muted">{price == null ? t.shop.priceLater : <bdi dir="ltr">{formatPrice(price)}</bdi>}</p>
-                    {gone ? <p className={`small ${s.gone}`}>{t.reserve.gone}</p> : null}
+                    {gone ? <p className={`small ${s.gone}`} role={flagged ? "alert" : undefined}>{t.reserve.gone}</p> : null}
                     <div className={s.lineActions}>
-                      <div className={s.qty} dir="ltr" role="group" aria-label={`${t.reserve.qty}: ${name}`}>
-                        <button type="button" aria-label={t.reserve.less} onClick={() => bag.setQty(l.itemId, l.variantKey, l.qty - 1)}>−</button>
+                      <div className={s.qty} dir="ltr" role="group" aria-label={`${t.reserve.qty}${colon(locale)} ${name}`}>
+                        <button type="button" aria-label={t.reserve.less} onClick={() => (l.qty <= 1 ? drop(l.itemId, l.variantKey, i) : bag.setQty(l.itemId, l.variantKey, l.qty - 1))}>−</button>
                         <bdi aria-live="polite">{l.qty}</bdi>
                         <button type="button" aria-label={t.reserve.more} disabled={l.qty >= 9} onClick={() => bag.setQty(l.itemId, l.variantKey, l.qty + 1)}>+</button>
                       </div>
-                      <button type="button" className={s.remove} onClick={() => bag.remove(l.itemId, l.variantKey)}>{t.reserve.remove}<span className="srOnly">: {name}</span></button>
+                      <button type="button" className={s.remove} data-remove onClick={() => drop(l.itemId, l.variantKey, i)}>{t.reserve.remove}<span className="srOnly">{colon(locale)} {name}</span></button>
                     </div>
                   </div>
                 </li>
@@ -135,7 +172,7 @@ export function ReserveView() {
           {rows.length ? (
             <p className={s.total}>
               <span>{t.reserve.total}</span>
-              <span>{total == null ? t.reserve.totalLater : <bdi dir="ltr">{formatPrice(total)}</bdi>}</span>
+              <span>{total == null ? totalText : <bdi dir="ltr">{formatPrice(total)}</bdi>}</span>
             </p>
           ) : null}
         </section>
@@ -151,19 +188,21 @@ export function ReserveView() {
           <h2 id="form-h" className={s.h2}>{t.reserve.formTitle}</h2>
           <p className={`muted ${s.formLine}`}>{t.reserve.formLine}</p>
           <form ref={form} className={s.form} onSubmit={submit} noValidate>
+            {invalid ? <p id="e-form" role="alert" className={s.formErr}>{invalid}</p> : null}
             <div className={s.field}>
               <label htmlFor="f-name">{t.reserve.name}</label>
-              <input id="f-name" name="name" type="text" autoComplete="name" required aria-invalid={!!errors.name} aria-describedby={errors.name ? "e-name" : undefined} />
+              <input id="f-name" name="name" type="text" autoComplete="name" required maxLength={80} aria-invalid={!!errors.name || !!invalid}
+                aria-describedby={[errors.name ? "e-name" : "", invalid ? "e-form" : ""].filter(Boolean).join(" ") || undefined} />
               {errors.name ? <p id="e-name" className={s.err}>{errors.name}</p> : null}
             </div>
             <div className={s.field}>
               <label htmlFor="f-phone">{t.reserve.phone}</label>
-              <input id="f-phone" name="phone" type="tel" inputMode="tel" dir="ltr" autoComplete="tel" required aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "e-phone" : "h-phone"} />
+              <input id="f-phone" name="phone" type="tel" inputMode="tel" dir="ltr" autoComplete="tel" required maxLength={40} aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "e-phone" : "h-phone"} />
               {errors.phone ? <p id="e-phone" className={s.err}>{errors.phone}</p> : <p id="h-phone" className={s.hint}>{t.reserve.phoneHint}</p>}
             </div>
             <div className={s.field}>
               <label htmlFor="f-email">{t.reserve.email} <span className={s.opt}>({t.reserve.optional})</span></label>
-              <input id="f-email" name="email" type="email" inputMode="email" dir="ltr" autoComplete="email" aria-invalid={!!errors.email} aria-describedby={errors.email ? "e-email" : undefined} />
+              <input id="f-email" name="email" type="email" inputMode="email" dir="ltr" autoComplete="email" maxLength={254} aria-invalid={!!errors.email} aria-describedby={errors.email ? "e-email" : undefined} />
               {errors.email ? <p id="e-email" className={s.err}>{errors.email}</p> : null}
             </div>
             <div className={s.field}>
@@ -190,17 +229,24 @@ export function ReserveView() {
 export function DoneView({ code }: { code: string | null }) {
   const { locale, t } = useI18n();
   const { settings } = useCatalog();
+  // "received" is only said for the code this browser was just given: a well-formed code that matches the receipt
+  // kept in this tab. Anything else typed into the address gets a plain "nothing here".
   const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [checked, setChecked] = useState(false);
   useEffect(() => {
-    try {
-      const r = JSON.parse(window.sessionStorage.getItem(LAST) ?? "null") as Receipt | null;
-      if (r && r.code === code) setReceipt(r);
-    } catch { /* ignore */ }
+    let r: Receipt | null = null;
+    try { r = JSON.parse(window.sessionStorage.getItem(LAST) ?? "null") as Receipt | null; } catch { /* ignore */ }
+    setReceipt(r && isReservationCode(code) && r.code === code && Array.isArray(r.lines) ? r : null);
+    setChecked(true);
   }, [code]);
-  if (!code) {
+  if (!checked) return <div className={`onChalk section ${s.page}`} aria-busy="true" />;
+  if (!code || !receipt) {
     return (
       <div className={`onChalk section ${s.page}`}>
-        <div className={`wrap ${s.empty}`}><p>{t.done.noCode}</p><Link className="btn" href={`/${locale}/collection/`}>{t.done.back}</Link></div>
+        <div className={`wrap ${s.empty}`}>
+          <p>{t.done.noCode}</p>
+          <Link className="btn" href={`/${locale}/`}>{t.notFound.home}</Link>
+        </div>
       </div>
     );
   }
@@ -234,7 +280,7 @@ export function DoneView({ code }: { code: string | null }) {
                   </li>
                 ))}
               </ul>
-              <p className={s.total}><span>{t.reserve.total}</span><span>{receipt.total == null ? t.reserve.totalLater : <bdi dir="ltr">{formatPrice(receipt.total)}</bdi>}</span></p>
+              <p className={s.total}><span>{t.reserve.total}</span><span>{receipt.total == null ? pick(t.reserve, "totalPending", t.reserve.totalLater) : <bdi dir="ltr">{formatPrice(receipt.total)}</bdi>}</span></p>
             </section>
           ) : null}
           <div className={s.doneActions}>
