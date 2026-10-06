@@ -200,5 +200,13 @@
   "notFound": {
     "line": "This page could not be found.",
     "home": "Home page in English"
+  },
+  "sound": {
+    "on": "Turn sound on",
+    "off": "Mute"
+  },
+  "theme": {
+    "toDark": "Dark mode",
+    "toLight": "Light mode"
   }
 }

@@ -140,7 +140,7 @@ export default function TzitzitCanvas({ spec, size = "adult", poster, className,
     <div
       ref={hostRef}
       className={className}
-      style={{ position: "relative", aspectRatio: "3 / 4", background: "#000", overflow: "hidden" }}
+      style={{ position: "relative", aspectRatio: "3 / 4", background: "transparent", overflow: "hidden" }}
     >
       {/* the picture itself; the controls sit beside it, not inside it, so assistive technology still reaches them */}
       <div role="img" aria-label={label} style={fill}>

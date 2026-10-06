@@ -6,6 +6,7 @@ import { asset } from "@/lib/asset";
 import { useCatalog } from "@/lib/catalog";
 import { tr } from "@/lib/format";
 import { useI18n } from "./Providers";
+import { useSound } from "./Sound";
 import s from "./Hero.module.css";
 
 const PORTRAIT = "(orientation: portrait) and (max-width: 900px)";
@@ -16,6 +17,9 @@ export default function Hero() {
   const video = useRef<HTMLVideoElement>(null);
   const [src, setSrc] = useState<{ mp4: string; poster: string } | null>(null);
   const [playing, setPlaying] = useState(true);
+  const { attachFilm } = useSound();
+  // the film keeps its own sound; the sound provider decides when it is heard
+  useEffect(() => { attachFilm(video.current); return () => attachFilm(null); }, [src, attachFilm]);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // poster only

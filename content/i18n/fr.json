@@ -200,5 +200,13 @@
   "notFound": {
     "line": "Cette page est introuvable.",
     "home": "Page d’accueil en français"
+  },
+  "sound": {
+    "on": "Activer le son",
+    "off": "Couper le son"
+  },
+  "theme": {
+    "toDark": "Mode sombre",
+    "toLight": "Mode clair"
   }
 }

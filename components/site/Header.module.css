@@ -69,3 +69,8 @@
 .langPanel a { min-inline-size: 56px; font-size: 16px; }
 @media (min-width: 768px) { .langPanel { display: none; } }
 @media (min-width: 1024px) { .panel { display: none; } }
+
+/* theme and sound controls */
+.themeDesk { display: none; }
+@media (min-width: 1024px) { .themeDesk { display: inline-grid; } }
+.panelTools { display: flex; align-items: center; justify-content: space-between; gap: 16px; }

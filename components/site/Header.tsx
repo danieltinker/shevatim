@@ -10,6 +10,8 @@ import { fill, tr } from "@/lib/format";
 import { LANG_KEY, LANG_LABEL, LANG_NAME, pick } from "@/lib/i18n";
 import { LOCALES, type Locale } from "@/lib/types";
 import { useI18n } from "./Providers";
+import { SoundToggle } from "./Sound";
+import ThemeToggle from "./Theme";
 import s from "./Header.module.css";
 
 export function LangSwitch({ className }: { className?: string }) {
@@ -107,6 +109,8 @@ export default function Header({ tribes }: { tribes: { key: string; plain: strin
         </Link>
         <div className={s.end}>
           <LangSwitch className={s.langDesk} />
+          <ThemeToggle className={s.themeDesk} />
+          <SoundToggle />
           <Link prefetch={false} className={s.bag} href={`${home}reserve/`} aria-label={count ? fill(count === 1 ? pick(t.nav, "bagCountOne", t.nav.bagCount) : t.nav.bagCount, { n: count }) : t.nav.bag}>
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M5 8h14l-1 12H6L5 8Z" /><path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
@@ -133,7 +137,7 @@ export default function Header({ tribes }: { tribes: { key: string; plain: strin
             <li><Link prefetch={false} href={`${home}terms/`}>{t.nav.terms}</Link></li>
           </ul>
         </nav>
-        <LangSwitch className={s.langPanel} />
+        <div className={s.panelTools}><LangSwitch className={s.langPanel} /><ThemeToggle /></div>
       </div>
     </>
   );

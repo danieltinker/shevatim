@@ -1,97 +1,95 @@
-# Shevatim — design direction (decided by the lead; builders follow it)
+# Shevatim — design direction, version 2 ("Midbar")
 
-## The brand, from its own material
-Shevatim (שבטים, "tribes") makes hooded, poncho-cut tzitziyot and desert streetwear: cream and striped woven
-cloth, fringe and tassels, gold sequin trim, tzitzit strings with a blue (tekhelet) thread. The campaign was shot
-in the Judean desert: chalk-white marl cliffs, a camel, a shofar, a turquoise motorbike, friends laughing.
-The wordmark is an ornate, gothic "SHEVATIM" (white on black or black on white PNG, `/media/brand/`).
-Product pictures are "ghost" shots: the item alone on pure black, no model.
-Reference the designer likes: idolstudios.co — a clean, quiet shop: full-bleed imagery, product grids,
-almost no decoration. Ours must feel more Jewish: Hebrew-first, the twelve tribes, verses, the Choshen stones.
+Version 1 (black shop ground, chalk story ground, coloured tribe stones) is replaced. This version follows the
+brand owner's notes of 6 Oct 2026, quoted in short:
+"brown and beige, desert, sand, earth, nature; less black, and not many different colours (too much red, blue,
+green, yellow now); a small, uniform palette"; "one strong message first, then the collections or main products,
+only then more about the brand"; "more space between elements, less content in each area, clearer hierarchy,
+buttons that lead simply to the shop, the collections and the products"; "some elements are too big and too
+simple; more luxurious, minimal, desert, precise; less '100 things on the screen', more a fashion brand";
+"gentle background music and some of the film's original sound, easy to mute"; "a small Light / Dark switch;
+dark keeps brown, beige and earth, never plain black". He likes the motion on the title and wants it kept.
 
-## Concept: night studio, day desert
-Two grounds, alternating by purpose.
-- **Black** `#000` is the shop: product tiles sit on it with no tile edge (the pictures are on black), so the
-  items float. Header, hero, grids, item page, bag: black.
-- **Chalk** `#E9E5DC` (the marl of the cliffs, a cool limestone white, not cream) is the story: the tribes
-  slider, verses, the crew, how reserving works.
-- Text: bone `#F3EFE7` on black, ink `#0B0A09` on chalk. Secondary text: `#A9A49A` on black, `#5D584F` on chalk.
-- One accent: **tekhelet** `#2F5FA8` on chalk, `#8FB2E6` on black. It marks links, focus rings, the active
-  control. Nothing else is coloured, except inside a tribe's own slide or page, where that tribe's flag colour
-  (from `content/tribes.json`, `flag.hex`) may tint the tribe name and its stone.
-- Hairlines: `rgba(243,239,231,.16)` on black, `rgba(11,10,9,.14)` on chalk. No shadows, no gradients as
-  decoration, no rounded cards. Radius 0 everywhere except the Choshen stones (2px) and round icon buttons.
+## Palette (the only colours on the site)
+Two themes, set by `data-theme` on `<html>` (`light` is the default; the visitor's choice is remembered).
+| Token | Light ("day") | Dark ("night") | Use |
+|---|---|---|---|
+| `--bg` | `#F4EDE0` cream sand | `#231911` deep earth | page ground |
+| `--surface` | `#EBE0CD` warm beige | `#2D2118` | alternate sections, cards, the header once scrolled |
+| `--stage` | `#DACBB1` dune | `#3B2C20` | behind product pictures (they are cut-outs with transparency) |
+| `--fg` | `#33261B` earth | `#F2E8D8` cream | text |
+| `--muted` | `#6E5D4B` | `#B9A78F` | secondary text |
+| `--accent` | `#8A5A30` clay | `#D5AC7A` sand gold | links, focus ring, the active control, one small detail per view |
+| `--accent-ink` | `#FBF6EC` | `#231911` | text on an accent fill |
+| `--line` | `rgba(51,38,27,.16)` | `rgba(242,232,216,.16)` | hairlines |
+No black (`#000`) and no pure white anywhere, in either theme. No blue, red, green or yellow in the interface:
+the tribes are no longer colour-coded. The only "colour" is what the photographs and the cloth bring.
+Text contrast: body and secondary text at least 4.5:1 on `--bg`, `--surface` and `--stage`, in both themes.
+
+## The tribes without colours
+- A tribe stone is a quiet tile: `--surface` ground, hairline border, the Hebrew name in Frank Ruhl (and the Latin
+  name small underneath in English and French). The selected stone is filled with `--accent`, text `--accent-ink`.
+  All twelve look the same otherwise.
+- Tribe names in display type are `--fg`. No flag-colour text, no colour bar, no colour swatch.
+- The flag colour, emblem and stone of each tribe remain as words on the tribe's own page (they are tradition,
+  not decoration).
 
 ## Type
-- **Frank Ruhl Libre** (variable, `@fontsource-variable/frank-ruhl-libre`): Hebrew and Latin display, and all
-  Bible verses (Hebrew with nikud). Big, weight 500–800. This is the "Jewish" voice: the face of printed
-  Hebrew books, used at fashion scale.
-- **Heebo** (variable, `@fontsource-variable/heebo`): interface and body, 400/500/600.
-- Scale (clamp between phone and desktop): display 56→168px (tribe names), h1 40→88, h2 28→48, h3 20→26,
-  body 16→17, small 13→14. Line-height: display 0.9–1.0, headings 1.1, body 1.55 (verses 1.7).
-- No all-caps eyebrow labels, no letter-spaced Latin caps, no "→" glued to link text, no middle-dot strings as
-  decoration (a separator inside a product name is fine). Sentence case in English and French.
-- Hebrew: numbers, prices, codes, phone numbers and Latin words inside Hebrew text are wrapped in
-  `<bdi>`/`dir="ltr"` so they never reorder. Prices: `₪` before the number in all languages, e.g. `₪ 480`.
+- Frank Ruhl Libre for display, Hebrew and verses; Heebo for interface and body. Unchanged.
+- Smaller and more exact than version 1: display (tribe name, collection name) `clamp(40px, 6.4vw, 104px)`,
+  h1 `clamp(32px, 4.2vw, 60px)`, h2 `clamp(22px, 2.3vw, 34px)`, h3 `clamp(18px, 1.5vw, 22px)`,
+  body 16–17px, small 13–14px. Display weight 500–600 (not 800). Line-height: display 1.0–1.1, body 1.6.
+- Section labels: small (13px), `--muted`, sentence case, generous space above the heading they introduce.
+- Sentence case everywhere; no all-caps, no letter-spaced Latin, no decorative separators.
 
-## Signature: the Choshen
-The breastplate's twelve stones, four rows of three, are the tribe navigator. Each stone is a small rectangle
-filled with the tribe's flag colour (Zevulun's pearl grey and Binyamin's jasper as given), with the tribe name
-set inside in Frank Ruhl. It appears (1) as a thin strip of twelve under the hero, (2) as the 4×3 grid that
-drives the tribes slider, (3) as filter chips on category pages. This is the one bold element. Everything
-around it stays quiet.
+## Space and rhythm
+- One idea per screen. Section padding `clamp(88px, 11vw, 176px)` top and bottom; never two dense blocks side by
+  side. Text blocks at most 56ch. Grids: 2 columns on phones, 3 on tablets, 4 on desktop, gaps 20–40px.
+- Radius 0; no shadows on boxes; no gradients as decoration. A cut-out picture may carry one soft ground shadow.
+- Sections alternate only between `--bg` and `--surface`; the change is barely visible. No hard black/white flips.
 
-## Layout
-- Header (black, sticky, 56px phone / 64px desktop): wordmark centred; on the inline-start side a menu button
-  (phone) or text links (desktop: collection, tribes, shop categories); on the inline-end side the language
-  switch (עב / EN / FR) and the bag with its count. Over the hero the header is transparent, then turns black.
-- Optional announcement bar above the header (from settings), one line, 32px.
-- Page gutters: 16px phone, 32px tablet, 48px desktop. Max text measure 62ch. Grids: 2 columns phone,
-  3 tablet, 4 desktop; 1px gaps are not used: use 16–24px gaps on black.
-- Product tile: picture 3:4, then the name (Heebo 15/500) and the price or "price on confirmation" (13px,
-  secondary). Hover (pointer devices only): swap to the second picture. No badges except "sold out".
-- Everything is mirrored for Hebrew (`dir="rtl"`): use logical CSS properties only (`margin-inline`, `inset-inline`,
-  `text-align: start`), never left/right.
+## Home page, in this order (nothing else)
+1. **Hero**: the film, full viewport, with a warm earth shade at the bottom (not black). The wordmark (cream),
+   the one line (settings.heroLine), ONE button: to the collection. Small round controls at the bottom corner:
+   sound and pause. The title's entrance motion stays. No stone strip, no second button, no tiles on this screen.
+2. **The collection**: small label, the collection's name, one sentence, four pieces, one button "See the
+   collection" and a quiet text link "All pieces" (the shop).
+3. **Shop by category**: the six categories as calm picture tiles (3 across on desktop, 2 on phones).
+4. **The twelve tribes** (the brand's idea, told calmly): heading and two sentences; the twelve stones; for the
+   chosen tribe its name, ONE verse (Hebrew with nikud; translation and reference under it in English and French),
+   two lines about the tribe, and one link "The pieces of <tribe>". No product tiles inside this section.
+5. **Lookbook**: five or six campaign pictures with air between them.
+6. **The crew**: three sentences and a row of four pictures.
+7. **How reserving works**: three steps, then the tzitzit verse.
+8. Footer.
+The live 3D cloth leaves the home page; it stays on each tzitzit's own page.
 
-## Home page, in order
-1. **Hero film**, full viewport. Desktop: `/media/hero/hero-desktop.mp4` (16:9). Phone: `hero-mobile.mp4`
-   (9:16). Muted, looped, `playsinline`, poster first, no controls except a small pause/play button (inline-end,
-   bottom). Wordmark large, centred low; under it the hero line (settings.heroLine) and one button: "Reserve
-   from the collection" → the current collection. A soft black gradient only at the very bottom for legibility.
-   If `prefers-reduced-motion`, show the poster only.
-2. **Choshen strip**: twelve stones in a row (scrolls sideways on phones), each jumps to that tribe's slide.
-3. **The collection** (black): its name large, its two-sentence description, four tiles (the first tzitzit of
-   Yehuda, Asher, Gad, Shimon), link "See all twelve tribes".
-4. **Tribes slider** (chalk): see below.
-5. **Touch the cloth** (black): the live 3D tzitzit (`components/cloth`), with a one-line invitation to drag it.
-6. **Categories** (black): tiles for each visible category; where a clip exists (`content/media.json` → clips)
-   the tile plays it muted on hover/in view; otherwise a picture.
-7. **Lookbook** (black, full-bleed pictures from media.json → lookbook): an editorial strip; sideways scroll on
-   phones, a 12-column collage on desktop. No captions.
-8. **The crew** (chalk): the team pictures (media.json → team) and three short sentences about who makes
-   Shevatim. The user asked for the team pictures to come after the film and the home content.
-9. **How reserving works** (chalk): three real steps (choose, leave your details, we contact you to confirm
-   size, price and delivery). Numbered, because it is a sequence. Then the tzitzit verse (Numbers 15:39).
-10. Footer (black): wordmark, category links, language, WhatsApp / Instagram / e-mail when set, small legal links.
+## Shop pages
+- Header: `--bg` (transparent over the hero film, with a warm shade behind it), one hairline. Wordmark centred,
+  drawn in `--fg` (use the wordmark PNG as a CSS mask so it follows the theme). Start side: menu (phones) or
+  three links. End side: language, theme switch, sound, bag. On phones the header shows menu, wordmark, sound,
+  bag; language and theme sit in the menu and in the footer.
+- Product tile: the cut-out on `--stage` (3:4, a little padding so the garment does not touch the edge), then the
+  name (15px, 500) and the price when there is one. Hover on pointer devices swaps to the second picture.
+- Item page: the stage is `--stage`; thumbnails are small `--stage` tiles; the form column is calm: category
+  label, name (h1 size), price or the pending-price sentence, size options (outlined; selected = `--fg` border),
+  one filled button. The 3D section below it sits on `--surface` with the canvas on `--stage`.
+- Buttons: filled = `--fg` ground with `--bg` text; hover inverts to an outline. One filled button per view.
+- Reserve pages, about, terms, tribe pages: same grounds and type; nothing coloured.
 
-## Tribes slider
-One tribe per slide, twelve slides, order from `tribes.json`.
-- Inline-start: the tribe name huge (Frank Ruhl 800, in the tribe colour; Zevulun and any colour that fails
-  3:1 on chalk falls back to ink with a colour underline), the stone (Hebrew name + gloss) and the flag
-  emblem as one quiet line, then "essence".
-- Centre: the verses. Hebrew with nikud always shown (Frank Ruhl 500, 24→34px, line-height 1.7,
-  `dir="rtl" lang="he"`); in English and French the translation follows under each verse in Heebo, with the
-  reference. In Hebrew only the Hebrew and the reference.
-- Inline-end / below: "the tribe's five": up to five tiles from the current collection's slots for this tribe,
-  and a link to the tribe's page.
-- Controls: the 4×3 Choshen (desktop: beside the slide; phone: a sideways strip above), previous/next buttons,
-  swipe, arrow keys, and the URL hash (`#reuven`). The slide change is a short cross-fade + 12px slide; no autoplay.
+## Sound
+Off until the visitor turns it on (browsers do not allow sound before a tap). One round button (speaker) in the
+header and on the hero: on = the film's own sound while the hero is on screen, plus a very quiet looping
+background track across the site; off = silence at once. The choice is remembered. The track pauses when the tab
+is hidden. `components/site/Sound.tsx` owns all of it.
+
+## Theme switch
+One small round button (sun / moon), `components/site/Theme.tsx`. It sets `data-theme` on `<html>` and remembers
+the choice. An inline script in the document head applies the saved theme before the first paint.
 
 ## Motion
-One orchestrated moment: the hero (wordmark and line fade up once). Elsewhere motion only answers an action
-(slide change, tile hover swap, bag drawer). Respect `prefers-reduced-motion` everywhere.
+The hero title's entrance stays. Elsewhere motion only answers an action (slide change, hover swap, menu).
+`prefers-reduced-motion` is respected everywhere.
 
 ## Words
-Plain, warm, short. Hebrew is the source language; English and French are written naturally, not translated
-word for word. Buttons say what happens: "Add to reservation", "Send reservation". Errors say what went wrong
-and what to do. No price is ever invented: an item without a price shows "price confirmed when we contact you".
+Unchanged from version 1: plain, warm, short; Hebrew first; prices are never invented.

@@ -8,12 +8,13 @@ import { LOCALES } from "@/lib/types";
 import Providers from "@/components/site/Providers";
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
+import { THEME_BOOT } from "@/components/site/Theme";
 import { tribeViews } from "@/components/site/tribes";
 import { brandName, ICONS, metadataBase } from "@/components/site/meta";
 
 export const dynamicParams = false;
 export function generateStaticParams() { return LOCALES.map((locale) => ({ locale })); }
-export const viewport: Viewport = { themeColor: "#000000", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#F4EDE0", width: "device-width", initialScale: 1 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -28,7 +29,11 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   const t = getDict(locale);
   const tribes = tribeViews(locale).map((x) => ({ key: x.key, plain: x.plain }));
   return (
-    <html lang={locale} dir={dirOf(locale)}>
+    <html lang={locale} dir={dirOf(locale)} data-theme="light" suppressHydrationWarning>
+      <head>
+        {/* the saved theme is applied before the first paint */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+      </head>
       <body>
         <Providers locale={locale} dict={t}>
           <a className="skip" href="#main">{t.nav.skip}</a>
