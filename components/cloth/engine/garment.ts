@@ -327,7 +327,7 @@ export function buildGarment(spec: GarmentSpec, quality: "low" | "high", kid: bo
     // the crown seam is held loosely on the centre line by two fixed points far to the sides, as the head form
     // of a ghost mannequin would: without it the slack hood slumps to one side
     const aL = sim.addParticle(-1.2, 1.7, 0, 0, KIND_DEAD), aR = sim.addParticle(1.2, 1.7, 0, 0, KIND_DEAD);
-    for (let jv = 0; jv < nhv; jv++) { sim.addConstraint(H(mid, jv), aL, -1, 6e-5); sim.addConstraint(H(mid, jv), aR, -1, 6e-5); }
+    for (let jv = 0; jv < nhv; jv++) { sim.addConstraint(H(mid, jv), aL, -1, 6e-5, 3); sim.addConstraint(H(mid, jv), aR, -1, 6e-5, 3); }
   }
 
   // --- tzitzit: wound cord, then loose strands, at each of the four corners ---
