@@ -1,16 +1,17 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import media from "@/content/media.json";
 import { asset } from "@/lib/asset";
 import { useCatalog } from "@/lib/catalog";
 import { tr } from "@/lib/format";
 import { useI18n } from "./Providers";
-import { useSound } from "./Sound";
+import { SoundToggle, useSound } from "./Sound";
 import s from "./Hero.module.css";
 
 const PORTRAIT = "(orientation: portrait) and (max-width: 900px)";
 
+/** The first screen: the film, the wordmark, the one line and the one button. Nothing else. */
 export default function Hero() {
   const { locale, t } = useI18n();
   const { settings } = useCatalog();
@@ -43,6 +44,12 @@ export default function Hero() {
     if (v.paused) { void v.play().catch(() => undefined); setPlaying(true); } else { v.pause(); setPlaying(false); }
   };
 
+  // the wordmark is drawn through its PNG as a mask, so it is the same cream as the line under it
+  const mark = {
+    ["--mark" as string]: `url("${asset(media.brand.wordmarkWhite)}")`,
+    ["--mark-small" as string]: `url("${asset(media.brand.wordmarkWhiteSmall)}")`,
+  } as CSSProperties;
+
   return (
     <section className={s.hero} aria-label="Shevatim">
       {/* preload only the poster this screen will show */}
@@ -59,21 +66,21 @@ export default function Hero() {
       <div className={s.shade} aria-hidden="true" />
       <div className={s.copy}>
         <h1 className={s.mark}>
-          <picture>
-            <source media="(max-width: 600px)" srcSet={asset(media.brand.wordmarkWhiteSmall)} width={626} height={242} />
-            <img src={asset(media.brand.wordmarkWhite)} width={1252} height={484} alt={locale === "he" ? "שבטים" : "Shevatim"} />
-          </picture>
+          <span className={s.ink} role="img" aria-label={locale === "he" ? "שבטים" : "Shevatim"} style={mark} />
         </h1>
         <p className={s.line}>{tr(settings.heroLine, locale)}</p>
         <Link className={`btn ${s.cta}`} href={`/${locale}/collection/`}>{t.hero.cta}</Link>
       </div>
-      {src ? (
-        <button type="button" className={s.toggle} onClick={toggle} aria-label={playing ? t.hero.pause : t.hero.play}>
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor">
-            {playing ? <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /> : <path d="M8 5l11 7-11 7z" />}
-          </svg>
-        </button>
-      ) : null}
+      <div className={s.controls}>
+        <SoundToggle className={s.ctl} />
+        {src ? (
+          <button type="button" className={`iconBtn ${s.ctl}`} onClick={toggle} aria-label={playing ? t.hero.pause : t.hero.play} title={playing ? t.hero.pause : t.hero.play}>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor">
+              {playing ? <path d="M7.5 6h3v12h-3zM13.5 6h3v12h-3z" /> : <path d="M8.5 6l9.5 6-9.5 6z" />}
+            </svg>
+          </button>
+        ) : null}
+      </div>
     </section>
   );
 }

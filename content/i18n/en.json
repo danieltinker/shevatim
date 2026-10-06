@@ -24,17 +24,18 @@
     "main": "Main navigation"
   },
   "hero": {
-    "cta": "Reserve from the collection",
+    "cta": "Discover the collection",
     "pause": "Pause the film",
     "play": "Play the film"
   },
   "home": {
     "collectionLabel": "The collection",
-    "collectionLink": "See all twelve tribes",
+    "collectionCta": "See the collection",
+    "allPieces": "All pieces",
     "clothTitle": "Touch the cloth",
     "clothLine": "Grab the tzitzit, drag it and watch how the cloth falls.",
     "clothLabel": "A 3D tzitzit you can drag",
-    "categoriesTitle": "The shop",
+    "categoriesTitle": "Shop by category",
     "comingSoon": "Coming soon",
     "lookbookTitle": "From the shoot in the Judean desert",
     "crewTitle": "The crew",
@@ -55,8 +56,8 @@
     "prev": "Previous tribe",
     "next": "Next tribe",
     "choose": "Choose a tribe",
-    "five": "Five pieces for {name}",
-    "page": "Read the story of {name}",
+    "pieces": "The pieces of {name}",
+    "page": "The story of {name}",
     "stone": "Stone on the Choshen (Bamidbar Rabbah 2:7)",
     "flag": "Flag colour",
     "emblem": "Emblem on the flag",

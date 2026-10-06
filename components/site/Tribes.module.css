@@ -1,65 +1,46 @@
-.section { overflow: clip; }
-.head { display: grid; gap: 16px; margin-block-end: clamp(28px, 4vw, 56px); }
-.head p { color: var(--muted); }
-@media (min-width: 1024px) { .head { grid-template-columns: 5fr 7fr; align-items: end; gap: 48px; } }
+/* The twelve tribes on the home page: a centred, quiet column. Stones, then one tribe at a time. */
+.section { background: var(--bg); color: var(--fg); overflow: clip; }
+.head { display: grid; justify-items: center; gap: clamp(16px, 1.8vw, 24px); text-align: center; margin-block-end: clamp(40px, 5vw, 72px); }
+.head p { color: var(--muted); max-inline-size: 56ch; }
 
-.stage { display: grid; gap: 20px; outline-offset: 12px; }
-.controls { display: grid; gap: 12px; }
-.nav { display: flex; align-items: center; gap: 12px; }
+.stage { display: grid; justify-items: center; outline-offset: 16px; }
+.stage > ul { inline-size: 100%; }
+
+.nav { display: flex; align-items: center; gap: 12px; margin-block-start: clamp(28px, 3.4vw, 44px); }
 .arrow {
-  inline-size: 48px; block-size: 48px; border-radius: 50%; display: grid; place-items: center;
-  background: transparent; border: 1px solid var(--fg); color: var(--fg);
+  inline-size: 44px; block-size: 44px; border-radius: 50%; display: grid; place-items: center;
+  background: transparent; border: 1px solid var(--line); color: var(--fg);
+  transition: border-color .2s ease;
 }
-.arrow:hover { background: var(--fg); color: var(--bg); }
+@media (hover: hover) { .arrow:hover { border-color: var(--fg); } }
 :global(html[dir="rtl"]) .arrow svg { transform: scaleX(-1); }
 .counter { font-size: var(--fs-small); color: var(--muted); font-variant-numeric: tabular-nums; min-inline-size: 9ch; text-align: center; }
 
-.slide { display: grid; gap: 28px; }
-@media (prefers-reduced-motion: no-preference) { .who, .verses, .five { animation: in .32s ease both; } .verses { animation-delay: .04s; } .five { animation-delay: .08s; } }
-@keyframes in { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: none; } }
-:global(html[dir="rtl"]) .who, :global(html[dir="rtl"]) .verses, :global(html[dir="rtl"]) .five { animation-name: inRtl; }
-@keyframes inRtl { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+.slide { display: grid; justify-items: center; text-align: center; inline-size: 100%; margin-block-start: clamp(32px, 4.4vw, 60px); }
+.name { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-display); line-height: 1.05; color: var(--fg); }
+/* Hebrew names carry vowel points above and below the letters */
+:global(html[lang="he"]) .name { line-height: 1.3; }
 
-.who { min-inline-size: 0; container-type: inline-size; }
-.name {
-  font-family: var(--font-display); font-weight: 800; line-height: .95; letter-spacing: -0.01em;
-  /* as large as the column allows for this name, capped by the display size */
-  font-size: clamp(56px, min(11.6vw, calc(100cqi / (var(--len) * 0.6))), 168px);
-  margin-block-end: .16em; padding-block-end: .04em; white-space: nowrap;
-  inline-size: fit-content; max-inline-size: 100%;
-}
-/* the colour bar of a name that is set in ink (Zevulun): its own box under the line, clear of the vowel points */
-.name::after { content: ""; display: block; block-size: var(--bar-h, 0em); background: var(--bar, transparent); margin-block-start: var(--bar-h, 0em); }
-:global(html[lang="he"]) .name { line-height: 1.12; font-size: clamp(64px, min(15vw, calc(100cqi / (var(--len) * 0.6))), 168px); margin-block-end: 0; padding-block-end: .15em; }
-:global(html[lang="he"]) .name::after { margin-block-start: calc(var(--bar-h, 0em) * 2.4); }
-.stoneLine { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: var(--fs-body); font-weight: 500; }
-.dot { inline-size: 18px; block-size: 12px; border-radius: 2px; box-shadow: inset 0 0 0 1px var(--line); flex: none; }
-.emblem { font-size: var(--fs-small); margin-block-start: 4px; max-inline-size: 48ch; }
-.emblem span { color: var(--muted); }
-.essence { margin-block: 16px 6px; max-inline-size: 48ch; color: var(--fg); }
-
-.verses { display: grid; gap: 28px; align-content: start; min-inline-size: 0; }
-.verse { border-inline-start: 2px solid var(--line); padding-inline-start: 20px; }
+.verse { margin: clamp(20px, 2.6vw, 36px) 0 0; max-inline-size: 100%; }
+.verse :global(.verse) { font-size: var(--fs-h2); line-height: 1.6; max-inline-size: 24em; margin-inline: auto; text-wrap: balance; }
+.verse :global(.verseTr) { max-inline-size: 56ch; margin: 14px auto 0; line-height: 1.6; }
+.verse :global(.verseRef) { margin-block-start: 10px; }
 .ref { display: block; font-style: normal; }
 
-.five { min-inline-size: 0; }
-.fiveTitle { font-family: var(--font-ui); font-size: var(--fs-small); font-weight: 500; color: var(--muted); margin: 0 0 12px; }
-.fiveRow {
-  display: grid; grid-auto-flow: column; grid-auto-columns: 44%; gap: 12px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: inline mandatory;
-  margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter);
+.essence { color: var(--muted); max-inline-size: 56ch; margin-block-start: clamp(24px, 2.8vw, 36px); }
+.links { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 0 32px; margin-block-start: clamp(16px, 2vw, 24px); }
+.quiet {
+  display: inline-block; padding-block: 10px; font-size: 15px; color: var(--muted);
+  text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 6px;
 }
-.fiveRow::-webkit-scrollbar { display: none; }
-.fiveRow > * { scroll-snap-align: start; }
-@media (min-width: 768px) { .fiveRow { grid-auto-columns: 28%; } }
+@media (hover: hover) { .quiet:hover { color: var(--fg); text-decoration-color: var(--fg); } }
 
-@media (min-width: 1024px) {
-  .stage { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) minmax(300px, 4fr); gap: 48px 56px; align-items: start; }
-  .controls { grid-column: 3; grid-row: 1; gap: 20px; }
-  .nav { justify-content: space-between; }
-  .slide { display: contents; }
-  .who { grid-column: 1; grid-row: 1; }
-  .verses { grid-column: 2; grid-row: 1; }
-  .five { grid-column: 1 / -1; grid-row: 2; }
-  .fiveRow { grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-columns: auto; gap: 24px; overflow: visible; margin-inline: 0; padding-inline: 0; }
-  .verses { padding-block-start: 12px; }
+/* a change of tribe answers the visitor: a short, soft arrival. The first paint has none. */
+@media (prefers-reduced-motion: no-preference) {
+  .fresh > * { animation: arrive .45s cubic-bezier(.2, .7, .2, 1) both; }
+  .fresh > :nth-child(2) { animation-delay: .05s; }
+  .fresh > :nth-child(3) { animation-delay: .1s; }
+  .fresh > :nth-child(4) { animation-delay: .14s; }
 }
+@media (prefers-reduced-motion: reduce) { .arrow { transition: none; } }
+@keyframes arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
