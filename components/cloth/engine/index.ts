@@ -211,6 +211,7 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     }
     g.setAttribute("position", pa); g.setAttribute("normal", na);
     g.setAttribute("uv", new BufferAttribute(uv, 2)); g.setAttribute("uv1", new BufferAttribute(uv1, 2));
+    g.setAttribute("tzDepth", new BufferAttribute(Float32Array.from({ length: ru * rv }, (_, k) => ((k / ru) | 0) / (rv - 1)), 1)); // 0 at the sheet's first edge, 1 at its last
     const ca = new BufferAttribute(col, 3); ca.setUsage(DynamicDrawUsage);
     g.setAttribute("color", ca);
     g.setIndex(new BufferAttribute(idx, 1));
@@ -218,7 +219,12 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     return g;
   }
 
-  function clothMaterial(map: Texture, tint: Color, mask: Texture | null): MeshPhysicalMaterial {
+  /** cavity: how much light is left on the inside face once everything is added up (1 = as lit). The inside of the
+   *  hood is a deep, closed pocket: no shadow map makes it dark enough, so it is taken down to near black by hand,
+   *  and the hood reads as empty instead of showing a grey, head-shaped lining.
+   *  rim > 0: the inside starts at that brightness at the sheet's first edge (the hood's face opening) and falls to
+   *  `cavity` over the first `depth` of the sheet, so the lining is still cloth where the light reaches it. */
+  function clothMaterial(map: Texture, tint: Color, mask: Texture | null, cavity = 1, rim = 0, depth = 0.5): MeshPhysicalMaterial {
     const m = new MeshPhysicalMaterial({
       map, color: tint, roughness: 0.96, metalness: 0, side: DoubleSide, vertexColors: true,
       normalMap: weaveTex, sheen: 0.55, sheenRoughness: 0.75, sheenColor: new Color(0xfff4e6),
@@ -227,9 +233,14 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     m.normalScale.set(0.62, 0.62); // plain cloth shows its ribs; a fabric picture brings its own texture (see the loader)
     if (mask) { m.alphaMap = mask; m.alphaTest = 0.5; }
     const inside = quality === "high" ? "0.84" : "0.64"; // without a shadow map the inside has to be darkened by hand
-    m.customProgramCacheKey = () => "tz-" + inside;
+    m.customProgramCacheKey = () => "tz-" + inside + "-" + cavity + "-" + rim + "-" + depth;
     m.onBeforeCompile = (shader) => { // the inside of the cloth is a touch darker
       shader.fragmentShader = shader.fragmentShader.replace("#include <color_fragment>", `#include <color_fragment>\n if (!gl_FrontFacing) diffuseColor.rgb *= ${inside};`);
+      if (cavity < 1 && rim > 0) {
+        shader.vertexShader = shader.vertexShader.replace("#include <common>", "#include <common>\nattribute float tzDepth;\nvarying float vTzDepth;").replace("#include <begin_vertex>", "#include <begin_vertex>\n vTzDepth = tzDepth;");
+        shader.fragmentShader = shader.fragmentShader.replace("#include <common>", "#include <common>\nvarying float vTzDepth;")
+          .replace("#include <opaque_fragment>", `#include <opaque_fragment>\n if (!gl_FrontFacing) gl_FragColor.rgb *= mix(${rim.toFixed(3)}, ${cavity.toFixed(3)}, smoothstep(0.0, ${depth.toFixed(3)}, vTzDepth));`);
+      } else if (cavity < 1) shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>\n if (!gl_FrontFacing) gl_FragColor.rgb *= ${cavity.toFixed(3)};`);
     };
     return m;
   }
@@ -246,8 +257,8 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     const { body, hood, width, halfLen } = G;
     const mask = neckMask(width, halfLen, G.neck);
     const tint = new Color(spec.baseColor || "#efe8d8");
-    const bodyMat = clothMaterial(plainTex, tint.clone(), mask);
-    const hoodMat = clothMaterial(plainTex, tint.clone(), null);
+    const bodyMat = clothMaterial(plainTex, tint.clone(), mask, 0.45); // seen through the neck or a sleeve, the inside of the garment is in its own shade
+    const hoodMat = clothMaterial(plainTex, tint.clone(), null, 0.03, 0.8, 0.42);
     // real scale: one swatch = 50 cm; weave tile = 16 mm
     weaveTex.repeat.set(0.5 / 0.016, 0.5 / 0.016);
     const hxr = width / (body.ru - 1), hyr = (2 * halfLen) / (body.rv - 1);
