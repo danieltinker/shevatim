@@ -29,13 +29,13 @@ const pageLang = (): string => {
   const k = (l || "he").toLowerCase().split("-")[0];
   return k in RESET_LABEL ? k : "en";
 };
-// The stage is always black, whatever the section around it: bone strokes, tekhelet-on-black focus ring.
+// The controls take the page theme: text colour strokes on a translucent page ground, accent focus ring.
 const RESET_CSS = `
 .tz-reset{position:absolute;inset-block-start:12px;inset-inline-end:12px;inline-size:40px;block-size:40px;padding:0;margin:0;border-radius:50%;
-border:1px solid rgba(243,239,231,.3);background:rgba(0,0,0,.5);color:#F3EFE7;cursor:pointer;display:grid;place-items:center;
+border:1px solid var(--line, rgba(128,128,128,.4));background:color-mix(in srgb, var(--bg, #231911) 70%, transparent);color:var(--fg, #F2E8D8);cursor:pointer;display:grid;place-items:center;
 opacity:.72;transition:opacity 200ms ease,border-color 200ms ease;animation:tz-reset-in 500ms ease both;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.tz-reset:hover,.tz-reset:focus-visible{opacity:1;border-color:rgba(243,239,231,.6)}
-.tz-reset:focus-visible{outline:2px solid #8FB2E6;outline-offset:3px}
+.tz-reset:hover,.tz-reset:focus-visible{opacity:1;border-color:var(--fg, #F2E8D8)}
+.tz-reset:focus-visible{outline:2px solid var(--accent, #D5AC7A);outline-offset:3px}
 .tz-reset:active{opacity:.85}
 @keyframes tz-reset-in{from{opacity:0}to{opacity:.72}}
 @media (prefers-reduced-motion:reduce){.tz-reset{animation:none;transition:none}}
@@ -175,7 +175,7 @@ export default function TzitzitCanvas({ spec, size = "adult", poster, className,
           aria-label={hint ?? "Play"}
           style={{
             position: "absolute", insetInlineEnd: 12, bottom: 12, width: 40, height: 40, borderRadius: 20, padding: 0,
-            border: "1px solid rgba(255,255,255,0.35)", background: "rgba(0,0,0,0.45)", color: "#fff", cursor: "pointer",
+            border: "1px solid var(--line)", background: "color-mix(in srgb, var(--bg) 70%, transparent)", color: "var(--fg)", cursor: "pointer",
             display: "grid", placeItems: "center",
           }}
         >
@@ -187,7 +187,7 @@ export default function TzitzitCanvas({ spec, size = "adult", poster, className,
           aria-hidden="true"
           style={{
             position: "absolute", insetInline: 0, bottom: 10, textAlign: "center", fontSize: 11, letterSpacing: "0.08em",
-            color: "rgba(255,255,255,0.55)", pointerEvents: "none", opacity: touched ? 0 : 1, transition: "opacity 600ms ease",
+            color: "var(--muted)", pointerEvents: "none", opacity: touched ? 0 : 1, transition: "opacity 600ms ease",
           }}
         >
           {hint}

@@ -11,6 +11,8 @@ import s from "./Tribes.module.css";
 
 /** The twelve tribes, told calmly: the stones choose a tribe; for the chosen one its name, one verse, two
  *  sentences and the way to its pieces. One tribe at a time, never on a timer. */
+const REBUKED = new Set(["shimon", "levi"]);
+
 export default function TribesSlider({ tribes, title, lede }: { tribes: TribeView[]; title: string; lede: string }) {
   const { locale, t } = useI18n();
   const [idx, setIdx] = useState(0);
@@ -62,7 +64,11 @@ export default function TribesSlider({ tribes, title, lede }: { tribes: TribeVie
     const out = fill(text, { name: tribe.plain });
     return locale === "fr" ? out.replace(/\b([dD])e (?=[AEIOUÉÈÊ])/g, "$1’") : out;
   };
-  const verse = tribe.verses[0];
+  // One verse per tribe. Shimon and Levi share Jacob's rebuke as their first verse (Genesis 49:5); the home page
+  // leads with Moses' blessing where there is one, otherwise with the verse of the tribe's naming.
+  const verse = REBUKED.has(tribe.key)
+    ? tribe.verses.find((v) => v.source === "moses") ?? tribe.verses.find((v) => v.source === "naming") ?? tribe.verses[0]
+    : tribe.verses[0];
 
   return (
     <section id="tribes" ref={root} className={`section ${s.section}`} aria-roledescription="carousel" aria-label={title}>

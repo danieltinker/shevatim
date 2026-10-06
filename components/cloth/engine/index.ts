@@ -220,8 +220,8 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
   }
 
   /** cavity: how much light is left on the inside face once everything is added up (1 = as lit). The inside of the
-   *  hood is a deep, closed pocket: no shadow map makes it dark enough, so it is taken down to near black by hand,
-   *  and the hood reads as empty instead of showing a grey, head-shaped lining.
+   *  hood is a deep, closed pocket: no shadow map makes it dark enough, so it is taken down by hand to a deep
+   *  shade of the cloth itself (not to black: the page grounds are sand and earth), and the hood reads as empty.
    *  rim > 0: the inside starts at that brightness at the sheet's first edge (the hood's face opening) and falls to
    *  `cavity` over the first `depth` of the sheet, so the lining is still cloth where the light reaches it. */
   function clothMaterial(map: Texture, tint: Color, mask: Texture | null, cavity = 1, rim = 0, depth = 0.5): MeshPhysicalMaterial {
@@ -258,7 +258,8 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     const mask = neckMask(width, halfLen, G.neck);
     const tint = new Color(spec.baseColor || "#efe8d8");
     const bodyMat = clothMaterial(plainTex, tint.clone(), mask, 0.45); // seen through the neck or a sleeve, the inside of the garment is in its own shade
-    const hoodMat = clothMaterial(plainTex, tint.clone(), null, 0.03, 0.8, 0.42);
+    // the inside of the hood is shaded cloth, not a black hole: the garments stand on sand and earth grounds now
+    const hoodMat = clothMaterial(plainTex, tint.clone(), null, 0.24, 0.82, 0.5);
     // real scale: one swatch = 50 cm; weave tile = 16 mm
     weaveTex.repeat.set(0.5 / 0.016, 0.5 / 0.016);
     const hxr = width / (body.ru - 1), hyr = (2 * halfLen) / (body.rv - 1);

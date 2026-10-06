@@ -32,7 +32,7 @@
 .info { padding-inline: var(--gutter); display: grid; align-content: start; justify-items: start; gap: 0; min-inline-size: 0; }
 .crumb { text-decoration: none; padding-block: 12px; }
 @media (hover: hover) { .crumb:hover { color: var(--fg); } }
-.name { font-size: var(--fs-h1); line-height: 1.12; }
+.name { font-size: clamp(28px, 3vw, 44px); line-height: 1.14; }
 :global(html[lang="he"]) .name { line-height: 1.2; }
 .price { margin-block-start: 14px; color: var(--muted); font-size: var(--fs-body); }
 .variants { border: 0; padding: 0; margin: 36px 0 0; inline-size: 100%; min-inline-size: 0; }
