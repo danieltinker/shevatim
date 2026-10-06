@@ -1,11 +1,11 @@
 {
   "title": {
-    "he": "שנים עשר שבטים",
+    "he": "שנים־עשר שבטים",
     "en": "The Twelve Tribes",
     "fr": "Les douze tribus"
   },
   "lede": {
-    "he": "שנים עשר בנים נולדו ליעקב אבינו, ומהם יצאו שנים עשר שבטי ישראל, ששמותיהם נחקקו על אבני החושן שעל לב אהרן הכהן. לכל שבט אבן משלו, צבע משלו וברכה משלו – וכולם חונים יחד סביב מרכז אחד.",
+    "he": "שנים־עשר בנים נולדו ליעקב אבינו, ומהם יצאו שנים־עשר שבטי ישראל, ששמותיהם נחקקו על אבני החושן שעל לב אהרן הכהן. לכל שבט אבן משלו, צבע משלו וברכה משלו – וכולם חונים יחד סביב מרכז אחד.",
     "en": "Jacob had twelve sons, and from them came the twelve tribes of Israel, whose names were engraved on the stones of the Choshen, the breastplate worn over the heart of Aharon the Kohen. Each tribe has its own stone, its own colour and its own blessing, yet all of them camp together around one centre.",
     "fr": "Jacob eut douze fils, dont sont issues les douze tribus d’Israël, et leurs noms furent gravés sur les pierres du Hochen, le pectoral porté sur le cœur d’Aharon le Cohen. Chaque tribu a sa pierre, sa couleur et sa bénédiction, et pourtant toutes campent ensemble autour d’un même centre."
   },
@@ -13,17 +13,17 @@
     "ref": {
       "he": "שמות כח, כא",
       "en": "Exodus 28:21",
-      "fr": "Exode 28:21"
+      "fr": "Exode 28, 21"
     },
     "he": "וְהָאֲבָנִים תִּהְיֶיןָ עַל־שְׁמֹת בְּנֵי־יִשְׂרָאֵל שְׁתֵּים עֶשְׂרֵה עַל־שְׁמֹתָם פִּתּוּחֵי חוֹתָם אִישׁ עַל־שְׁמוֹ תִּהְיֶיןָ לִשְׁנֵי עָשָׂר שָׁבֶט",
     "en": "And the stones shall be according to the names of the children of Israel, twelve, according to their names; like the engravings of a signet, every one according to his name, they shall be for the twelve tribes.",
-    "fr": "Ces pierres, portant les noms des fils d’Israël, sont au nombre de douze selon ces mêmes noms; elles contiendront, gravé en manière de cachet, le nom de chacune des douze tribus."
+    "fr": "Ces pierres, portant les noms des fils d’Israël, sont au nombre de douze selon ces mêmes noms ; elles contiendront, gravé en manière de cachet, le nom de chacune des douze tribus."
   },
   "tzitzit_verse": {
     "ref": {
       "he": "במדבר טו, לח",
       "en": "Numbers 15:38",
-      "fr": "Nombres 15:38"
+      "fr": "Nombres 15, 38"
     },
     "he": "דַּבֵּר אֶל־בְּנֵי יִשְׂרָאֵל וְאָמַרְתָּ אֲלֵהֶם וְעָשׂוּ לָהֶם צִיצִת עַל־כַּנְפֵי בִגְדֵיהֶם לְדֹרֹתָם וְנָתְנוּ עַל־צִיצִת הַכָּנָף פְּתִיל תְּכֵלֶת",
     "en": "Speak unto the children of Israel, and bid them that they make them throughout their generations fringes in the corners of their garments, and that they put with the fringe of each corner a thread of blue.",
