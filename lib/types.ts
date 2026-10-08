@@ -36,7 +36,11 @@ export interface Variant {
   label: L10n;
   price: number | null;   // agorot (ILS × 100); null = use the item price
   available: boolean;
+  left?: number;          // shop only: how many are left when the size is counted and 10 or fewer remain
 }
+
+/** Owner only: stock of one size. qty null = not counted; held = taken by open reservations; sold = in done ones. */
+export interface StockLine { qty: number | null; held: number; sold: number }
 
 /** Parameters of the playable 3D garment (tzitziyot only). */
 export interface ClothSpec {
@@ -62,6 +66,8 @@ export interface Item {
   tribe: TribeKey | null; // home tribe, optional
   status: "draft" | "published" | "archived";
   soldOut: boolean;
+  left?: number;          // shop only, for a piece without sizes (see Variant.left)
+  stock?: Record<string, StockLine>; // owner only: per size key ("" for a piece without sizes)
   cloth: ClothSpec | null;
   sort: number;
   updatedAt: string;      // ISO
@@ -108,6 +114,7 @@ export interface ReservationLine {
   variantLabel: L10n | null;
   qty: number;
   unitPrice: number | null; // agorot snapshot, null if the item had no price
+  held?: boolean;         // the line took counted stock (given back if the reservation is cancelled)
 }
 
 export interface Reservation {

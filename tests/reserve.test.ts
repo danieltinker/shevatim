@@ -42,8 +42,8 @@ describe("shv_reserve: happy paths", () => {
     expect(new Date(r.createdAt).toISOString().slice(0, 19) + "Z").toBe(r.createdAt);
     const tz01 = s.catalog.items.find((i) => i.id === "tz01")!;
     expect(r.lines).toEqual([
-      { itemId: "tz01", code: "tz01", name: tz01.name, variantKey: "adult", variantLabel: tz01.variants[0].label, qty: 2, unitPrice: null },
-      { itemId: "ne01", code: "ne01", name: s.catalog.items.find((i) => i.id === "ne01")!.name, variantKey: null, variantLabel: null, qty: 1, unitPrice: null },
+      { itemId: "tz01", code: "tz01", name: tz01.name, variantKey: "adult", variantLabel: tz01.variants[0].label, qty: 2, unitPrice: null, held: false },
+      { itemId: "ne01", code: "ne01", name: s.catalog.items.find((i) => i.id === "ne01")!.name, variantKey: null, variantLabel: null, qty: 1, unitPrice: null, held: false },
     ]);
     expect(s.counts.total).toBeGreaterThanOrEqual(1);
     expect(s.counts.new).toBeGreaterThanOrEqual(1);

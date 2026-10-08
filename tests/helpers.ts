@@ -9,7 +9,7 @@ import type { AdminState, Catalog, ReservationInput } from "../lib/types";
 
 export const ROOT = fileURLToPath(new URL("..", import.meta.url));
 export const PASSWORD = "correct horse battery";
-export const SCHEMA_SQL = readFileSync(join(ROOT, "db/001_schema.sql"), "utf8");
+export const SCHEMA_SQL = readFileSync(join(ROOT, "db/001_schema.sql"), "utf8") + "\n" + readFileSync(join(ROOT, "db/004_stock.sql"), "utf8");
 export const SEED_SQL = readFileSync(join(ROOT, "db/003_seed.sql"), "utf8");
 export const seed = JSON.parse(readFileSync(join(ROOT, "db/seed.json"), "utf8")) as Catalog;
 

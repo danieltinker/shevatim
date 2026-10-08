@@ -48,6 +48,7 @@ await db.exec(`
   end $$;
 `);
 await db.exec(readFileSync(join(root, "db/001_schema.sql"), "utf8"));
+await db.exec(readFileSync(join(root, "db/004_stock.sql"), "utf8")); // stock: counts, holds by reservations, the moves log
 await db.exec(buildSeedSql(join(root, "db/seed.json")));
 const hasAdmin = (await db.query("select 1 from shevatim.admin where id = 1")).rows.length > 0;
 if (!hasAdmin || process.env.ADMIN_PASSWORD) {

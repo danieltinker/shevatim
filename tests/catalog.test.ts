@@ -105,15 +105,15 @@ describe("privileges", () => {
     const tables = await scalar<number>(db,
       "select count(*)::int from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'shevatim' and c.relkind = 'r'");
     const policies = await scalar<number>(db, "select count(*)::int from pg_policies where schemaname = 'shevatim'");
-    expect(tables).toBe(9);
+    expect(tables).toBe(11); // 9 in 001_schema.sql + stock and stock_moves in 004_stock.sql
     expect(off).toBe(0);
     expect(policies).toBe(0);
   });
 
-  it("all four public functions are security definer with an empty search_path", async () => {
+  it("all five public functions are security definer with an empty search_path", async () => {
     const r = await db.query<{ proname: string; prosecdef: boolean; proconfig: string[] | null }>(
       "select p.proname, p.prosecdef, p.proconfig from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname = 'public' and p.proname like 'shv\\_%' order by 1");
-    expect(r.rows.map((x) => x.proname)).toEqual(["shv_admin", "shv_admin_login", "shv_catalog", "shv_reserve"]);
+    expect(r.rows.map((x) => x.proname)).toEqual(["shv_admin", "shv_admin_login", "shv_admin_stock", "shv_catalog", "shv_reserve"]);
     for (const row of r.rows) {
       expect(row.prosecdef).toBe(true);
       expect(String(row.proconfig)).toMatch(/search_path=("")?$/);

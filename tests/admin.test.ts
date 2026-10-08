@@ -107,7 +107,8 @@ describe("items", () => {
     });
     expect(item.sort).toBeGreaterThan(600);
     expect(new Date(item.updatedAt).getTime()).toBeGreaterThan(Date.now() - 60_000);
-    expect(Object.keys(item).sort()).toEqual(Object.keys((await catalog(db)).items[0]).sort());
+    // the owner's view is the shop's item plus its stock per size
+    expect(Object.keys(item).sort()).toEqual([...Object.keys((await catalog(db)).items[0]), "stock"].sort());
 
     const second = await admin<Item>(db, token, "item.save", { category: "shirts", name: L("Desert Tee") });
     expect(second.code).toBe("sh02");
