@@ -10,6 +10,8 @@
   --fs-small: clamp(13px, .92vw, 14px);
   --gutter: 20px; --header-h: 60px; --ann-h: 0px;
   --section-y: clamp(88px, 11vw, 176px);
+  /* soft corners everywhere: pictures and cards, smaller boxes and fields, pills for buttons, tags and chips */
+  --r-card: 20px; --r-box: 14px; --r-pill: 999px;
   --on-film: #F2E8D8; /* cream text laid over the film and its earth shade: the same in both themes */
 }
 @media (min-width: 768px) { :root { --gutter: 40px; } }
@@ -23,6 +25,7 @@
   --line-strong: rgba(51, 38, 27, .55); /* the edge of a form field: 3:1 against the ground */
   --warn: #8C3B1F; /* terracotta: error text */
   --shade: 35, 25, 17; /* the earth shade laid over films and pictures, as r, g, b */
+  --sage: #56633D; --sage-ink: #FBF6EC; --sage-soft: rgba(86, 99, 61, .12); /* hover and the selected state */
   color-scheme: light;
 }
 :root[data-theme="dark"] {
@@ -31,6 +34,7 @@
   --line-strong: rgba(242, 232, 216, .45);
   --warn: #E9A587;
   --shade: 20, 14, 9;
+  --sage: #AAB88A; --sage-ink: #30241A; --sage-soft: rgba(170, 184, 138, .16);
   color-scheme: dark;
 }
 /* names from version 1, kept so older rules resolve: both grounds are now theme grounds */
