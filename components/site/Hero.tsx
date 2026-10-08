@@ -6,6 +6,7 @@ import { asset } from "@/lib/asset";
 import { useCatalog } from "@/lib/catalog";
 import { tr } from "@/lib/format";
 import { useI18n } from "./Providers";
+import LogoAssemble from "./LogoAssemble";
 import { SoundToggle, useSound } from "./Sound";
 import s from "./Hero.module.css";
 
@@ -44,7 +45,7 @@ export default function Hero() {
     if (v.paused) void v.play().catch(() => undefined); else v.pause();
   };
 
-  // the wordmark is drawn through its PNG as a mask, so it is the same cream as the line under it
+  // the wordmark is drawn through its PNG as a mask (the small file on small, ordinary screens)
   const mark = {
     ["--mark" as string]: `url("${asset(media.brand.wordmarkWhite)}")`,
     ["--mark-small" as string]: `url("${asset(media.brand.wordmarkWhiteSmall)}")`,
@@ -67,7 +68,7 @@ export default function Hero() {
       <div className={s.shade} aria-hidden="true" />
       <div className={s.copy}>
         <h1 className={s.mark}>
-          <span className={s.ink} role="img" aria-label={locale === "he" ? "שבטים" : "Shevatim"} style={mark} />
+          <LogoAssemble className={s.ink} label={locale === "he" ? "שבטים" : "Shevatim"} style={mark} />
         </h1>
         <p className={s.line}>{tr(settings.heroLine, locale)}</p>
         <Link className={`btn ${s.cta}`} href={`/${locale}/collection/`}>{t.hero.cta}</Link>
