@@ -1,0 +1,98 @@
+/* The tribe pages: the index of twelve arches, and each tribe's own page
+   (the stones to change tribe, the tribe's pieces, its story, the pager). Sage marks hover and focus. */
+
+/* ───────── the index: twelve arches ───────── */
+.index { background: var(--bg); color: var(--fg); padding: clamp(56px, 7vw, 112px) var(--gutter) var(--section-y); }
+.indexHead { display: grid; justify-items: center; text-align: center; gap: clamp(16px, 1.8vw, 24px); margin-block-end: clamp(48px, 6vw, 96px); }
+.indexHead > * { min-inline-size: 0; }
+.indexTitle { font-size: var(--fs-h1); font-weight: 600; }
+:global(html[lang="he"]) .indexTitle { line-height: 1.3; }
+.lede { max-inline-size: 56ch; color: var(--muted); text-wrap: pretty; }
+
+.arches {
+  list-style: none; margin: 0 auto; padding: 0; max-inline-size: 1360px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 16px;
+}
+@media (min-width: 640px) { .arches { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 28px; } }
+@media (min-width: 1024px) { .arches { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 56px 32px; } }
+@media (min-width: 1280px) { .arches { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 64px 28px; } }
+.arches > li { min-inline-size: 0; display: grid; }
+
+/* the whole card is the link: an arch with the emblem, the name, one line */
+.card {
+  display: grid; grid-template-rows: auto auto 1fr; justify-items: center; align-content: start; text-align: center;
+  text-decoration: none; color: var(--fg); border-radius: var(--r-box); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .4s cubic-bezier(.2, .7, .2, 1);
+}
+/* a 3:4 arch: the top is a half circle (37.5% of the height is half the width), the foot has soft corners */
+.arch {
+  inline-size: 100%; aspect-ratio: 3 / 4; display: grid; place-items: center; padding-block-start: 20%;
+  color: var(--fg); background-color: var(--surface); border: 1px solid var(--line);
+  border-radius: 50% 50% var(--r-box) var(--r-box) / 37.5% 37.5% var(--r-box) var(--r-box);
+  transition: background-color .3s ease, border-color .3s ease, color .3s ease;
+}
+.icon { inline-size: 74%; block-size: auto; aspect-ratio: 1; display: block; overflow: visible; stroke-width: 1.6; transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+/* the line keeps one weight (about 1.6px) whatever the size of the card */
+.icon :where(path, circle, ellipse, rect) { vector-effect: non-scaling-stroke; }
+.name { margin-block-start: 18px; font-family: var(--font-display); font-weight: 600; font-size: clamp(22px, 1.9vw, 28px); line-height: 1.3; text-wrap: balance; }
+.line { margin-block-start: 4px; max-inline-size: 28ch; font-size: var(--fs-small); line-height: 1.55; color: var(--muted); text-wrap: balance; }
+
+/* hover and keyboard focus: the card lifts, the arch takes the sage, the emblem grows a little */
+@media (hover: hover) {
+  .card:hover { transform: translateY(-6px); }
+  .card:hover .arch { background-image: linear-gradient(var(--sage-soft), var(--sage-soft)); border-color: var(--sage); color: var(--sage); }
+  .card:hover .icon { transform: scale(1.07) translateY(-2%); }
+}
+.card:focus-visible { outline: 2px solid var(--sage); outline-offset: 8px; transform: translateY(-6px); }
+.card:focus-visible .arch { background-image: linear-gradient(var(--sage-soft), var(--sage-soft)); border-color: var(--sage); color: var(--sage); }
+.card:focus-visible .icon { transform: scale(1.07) translateY(-2%); }
+.card:active { transform: translateY(-2px); }
+@media (prefers-reduced-motion: reduce) {
+  .card, .arch, .icon { transition: none; }
+  .card:hover, .card:focus-visible, .card:active, .card:hover .icon, .card:focus-visible .icon { transform: none; }
+}
+
+.indexVerse { margin: clamp(80px, 10vw, 152px) auto 0; max-inline-size: 46em; text-align: center; }
+
+/* ───────── a tribe's page ───────── */
+/* 1. the twelve stones on top: the way to another tribe */
+.stones { background: var(--bg); padding: clamp(16px, 2vw, 28px) var(--gutter); border-block-end: 1px solid var(--line); }
+.stones > nav { max-inline-size: 1680px; margin-inline: auto; }
+
+/* 2. the tribe's pieces */
+.pieces { background: var(--bg); color: var(--fg); padding: clamp(48px, 6vw, 96px) var(--gutter) var(--section-y); }
+.piecesHead { display: grid; gap: 10px; justify-items: start; margin-block-end: clamp(28px, 3.2vw, 48px); }
+.piecesHead > * { min-inline-size: 0; }
+.piecesTitle { font-size: clamp(28px, 3.2vw, 46px); }
+:global(html[lang="he"]) .piecesTitle { line-height: 1.3; }
+.priceNote { font-size: var(--fs-small); color: var(--muted); }
+.more { margin-block-start: clamp(72px, 9vw, 136px); }
+.more .piecesTitle { font-size: var(--fs-h2); }
+
+/* any number of pieces, one to twenty-four: 2 columns on phones (an odd count opens with one piece across
+   both), 3 on tablets, 4 or 5 on wide screens (Listing.tsx picks the one that leaves the fuller last row) */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 16px; }
+@media (max-width: 767px) { .grid[data-lead] > :first-child { grid-column: 1 / -1; } }
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 24px; } }
+@media (min-width: 1024px) { .grid { grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: 56px 28px; } }
+@media (min-width: 1440px) { .grid { gap: 64px 36px; } }
+
+/* 3. the story: the emblem in a small arch beside the name */
+.storyHead { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 clamp(18px, 2.4vw, 36px); }
+.storyHead > * { min-inline-size: 0; }
+.mark {
+  inline-size: clamp(76px, 7.4vw, 112px); aspect-ratio: 3 / 4; display: grid; place-items: center; padding-block-start: 22%;
+  background: var(--bg); border: 1px solid var(--line); color: var(--fg);
+  border-radius: 50% 50% var(--r-box) var(--r-box) / 37.5% 37.5% var(--r-box) var(--r-box);
+}
+.markIcon { inline-size: 84%; block-size: auto; aspect-ratio: 1; display: block; overflow: visible; stroke-width: 1.4; }
+.markIcon :where(path, circle, ellipse, rect) { vector-effect: non-scaling-stroke; }
+.storyName { font-size: clamp(40px, 5vw, 76px); font-weight: 600; line-height: 1.05; }
+:global(html[lang="he"]) .storyName { line-height: 1.3; }
+/* the verse is Hebrew on every page: in English and French it still sits at the start, hugging its text */
+.tagline { display: grid; justify-items: start; margin-block-start: clamp(28px, 3vw, 44px); }
+.tagline > * { max-inline-size: min(100%, 30em); }
+.tagline :global(.verse) { font-size: clamp(22px, 2.1vw, 30px); }
+.taglineTr { margin-block-start: 6px; color: var(--muted); max-inline-size: 56ch; }
+.versesLabel { font-family: var(--font-ui); font-size: 13px; line-height: 1.5; font-weight: 400; color: var(--muted); }

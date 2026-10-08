@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
 import { useCatalog } from "@/lib/catalog";
 import { currentCollection, fill, slotItems, tr } from "@/lib/format";
@@ -12,6 +13,7 @@ import type { TribeView } from "./tribes";
 import ch from "./Choshen.module.css";
 import tile from "./Tile.module.css";
 import s from "./Page.module.css";
+import tp from "./TribePages.module.css";
 
 const FIVE = "(min-width: 1024px) 19vw, (min-width: 768px) 33vw, 50vw";
 
@@ -60,35 +62,63 @@ export function CollectionFromQuery({ tribes }: { tribes: TribeView[] }) {
 }
 
 // ───────── a tribe's pieces (on its own page) ─────────
+/** Columns on a wide screen for n pieces: four or five, whichever leaves the fuller last row (five on a tie,
+ *  so twenty pieces make four rows of five, and twenty-four make six rows of four). */
+function wideColumns(n: number): 4 | 5 {
+  const fullness = (c: number) => (n % c === 0 ? 1 : (n % c) / c);
+  return fullness(5) >= fullness(4) ? 5 : 4;
+}
+/** Any number of pieces, one to twenty-four (TribePages.module.css): 2 columns on phones, where an odd count
+ *  opens with one piece across both columns; 3 on tablets; 4 or 5 on wide screens. */
+function PieceGrid({ items, eager }: { items: Item[]; eager?: boolean }) {
+  const cols = wideColumns(items.length);
+  const lead = items.length % 2 === 1;
+  const wide = cols === 5 ? "18vw" : "23vw";
+  return (
+    <div className={tp.grid} style={{ ["--cols" as string]: cols } as CSSProperties} data-lead={lead ? "" : undefined}>
+      {items.map((it, i) => (
+        <Tile key={it.id} item={it} eager={eager && i < cols} sizes={`(min-width: 1024px) ${wide}, (min-width: 768px) 31vw, ${lead && i === 0 ? "92vw" : "46vw"}`} />
+      ))}
+    </div>
+  );
+}
+/** The tribe's pieces in the current collection, then its other pieces. The first heading is the page's h1. */
 export function TribeItems({ tribe }: { tribe: TribeView }) {
   const { locale, t } = useI18n();
   const catalog = useCatalog();
   const col = currentCollection(catalog);
-  const five = slotItems(catalog, col, tribe.key);
-  const ids = new Set(five.map((i) => i.id));
+  const inCol = slotItems(catalog, col, tribe.key);
+  const ids = new Set(inCol.map((i) => i.id));
   const more = catalog.items.filter((i) => i.status === "published" && i.tribe === tribe.key && !ids.has(i.id)).sort((a, b) => a.sort - b.sort);
   return (
-    <div className={`section ${s.tribeItems}`}>
+    <div className={tp.pieces}>
       <div className="wrap">
-        {five.length ? (
-          <section>
-            <header className={s.blockHead}>
-              <h2 className={s.h2}>{fill(t.tribes.inCollection, { name: tribe.plain, collection: col ? tr(col.name, locale) : "" })}</h2>
-              <PriceNote items={[...five, ...more]} className={s.priceNote} />
+        {inCol.length ? (
+          <section aria-labelledby="pieces-h">
+            <header className={tp.piecesHead}>
+              <h1 id="pieces-h" className={tp.piecesTitle}>{fill(t.tribes.inCollection, { name: tribe.plain, collection: col ? tr(col.name, locale) : "" })}</h1>
+              <PriceNote items={[...inCol, ...more]} className={tp.priceNote} />
             </header>
-            <Grid className={tile.five}>{five.map((it) => <Tile key={it.id} item={it} sizes={FIVE} />)}</Grid>
+            <PieceGrid items={inCol} eager />
           </section>
         ) : null}
         {more.length ? (
-          <section className={five.length ? s.moreBlock : undefined}>
-            <header className={s.blockHead}>
-              <h2 className={s.h2}>{fill(t.tribes.more, { name: tribe.plain })}</h2>
-              {five.length ? null : <PriceNote items={more} className={s.priceNote} />}
+          <section className={inCol.length ? tp.more : undefined} aria-labelledby="more-h">
+            <header className={tp.piecesHead}>
+              {inCol.length
+                ? <h2 id="more-h" className={tp.piecesTitle}>{fill(t.tribes.more, { name: tribe.plain })}</h2>
+                : <h1 id="more-h" className={tp.piecesTitle}>{fill(t.tribes.more, { name: tribe.plain })}</h1>}
+              {inCol.length ? null : <PriceNote items={more} className={tp.priceNote} />}
             </header>
-            <Grid>{more.map((it) => <Tile key={it.id} item={it} />)}</Grid>
+            <PieceGrid items={more} eager={!inCol.length} />
           </section>
         ) : null}
-        {!five.length && !more.length ? <p className="muted">{t.shop.empty}</p> : null}
+        {!inCol.length && !more.length ? (
+          <header className={tp.piecesHead}>
+            <h1 className={tp.piecesTitle}>{fill(t.tribes.pieces, { name: tribe.plain })}</h1>
+            <p className="muted">{t.shop.empty}</p>
+          </header>
+        ) : null}
       </div>
     </div>
   );
