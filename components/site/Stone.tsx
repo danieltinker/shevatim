@@ -18,13 +18,14 @@ export function StoneLabel({ t }: { t: TribeView }) {
   );
 }
 
-/** A strip of the twelve as plain links (tribe pages): no script needed. */
-export default function ChoshenStrip({ tribes, hrefFor, label, current }: {
-  tribes: TribeView[]; hrefFor: (t: TribeView) => string; label: string; current?: string;
+/** A strip of the twelve as plain links (tribe pages): no script needed. With `plate` the twelve are laid out
+ *  as the breastplate (rows of three, six or twelve, as on the home page), so none hides off screen. */
+export default function ChoshenStrip({ tribes, hrefFor, label, current, plate }: {
+  tribes: TribeView[]; hrefFor: (t: TribeView) => string; label: string; current?: string; plate?: boolean;
 }) {
   return (
     <nav className={s.strip} aria-label={label}>
-      <ul className={s.stripList}>
+      <ul className={plate ? s.plate : s.stripList}>
         {tribes.map((t) => (
           <li key={t.key}>
             <a className={s.stone} style={stoneStyle(t)} href={hrefFor(t)} aria-current={current === t.key ? "true" : undefined}>
