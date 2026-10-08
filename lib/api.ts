@@ -2,7 +2,7 @@
 // browser to the database's REST endpoint (Supabase PostgREST in production, scripts/dev-db.mjs locally).
 // All server logic lives in SQL functions (db/*.sql). This file is the only place that talks to the network.
 import type {
-  AdminState, Catalog, Category, Collection, Item, Picture, Reservation, ReservationInput,
+  AdminState, Catalog, Category, Collection, Item, Picture, Reservation, ReservationInput, StockMove,
   ReservationStatus, Settings, TribeKey,
 } from "./types";
 import { ApiError } from "./types";
@@ -78,7 +78,20 @@ export const adminSaveCategory = (t: string, c: Partial<Category> & { key: strin
 export const adminSaveSettings = (t: string, s: Partial<Settings>) => admin<Settings>(t, "settings.save", s);
 
 export const adminUpdateReservation = (t: string, id: string, patch: { status?: ReservationStatus; adminNote?: string }) =>
-  admin<Reservation>(t, "reservation.update", { id, ...patch });
+  admin<Reservation>(t, "reservation.update", { id, ...patch }); // also "item_unavailable": reopening it needs stock that is gone
+
+// stock and "coming soon" (db/004_stock.sql). variantKey "" = a piece without sizes. Errors: "invalid", "not_enough".
+const stock = <T>(token: string, action: string, payload: unknown = {}) =>
+  rpc<T>("shv_admin_stock", { p_token: token, p_action: action, p_payload: payload });
+/** qty null = stop counting this size (it then behaves as if stock did not exist). */
+export const adminStockSet = (t: string, itemId: string, variantKey: string, qty: number | null) =>
+  stock<Item>(t, "stock.set", { itemId, variantKey, qty });
+export const adminStockAdjust = (t: string, itemId: string, variantKey: string, delta: number) =>
+  stock<Item>(t, "stock.adjust", { itemId, variantKey, delta });
+export const adminStockMoves = (t: string, itemId?: string) =>
+  stock<StockMove[]>(t, "stock.moves", itemId ? { itemId } : {});
+export const adminSetComingSoon = (t: string, itemId: string, comingSoon: boolean) =>
+  stock<Item>(t, "item.comingSoon", { itemId, comingSoon });
 
 /** Uploads pre-sized copies of one picture (the browser resizes before upload, see lib/resize.ts) and returns
  *  the Picture to store on an item. `copies` maps width → Blob (webp). */

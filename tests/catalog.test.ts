@@ -18,7 +18,8 @@ describe("shv_catalog", () => {
     const { version: _seedVersion, ...expected } = seed;
     expect(typeof version).toBe("string");
     expect(version.length).toBeGreaterThan(0);
-    expect(rest).toEqual(expected);
+    // the database adds one switch the seed does not carry: nothing is "coming soon" at first
+    expect(rest).toEqual({ ...expected, items: expected.items.map((i) => ({ ...i, comingSoon: false })) });
   });
 
   it("has 61 items, 6 categories and 12 tribes × 5 slots", async () => {

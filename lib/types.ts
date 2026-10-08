@@ -41,6 +41,8 @@ export interface Variant {
 
 /** Owner only: stock of one size. qty null = not counted; held = taken by open reservations; sold = in done ones. */
 export interface StockLine { qty: number | null; held: number; sold: number }
+/** One change in the stock log. reason: count (the owner typed a number), adjust (+/−), reserve, release (cancelled), retake (reopened). */
+export interface StockMove { at: string; itemId: string; variantKey: string; delta: number; qtyAfter: number | null; reason: "count" | "adjust" | "reserve" | "release" | "retake"; ref: string }
 
 /** Parameters of the playable 3D garment (tzitziyot only). */
 export interface ClothSpec {
@@ -66,6 +68,7 @@ export interface Item {
   tribe: TribeKey | null; // home tribe, optional
   status: "draft" | "published" | "archived";
   soldOut: boolean;
+  comingSoon?: boolean;   // shown under a sand veil, no price or sizes, cannot be reserved (switched in the back office)
   left?: number;          // shop only, for a piece without sizes (see Variant.left)
   stock?: Record<string, StockLine>; // owner only: per size key ("" for a piece without sizes)
   cloth: ClothSpec | null;

@@ -148,3 +148,27 @@ describe("stock", () => {
     expect(c.collections.length).toBeGreaterThan(0);
   });
 });
+
+describe("coming soon", () => {
+  it("is off at first, the owner switches it, the shop sees it and cannot reserve it", async () => {
+    expect((await pub("tz09")).comingSoon).toBe(false);
+    const o = await stock("item.comingSoon", { itemId: "tz09", comingSoon: true }) as OwnerItem;
+    expect(o.comingSoon).toBe(true);
+    expect((await pub("tz09")).comingSoon).toBe(true);
+    expect(await outcome(reserve(db, order({ lines: [{ itemId: "tz09", variantKey: "adult", qty: 1 }] }), freshIp()))).toBe("item_unavailable");
+    await stock("item.comingSoon", { itemId: "tz09", comingSoon: false });
+    expect((await reserve(db, order({ lines: [{ itemId: "tz09", variantKey: "adult", qty: 1 }] }), freshIp())).code).toMatch(/^SHV-/);
+  });
+
+  it("saving the item in the editor keeps the switch as it is", async () => {
+    await stock("item.comingSoon", { itemId: "tz10", comingSoon: true });
+    const saved = await admin<Item>(db, token, "item.save", { id: "tz10", sort: 5 });
+    expect(saved.comingSoon).toBe(true);
+  });
+
+  it("refuses bad input and archived pieces", async () => {
+    expect(await outcome(stock("item.comingSoon", { itemId: "tz11", comingSoon: "yes" }))).toBe("invalid");
+    expect(await outcome(stock("item.comingSoon", { itemId: "no-such", comingSoon: true }))).toBe("invalid");
+    expect(await outcome(rpc(db, "shv_admin_stock", { p_token: "0".repeat(64), p_action: "item.comingSoon", p_payload: { itemId: "tz11", comingSoon: true } }))).toBe("unauthorized");
+  });
+});

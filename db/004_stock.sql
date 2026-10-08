@@ -13,6 +13,10 @@
 --   * The owner's own "available" switches and the "sold out" switch are never changed by stock.
 -- This file contains no statement that removes rows: counts are switched off by setting them to null.
 
+-- coming soon: a published piece the shop shows under a sand veil, with no price, sizes or reservation button.
+-- The owner switches it in the back office (shv_admin_stock 'item.comingSoon'); reservations refuse it.
+alter table shevatim.items add column if not exists coming_soon boolean not null default false;
+
 create table if not exists shevatim.stock (
   item_id     text not null references shevatim.items(id),
   variant_key text not null default '',
@@ -63,7 +67,7 @@ language sql stable set search_path = '' as $$
     'id', i.id, 'code', i.code, 'slug', i.slug, 'category', i.category, 'name', i.name,
     'description', i.description, 'price', i.price, 'variants', i.variants, 'pictures', i.pictures,
     'tribe', i.tribe, 'status', i.status, 'soldOut', i.sold_out, 'cloth', i.cloth, 'sort', i.sort,
-    'updatedAt', shevatim.ts(i.updated_at))
+    'updatedAt', shevatim.ts(i.updated_at), 'comingSoon', i.coming_soon)
 $$;
 
 -- the owner's view: the stored item plus, per size, { qty (null = not counted), held, sold }
@@ -243,7 +247,7 @@ begin
   -- lines: everything about the item comes from the database
   for v_line in select l.x from jsonb_array_elements(v_lines) l(x) loop
     select * into v_item from shevatim.items i where i.id = v_line ->> 'itemId';
-    if not found or v_item.status <> 'published' or v_item.sold_out then
+    if not found or v_item.status <> 'published' or v_item.sold_out or v_item.coming_soon then
       raise exception 'item_unavailable';
     end if;
     v_vkey := v_line ->> 'variantKey';
@@ -344,7 +348,8 @@ end $$;
 -- actions: 'stock.set'    { itemId, variantKey ('' for a piece without sizes), qty: 0…100000 | null (stop counting) }
 --          'stock.adjust' { itemId, variantKey, delta: ±1…100000 } (an uncounted size starts counting from 0)
 --          'stock.moves'  { itemId? } → the last 200 changes, newest first
--- set and adjust answer with the owner's item (the same shape as item.save).
+--          'item.comingSoon' { itemId, comingSoon: boolean } (the piece shows as "coming soon" and cannot be reserved)
+-- set, adjust and item.comingSoon answer with the owner's item (the same shape as item.save).
 create or replace function public.shv_admin_stock(p_token text, p_action text, p_payload jsonb) returns jsonb
 language plpgsql volatile security definer set search_path = '' as $$
 declare
@@ -367,6 +372,16 @@ begin
       from (select * from shevatim.stock_moves x
             where not (p ? 'itemId') or x.item_id = p ->> 'itemId'
             order by x.id desc limit 200) m), '[]'::jsonb);
+  end if;
+
+  if p_action = 'item.comingSoon' then
+    if not shevatim.is_str(p -> 'itemId', 80) or jsonb_typeof(p -> 'comingSoon') is distinct from 'boolean' then
+      raise exception 'invalid'; end if;
+    update shevatim.items i set coming_soon = (p ->> 'comingSoon')::boolean, updated_at = now()
+    where i.id = p ->> 'itemId' and i.status <> 'archived'
+    returning * into v_item;
+    if not found then raise exception 'invalid'; end if;
+    return shevatim.item_json(v_item);
   end if;
 
   if p_action not in ('stock.set', 'stock.adjust') then raise exception 'invalid'; end if;
