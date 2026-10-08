@@ -91,3 +91,11 @@
 .canvasHold { aspect-ratio: 3 / 4; }
 @media (min-width: 900px) { .playIn { grid-template-columns: 5fr 7fr; gap: 72px; } }
 @media (prefers-reduced-motion: reduce) { .thumbs button, .opt span, .crumb { transition: none; } }
+
+/* counted stock: "only 2 left" under the price */
+.left { margin-block-start: 6px; font-size: var(--fs-small); color: var(--sage); }
+.optGone { color: var(--muted); font-size: 13px; }
+/* coming soon: an outlined sage pill where the button would be, and one quiet sentence */
+.soonBox { display: grid; gap: 10px; justify-items: stretch; margin-block-start: 28px; max-inline-size: 440px; }
+.soonPill.soonPill { background: transparent; color: var(--sage); border-color: var(--sage); cursor: default; pointer-events: none; }
+.soonNote { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }

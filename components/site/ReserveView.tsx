@@ -37,8 +37,10 @@ export function ReserveView() {
     const item = catalog.items.find((i) => i.id === l.itemId && i.status === "published");
     const v = item && l.variantKey ? item.variants.find((x) => x.key === l.variantKey) ?? null : null;
     // the same rule as the server: the piece must exist and be in stock, and its size must be a real, available one
-    const gone = !item || item.soldOut || (item.variants.length ? !v || !v.available : !!l.variantKey);
-    return { l, item, v, gone, price: item ? priceOf(item, l.variantKey) : null };
+    const left = item ? (item.variants.length ? v?.left : item.left) ?? null : null;
+    const over = left != null && left > 0 && l.qty > left; // counted stock: fewer left than asked for
+    const gone = !item || item.soldOut || !!item.comingSoon || (item.variants.length ? !v || !v.available : !!l.variantKey) || over;
+    return { l, item, v, gone, over, left, price: item ? priceOf(item, l.variantKey) : null };
   });
   const anyGone = rows.some((r) => r.gone);
   const total = rows.every((r) => r.price != null) ? rows.reduce((n, r) => n + (r.price ?? 0) * r.l.qty, 0) : null;
@@ -144,7 +146,7 @@ export function ReserveView() {
         <section className={s.bag} aria-labelledby="bag-h">
           <h1 id="bag-h" className={s.h1} tabIndex={-1}>{t.reserve.title}</h1>
           <ul ref={listRef} className={s.lines}>
-            {rows.map(({ l, item, v, gone, price }, i) => {
+            {rows.map(({ l, item, v, gone, over, left, price }, i) => {
               const name = item ? tr(item.name, locale) : l.itemId;
               return (
                 <li key={`${l.itemId}:${l.variantKey}`} className={`${s.line} ${gone ? s.lineGone : ""}`}>
@@ -156,12 +158,12 @@ export function ReserveView() {
                     {v ? <p className="small muted"><bdi>{tr(v.label, locale)}</bdi></p> : null}
                     {/* a line shows a price only when it has one; that prices are confirmed later is said once, in the summary */}
                     {price != null ? <p className="small muted"><bdi dir="ltr">{formatPrice(price)}</bdi></p> : null}
-                    {gone ? <p className={`small ${s.gone}`} role={flagged ? "alert" : undefined}>{t.reserve.gone}</p> : null}
+                    {gone ? <p className={`small ${s.gone}`} role={flagged ? "alert" : undefined}>{over ? fill(t.reserve.onlyLeft, { n: left ?? 0 }) : t.reserve.gone}</p> : null}
                     <div className={s.lineActions}>
                       <div className={s.qty} dir="ltr" role="group" aria-label={`${t.reserve.qty}${colon(locale)} ${name}`}>
                         <button type="button" aria-label={t.reserve.less} onClick={() => (l.qty <= 1 ? drop(l.itemId, l.variantKey, i) : bag.setQty(l.itemId, l.variantKey, l.qty - 1))}>−</button>
                         <bdi aria-live="polite">{l.qty}</bdi>
-                        <button type="button" aria-label={t.reserve.more} disabled={l.qty >= 9} onClick={() => bag.setQty(l.itemId, l.variantKey, l.qty + 1)}>+</button>
+                        <button type="button" aria-label={t.reserve.more} disabled={l.qty >= Math.min(9, left ?? 9)} onClick={() => bag.setQty(l.itemId, l.variantKey, l.qty + 1)}>+</button>
                       </div>
                       <button type="button" className={s.remove} data-remove onClick={() => drop(l.itemId, l.variantKey, i)}>{t.reserve.remove}<span className="srOnly">{colon(locale)} {name}</span></button>
                     </div>

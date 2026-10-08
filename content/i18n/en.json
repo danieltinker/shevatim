@@ -86,7 +86,8 @@
     "soldOut": "Sold out",
     "collectionTitle": "The {name} collection",
     "collectionLabel": "The collection",
-    "lede": "Every piece in one place. Filter by category and by tribe."
+    "lede": "Every piece in one place. Filter by category and by tribe.",
+    "nextDrop": "In the next drop"
   },
   "item": {
     "choose": "Choose a size",
@@ -113,7 +114,12 @@
     "render": "3D rendering. The cloth was photographed from the real piece.",
     "noPictures": "Pictures of this piece are on their way.",
     "clothLabel": "A 3D tzitzit you can drag",
-    "clothHint": "Drag the cloth"
+    "clothHint": "Drag the cloth",
+    "comingSoonNote": "This piece arrives with the next drop. It can’t be reserved yet.",
+    "comingSoonAsk": "Want us to tell you when it lands? Message us",
+    "left": "Only {n} left",
+    "leftOne": "Last one",
+    "sizeGone": "sold out"
   },
   "reserve": {
     "title": "Your reservation",
@@ -156,7 +162,8 @@
     "pausedTitle": "Reserving is paused",
     "pausedText": "The pieces you chose stay saved here. You can send them once we take reservations again.",
     "whatsappInstead": "Send it on WhatsApp instead",
-    "whatsappLead": "Hello, I would like to reserve:"
+    "whatsappLead": "Hello, I would like to reserve:",
+    "onlyLeft": "Only {n} left. Lower the quantity to continue."
   },
   "done": {
     "title": "Reservation received",

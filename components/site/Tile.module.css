@@ -35,3 +35,14 @@
 .tile:focus-visible .frame { outline: 2px solid var(--sage); outline-offset: 3px; }
 .tile:focus-visible .name { color: var(--sage); }
 @media (prefers-reduced-motion: reduce) { .pic, .frame, .name { transition: none; } .tile:hover .frame { transform: none; } }
+
+/* coming soon (switched per piece in the back office): the garment rests under a sand veil with the word in the
+   middle; no price. The card still opens the piece's page. */
+.soon .pic { opacity: .38; filter: saturate(.55) blur(.6px); }
+.veil {
+  position: absolute; inset: 0; z-index: 2; display: grid; place-content: center; justify-items: center; gap: 4px;
+  text-align: center; padding: 12px; background: color-mix(in srgb, var(--stage) 40%, transparent); color: var(--fg);
+}
+.veilWord { font-family: var(--font-display); font-weight: 600; font-size: clamp(20px, 1.7vw, 26px); line-height: 1.1; }
+.veilSub { font-size: 12px; line-height: 1.4; color: var(--muted); }
+.soon .name { color: var(--muted); }

@@ -86,7 +86,8 @@
     "soldOut": "Épuisé",
     "collectionTitle": "La collection {name}",
     "collectionLabel": "La collection",
-    "lede": "Toutes les pièces au même endroit. Filtrez par catégorie et par tribu."
+    "lede": "Toutes les pièces au même endroit. Filtrez par catégorie et par tribu.",
+    "nextDrop": "Dans la prochaine collection"
   },
   "item": {
     "choose": "Choisir une taille",
@@ -113,7 +114,12 @@
     "render": "Rendu 3D. Le tissu a été photographié sur la pièce réelle.",
     "noPictures": "Les photos de cette pièce arrivent.",
     "clothLabel": "Un tsitsit en 3D que l’on peut faire glisser",
-    "clothHint": "Faites glisser le tissu"
+    "clothHint": "Faites glisser le tissu",
+    "comingSoonNote": "Cette pièce arrive avec la prochaine collection. Elle ne peut pas encore être réservée.",
+    "comingSoonAsk": "Envie d’être prévenu ? Écrivez-nous",
+    "left": "Plus que {n}",
+    "leftOne": "Dernière pièce",
+    "sizeGone": "épuisé"
   },
   "reserve": {
     "title": "Votre réservation",
@@ -156,7 +162,8 @@
     "pausedTitle": "Les réservations sont en pause",
     "pausedText": "Les pièces choisies restent enregistrées ici. Vous pourrez les envoyer dès la reprise des réservations.",
     "whatsappInstead": "L’envoyer plutôt sur WhatsApp",
-    "whatsappLead": "Bonjour, je souhaite réserver :"
+    "whatsappLead": "Bonjour, je souhaite réserver :",
+    "onlyLeft": "Plus que {n}. Réduisez la quantité pour continuer."
   },
   "done": {
     "title": "Réservation reçue",

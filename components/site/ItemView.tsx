@@ -86,7 +86,10 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
   const variants = item.variants;
   // one size: it is the choice. Several: nothing is chosen until the visitor chooses.
   const chosen = variants.length === 1 ? (variants[0].available ? variants[0] : null) : variants.find((v) => v.key === variant && v.available) ?? null;
-  const canAdd = !item.soldOut && (variants.length === 0 || variants.some((v) => v.available)) && catalog.settings.reservationsOpen;
+  const soon = !!item.comingSoon;
+  const canAdd = !soon && !item.soldOut && (variants.length === 0 || variants.some((v) => v.available)) && catalog.settings.reservationsOpen;
+  // counted stock: the last one or two of the chosen size (or of a piece without sizes) are said out loud
+  const leftNow = variants.length ? (chosen?.left ?? null) : (item.left ?? null);
   const add = () => {
     if (variants.length && !chosen) {
       setNeedChoice(true); setAdded(false);
@@ -138,9 +141,12 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
         <div className={s.info}>
           {category ? <Link className={`label ${s.crumb}`} href={`/${locale}/shop/?cat=${category.key}`}>{tr(category.name, locale)}</Link> : null}
           <h1 className={s.name}>{name}</h1>
-          <PriceLine className={s.price} price={priceOf(item, chosen?.key)} />
+          {soon ? null : <PriceLine className={s.price} price={priceOf(item, chosen?.key)} />}
+          {!soon && leftNow != null && leftNow > 0 && leftNow <= 2 ? (
+            <p className={s.left}>{leftNow === 1 ? t.item.leftOne : fill(t.item.left, { n: leftNow })}</p>
+          ) : null}
 
-          {variants.length ? (
+          {variants.length && !soon ? (
             <fieldset className={s.variants} aria-describedby={needChoice && !chosen ? "e-variant" : undefined}>
               <legend>{t.item.choose}</legend>
               <div ref={opts} className={long ? s.optsLong : s.opts}>
@@ -148,7 +154,7 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
                   <label key={v.key} className={s.opt}>
                     <input type="radio" name="variant" value={v.key} checked={chosen?.key === v.key} disabled={!v.available}
                       onChange={() => { setVariant(v.key); setAdded(false); setNeedChoice(false); }} />
-                    <span><bdi>{tr(v.label, locale)}</bdi></span>
+                    <span><bdi>{tr(v.label, locale)}</bdi>{v.available ? null : <span className={s.optGone}> · {t.item.sizeGone}</span>}</span>
                   </label>
                 ))}
               </div>
@@ -156,13 +162,25 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
             </fieldset>
           ) : null}
 
-          <button type="button" className={`btn ${s.add}`} disabled={!canAdd} onClick={add}>
-            {item.soldOut ? t.shop.soldOut : t.item.add}
-          </button>
-          <p className={s.added} role="status">
-            {added ? <>{t.item.added} <Link className="link" href={`/${locale}/reserve/`}>{t.item.toBag}</Link></> : null}
-            {!catalog.settings.reservationsOpen ? t.item.noReserve : null}
-          </p>
+          {soon ? (
+            <div className={s.soonBox}>
+              <span className={`btn ${s.soonPill}`} aria-disabled="true">{t.home.comingSoon}</span>
+              <p className={s.soonNote}>{t.item.comingSoonNote}</p>
+              {catalog.settings.whatsapp ? (
+                <a className="link" href={`https://wa.me/${catalog.settings.whatsapp}?text=${encodeURIComponent(`${name} [${item.code}]`)}`} target="_blank" rel="noopener noreferrer">{t.item.comingSoonAsk}</a>
+              ) : null}
+            </div>
+          ) : (
+            <>
+              <button type="button" className={`btn ${s.add}`} disabled={!canAdd} onClick={add}>
+                {item.soldOut ? t.shop.soldOut : t.item.add}
+              </button>
+              <p className={s.added} role="status">
+                {added ? <>{t.item.added} <Link className="link" href={`/${locale}/reserve/`}>{t.item.toBag}</Link></> : null}
+                {!catalog.settings.reservationsOpen ? t.item.noReserve : null}
+              </p>
+            </>
+          )}
 
           {tr(item.description, locale) ? <p className={s.desc}>{tr(item.description, locale)}</p> : null}
 

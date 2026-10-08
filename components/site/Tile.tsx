@@ -44,9 +44,10 @@ export default function Tile({ item, sizes, eager }: { item: Item; sizes?: strin
   const [first, second] = item.pictures;
   const name = tr(item.name, locale);
   const sz = sizes ?? "(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw";
-  const want = canHover && second && !wanted ? () => setWanted(true) : undefined;
+  const soon = !!item.comingSoon;
+  const want = canHover && second && !wanted && !soon ? () => setWanted(true) : undefined;
   return (
-    <Link className={s.tile} href={`/${locale}/item/?i=${encodeURIComponent(item.slug)}`} onPointerEnter={want} onFocus={want}>
+    <Link className={`${s.tile} ${soon ? s.soon : ""}`} href={`/${locale}/item/?i=${encodeURIComponent(item.slug)}`} onPointerEnter={want} onFocus={want}>
       <span className={`${s.frame} ${arrived ? s.swap : ""}`}>
         {first ? (
           <img className={`${s.pic} ${s.first}`} src={pictureUrl(first, 480)} srcSet={pictureSrcSet(first)} sizes={sz} width={first.w} height={first.h}
@@ -56,9 +57,11 @@ export default function Tile({ item, sizes, eager }: { item: Item; sizes?: strin
           <img className={`${s.pic} ${s.second}`} src={pictureUrl(second, 480)} srcSet={pictureSrcSet(second)} sizes={sz} width={second.w} height={second.h}
             alt="" decoding="async" onLoad={() => setArrived(true)} />
         ) : null}
+        {/* coming soon: the garment under a sand veil, the word in the middle */}
+        {soon ? <span className={s.veil} aria-hidden="true"><span className={s.veilWord}>{t.home.comingSoon}</span><span className={s.veilSub}>{t.shop.nextDrop}</span></span> : null}
       </span>
       <span className={s.name}>{name}</span>
-      {item.price != null ? <PriceLine className={s.price} price={item.price} /> : null}
+      {soon ? <span className="srOnly">{t.home.comingSoon}</span> : item.price != null ? <PriceLine className={s.price} price={item.price} /> : null}
       {item.soldOut ? <span className={s.sold}>{t.shop.soldOut}</span> : null}
     </Link>
   );
