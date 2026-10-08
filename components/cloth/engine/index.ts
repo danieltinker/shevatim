@@ -49,14 +49,17 @@ export interface TzitzitHandle {
     grab(particle: number, dx: number, dy: number, dz: number): void;
     release(): void;
     reset(): void;
-    view(): { azimuth: number; elevation: number; zoom: number; grabbed: number; paused: boolean; pending: boolean; homing: boolean };
+    view(): { azimuth: number; elevation: number; zoom: number; grabbed: number; paused: boolean; pending: boolean; homing: boolean; pointer: number; pinching: boolean; grabbing: boolean };
     bounds(): { top: number; bottom: number; halfW: number } | null;
     /** true once the fabric picture is applied (or failed to load) */
     textureReady(): boolean;
     /** Absolute camera for product stills: same distance for every item. */
     frame(azimuth: number, elevation: number, distance: number, targetY: number): void;
     render(): void;
-    stats(): { particles: number; constraints: number; body: number; hood: number; strings: number; solverMsPerFrame: number; substeps: number; kinetic: number; strainPasses: number };
+    stats(): { particles: number; constraints: number; body: number; hood: number; strings: number; solverMsPerFrame: number; substeps: number; kinetic: number; strainPasses: number; pull: number; recovering: boolean };
+    /** Since the last call (resets): the largest distance any cloth particle moved in a single lab frame (move), and
+     *  the largest change of that per-frame motion from one frame to the next (snap), in metres. */
+    jump(): { move: number; snap: number };
     bench(frames: number): number;
     /** Pointer gestures in client pixels, without real events (deterministic with step()). */
     down(x: number, y: number): number;
@@ -130,13 +133,17 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
   const kid = opts.size === "kid";
   const cores = navigator.hardwareConcurrency || 8;
   const small = Math.min(window.innerWidth, window.innerHeight) < 480;
+  const mq = (q: string): boolean => typeof window.matchMedia === "function" && window.matchMedia(q).matches;
+  // a phone or tablet: the finger is the main pointer. Such devices start at low quality (rather than being stepped
+  // down mid-play, which rebuilds the garment), and their canvas keeps to a pixel budget.
+  const coarse = mq("(pointer: coarse)") || (!mq("(any-pointer: fine)") && (navigator.maxTouchPoints || 0) > 0);
   let quality: "low" | "high" =
     opts.quality === "low" || opts.quality === "high" ? opts.quality
-      : cores <= 4 || (small && cores <= 6) ? "low" : "high";
+      : coarse || cores <= 4 || (small && cores <= 6) ? "low" : "high";
   const autoQuality = !opts.quality || opts.quality === "auto";
 
   const canvas = document.createElement("canvas");
-  canvas.style.cssText = "display:block;width:100%;height:100%;touch-action:pan-y;outline:none;cursor:grab;-webkit-tap-highlight-color:transparent;user-select:none";
+  canvas.style.cssText = "display:block;width:100%;height:100%;touch-action:pan-y;outline:none;cursor:grab;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none";
   let renderer: WebGLRenderer;
   try {
     renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: "high-performance" });
@@ -247,7 +254,7 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     return m;
   }
 
-  function build(): void {
+  function build(resetView = true): void {
     const id = ++buildId;
     for (const d of disposables) d.dispose();
     disposables = [];
@@ -364,7 +371,7 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
         disposables.push(geo, gMat, seq);
       }
     }
-    fitCamera(true);
+    fitCamera(resetView);
   }
 
   // ---- camera ----
@@ -421,8 +428,7 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     }
   }
   const sCol = new Color(), rimCol = new Color();
-  function updateStrings(): void {
-    const p = G.sim.pos;
+  function updateStrings(p: Float64Array): void {
     const px = (2 * baseDist * zoom * Math.tan((FOV * Math.PI) / 360)) / Math.max(1, canvas.clientHeight || 600); // metres per CSS pixel
     const ks = kid ? 1 / 0.7 : 1;
     const thin = Math.max(0.00095 * ks, px * 0.62), thick = Math.max(0.0029 * ks, px * 1.5);
@@ -586,8 +592,13 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     attr.needsUpdate = true;
   }
   let firstGeom = true;
-  function syncGeometry(): void {
-    G.body.update(); G.hood?.update();
+  let rbuf = new Float64Array(0);
+  /** alpha < 1: draw the cloth between the start and the end of the latest simulated frame (see ClothSim.lerpTo) */
+  function syncGeometry(alpha = 1): void {
+    const s = G.sim;
+    let src = s.pos;
+    if (alpha < 1) { if (rbuf.length !== s.pos.length) rbuf = new Float64Array(s.pos.length); src = s.lerpTo(alpha, rbuf); }
+    G.body.update(src); G.hood?.update(src);
     if (G.hood) { // weld the back seam of the hood so no gap shows
       const { ru, rv, rpos, rnrm } = G.hood;
       for (let i = 0; i < ru >> 1; i++) {
@@ -606,7 +617,7 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     }
     shadeFolds(G.body, bodyMesh);
     if (G.hood && hoodMesh) shadeFolds(G.hood, hoodMesh);
-    updateStrings(); updateTrim(firstGeom); updateGold();
+    updateStrings(src); updateTrim(firstGeom); updateGold();
     firstGeom = false;
   }
 
@@ -625,35 +636,58 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     s.windPhase = t * 0.9; s.windGust = gust;
   }
   // ---- always back to a garment that hangs straight ----
-  // Cloth without self-collision can end up wrapped around the ghost body, slid off the shoulders, or with its hood
-  // slumped off the head form, and no amount of waiting undoes that. So the pose is watched: two seconds after every
-  // release (a little later if the cloth is still swinging), and once a second for as long as the garment is on
-  // screen. If the cloth is far from its settled pose, sits off-axis, has lost its hood, is over-stretched, or the
-  // numbers broke, every particle is eased back. The thresholds sit well above what the indoor draught does.
-  const HOME_MEAN = 0.04;     // m, mean distance of the cloth from the settled pose that counts as "not back"
-  const HOME_HOOD = 0.03;     // m, the same for the hood alone (a slumped hood is small in the overall mean)
-  const HOME_SHIFT = 0.015;   // m, mean sideways offset: the garment sits off-axis on the shoulders
-  const HOME_STRAIN = 1.12;   // a thread 12 % longer than in the settled garment is not a state cloth rests in
+  // The solver itself brings the cloth home after every release, through the physics (ClothSim: the pull home).
+  // What no gentle pull undoes is a real knot: cloth without self-collision can end up wrapped around the ghost body,
+  // a fold can snap through to its other side, the hood can be dragged off the head form. So the pose is watched too:
+  //  - after a release, at 2 s, with the pull (and strain limiting) held at full strength until then: a hood dragged
+  //    off the head can hang near home on them, and would fall if let go. Anything more than a centimetre (the hood,
+  //    or the sideways shift: six millimetres) beyond where the untouched garment sat in the draught before it was
+  //    touched is "not back". Not back, and not closing in since a look 0.2 s before, it is eased back at once
+  //    (closing in, it gets until 3.2 s). Once more 3 s later, when the pull has eased off: a hood or a garment that
+  //    only stayed on thanks to the pull has slipped by then (the mean is left out of that look: by then the
+  //    draught has had time to blow the garment wherever it blows the untouched one);
+  //  - while nobody touches it, once a second, as a backstop for real knots only: the draught's gusts blow an
+  //    untouched garment up to ~6.5 cm (mean), ~1.9 cm (hood) and ~1.3 cm (sideways) off its settled pose, and a
+  //    garment that is eased back against a gust only to be blown out again would look broken.
+  // A garment found off is eased back (every particle, 0.6 s, smootherstep). NaN always counts as off.
+  interface Pose { mean: number; hood: number; shift: number; strain: number }
+  const HOME_MEAN = 0.08, HOME_HOOD = 0.03, HOME_SHIFT = 0.025; // m: the idle backstop (beyond any gust)
+  const HOME_STRAIN = 1.08;   // a thread 8 % longer than in the settled garment is not a state cloth rests in
+  const BACK_MEAN = 0.01, BACK_FLOOR = 0.012, BACK_HOOD = 0.006, BACK_SHIFT = 0.006; // m beyond the untouched level
+  const SLIP = 0.008;         // m, the hood or the sideways shift worse than at the first look: slipped
   const HOME_AFTER = 2.0;     // s after release: first look
   const HOME_LATEST = 3.2;    // s after release: stop waiting for the swing to die down
+  const HOME_AGAIN = 3.0;     // s after the first look: the second
   const HOME_TIME = 0.6;      // s, the ease itself
-  let sinceRelease = -1, nextCheck = 0, idleClock = 0, strikes = 0;
+  let sinceRelease = -1, nextCheck = 0, idleClock = 0, strikes = 0, secondLook = false, quietFor = 0, lastLook: Pose | null = null, firstLook: Pose | null = null;
+  let untouched: Pose | null = null; // the garment in the draught, last seen untouched
   let homing = false, homeT = 0, homeDur = HOME_TIME, homeCam = false;
   let homeFrom = new Float64Array(0);
   const camFrom = { az: 0, el: 0, zoom: 1, tx: 0 };
   const prefersStill = (): boolean => typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function released(): void { sinceRelease = 0; nextCheck = HOME_AFTER; strikes = 0; }
-  function poseIsOff(): boolean {
+  function released(): void { sinceRelease = 0; nextCheck = HOME_AFTER - 0.2; strikes = 0; secondLook = false; lastLook = null; quietFor = 0; G.sim.pullLatch = true; }
+  function measurePose(): Pose {
     const s = G.sim, hd = G.hood;
-    const mean = s.meanFromRest(), strain = s.maxStrain();
-    const hoodMean = hd ? s.meanFromRest(hd.start, hd.start + hd.nu * hd.nv) : 0;
     let sx = 0, cnt = 0;
     for (let i = 0, n = G.body.nu * G.body.nv; i < n; i++) if (s.w[i] > 0) { sx += s.pos[i * 3] - s.rest[i * 3]; cnt++; }
-    const shift = cnt ? Math.abs(sx / cnt) : 0;
-    return !(mean <= HOME_MEAN && hoodMean <= HOME_HOOD && shift <= HOME_SHIFT && strain <= HOME_STRAIN); // written so that NaN counts as off
+    return { mean: s.meanFromRest(), hood: hd ? s.meanFromRest(hd.start, hd.start + hd.nu * hd.nv) : 0, shift: cnt ? Math.abs(sx / cnt) : 0, strain: s.maxStrain() };
+  }
+  // written so that NaN counts as off
+  const knotted = (p: Pose): boolean => !(p.mean <= HOME_MEAN && p.hood <= HOME_HOOD && p.shift <= HOME_SHIFT && p.strain <= HOME_STRAIN);
+  function notBack(p: Pose): boolean {
+    const u = untouched ?? { mean: 0.02, hood: 0.002, shift: 0.004, strain: 1 };
+    return knotted(p) || !(p.mean <= Math.max(BACK_FLOOR, u.mean + BACK_MEAN) && p.hood <= u.hood + BACK_HOOD && p.shift <= u.shift + BACK_SHIFT);
+  }
+  /** At the start of a touch: if the garment has been left alone (or never touched), remember how it sits now. */
+  function noteUntouched(): void {
+    if (homing || sinceRelease >= 0 || G.sim.recoverT >= 0 || settleLeft > 0) return;
+    if (untouched && quietFor < 3) return;
+    const p = measurePose();
+    if (!knotted(p)) untouched = p;
   }
   function startHome(withCamera: boolean, dur = HOME_TIME): void {
     const s = G.sim;
+    if (grabbing) endGrab();
     s.grabIdx = -1; sinceRelease = -1;
     if (homeFrom.length !== s.pos.length) homeFrom = new Float64Array(s.pos.length);
     homeFrom.set(s.pos);
@@ -684,28 +718,55 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     const s = G.sim;
     if (s.kinetic !== s.kinetic) { if (grabbing) endGrab(); startHome(false, 0); return; } // NaN: back at once
     if (s.grabIdx >= 0) return;
-    if (sinceRelease >= 0) { // just let go: look at two seconds, wait a little longer if it still swings
+    const ease = (): void => startHome(false, prefersStill() ? 0 : HOME_TIME);
+    if (sinceRelease >= 0) { // just let go
       sinceRelease += dt;
       if (sinceRelease < nextCheck) return;
-      if (!poseIsOff()) { sinceRelease = -1; idleClock = 0; strikes = 0; return; }
-      if (s.kinetic > 0.004 && sinceRelease < HOME_LATEST && s.maxStrain() <= 1.5) { nextCheck = sinceRelease + 0.2; return; }
-      startHome(false, prefersStill() ? 0 : HOME_TIME);
+      const p = measurePose();
+      if (!secondLook) { // first look, the pull still at full strength
+        const prev = lastLook; lastLook = p;
+        if (!prev) { nextCheck = sinceRelease + 0.2; return; } // a look just before, to see which way it is going
+        if (!notBack(p)) { s.pullLatch = false; secondLook = true; firstLook = p; nextCheck = sinceRelease + HOME_AGAIN; return; } // home: the pull may ease off
+        const closing = p.mean < prev.mean * 0.97 || p.hood < prev.hood * 0.93 - 0.0005;
+        if (closing && sinceRelease < HOME_LATEST && p.strain <= 1.5) { nextCheck = sinceRelease + 0.2; return; } // still on its way home
+        ease(); return;
+      }
+      sinceRelease = -1; idleClock = 0; strikes = 0; quietFor = 0; // second look, the pull eased off: still home?
+      const f = firstLook ?? p;
+      if (knotted(p) || !(p.hood <= f.hood + SLIP && p.shift <= f.shift + SLIP)) ease();
       return;
     }
-    // nobody is touching it: once a second; off twice in a row (not just a passing gust) and it is eased back
-    idleClock += dt;
+    // nobody is touching it: once a second; knotted three times in a row (not a passing gust) and it is eased back
+    idleClock += dt; quietFor += dt;
     if (idleClock < 1) return;
     idleClock = 0;
-    if (!poseIsOff()) { strikes = 0; return; }
-    if (++strikes >= 2) { strikes = 0; startHome(false, prefersStill() ? 0 : HOME_TIME); }
+    const p = measurePose();
+    if (!knotted(p)) { strikes = 0; if (quietFor >= 3) untouched = p; return; }
+    if (++strikes >= 3) { strikes = 0; ease(); }
   }
-  function stepFrames(n: number): void {
+  // lab measure of visible jumps: per cloth particle, how far it moved in one frame (move), and how much that differs
+  // from how far it moved in the frame before (snap: a teleport, or cloth jerked into motion from one frame to the next)
+  let jumpA = new Float64Array(0), jumpB = new Float64Array(0), jumpMove = 0, jumpSnap = 0;
+  function stepFrames(n: number): void { // the lab's deterministic clock
     for (let k = 0; k < n; k++) {
+      const s = G.sim;
+      if (jumpA.length !== s.pos.length) { jumpA = new Float64Array(s.pos.length); jumpA.set(s.pos); jumpB = new Float64Array(s.pos.length); jumpB.set(s.pos); }
+      jumpB.set(jumpA); jumpA.set(s.pos);
       simTime += 1 / 60;
       if (homing) homeStep(1 / 60);
-      else { updateWind(simTime); G.sim.frame(1 / 60); }
+      else { updateWind(simTime); s.frame(1 / 60); }
       G.body.update(); G.hood?.update();
       if (!homing) watch(1 / 60);
+      const p = G.sim.pos, w = G.sim.w, kind = G.sim.kind, A = jumpA, B = jumpB;
+      for (let i = 0, i3 = 0; i < G.sim.n; i++, i3 += 3) {
+        if (w[i] === 0 || kind[i] !== 0) continue;
+        const dx = p[i3] - A[i3], dy = p[i3 + 1] - A[i3 + 1], dz = p[i3 + 2] - A[i3 + 2];
+        const m2 = dx * dx + dy * dy + dz * dz;
+        if (m2 > jumpMove * jumpMove) jumpMove = Math.sqrt(m2);
+        const sx = dx - (A[i3] - B[i3]), sy = dy - (A[i3 + 1] - B[i3 + 1]), sz = dz - (A[i3 + 2] - B[i3 + 2]);
+        const s2 = sx * sx + sy * sy + sz * sz;
+        if (s2 > jumpSnap * jumpSnap) jumpSnap = Math.sqrt(s2);
+      }
     }
   }
   let settleLeft = 0;
@@ -724,18 +785,39 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
       settleLeft--;
     }
     s.damping = saveD; s.substeps = saveSub; windOn = true;
-    if (settleLeft <= 0) { s.zeroVelocities(); s.saveRest(); G.body.update(); G.hood?.update(); measure(); fitCamera(true); return true; }
+    if (settleLeft <= 0) {
+      s.zeroVelocities(); s.saveRest(); G.body.update(); G.hood?.update(); measure(); fitCamera(!keepView); keepView = false;
+      if (resizeDue) { resizeDue = false; resize(); } // the new pixel ratio, right before the first frame of the new garment is drawn
+      return true;
+    }
     return false;
   }
 
   // ---- loop ----
+  // Per display frame: advance the solver by real time in fixed 60 Hz frames (two at 30 fps, none on every other
+  // frame at 120 Hz), and draw the cloth between the last two simulated frames, so it moves at an even pace at any
+  // display rate. Nothing is drawn more often than about 100 times a second (a 120 Hz phone draws at 60), and nothing
+  // at all while the cloth is paused and the camera is still.
   let paused = !!opts.paused, disposed = false, contextLost = false, raf = 0, lastT = 0, needsDraw = true, ready = false;
-  let slowFrames = 0, measured = 0;
+  let slowFrames = 0, measured = 0, stepDownDue = false, keepView = false, resizeDue = false, lastDrawT = -1e9, drawAlpha = 1;
+  const DRAW_GAP = 9.5; // ms
   function draw(): void {
     placeCamera();
-    syncGeometry();
+    syncGeometry(homing ? 1 : drawAlpha);
     renderer.render(scene, camera);
     needsDraw = false;
+  }
+  /** Step down to low quality only when it cannot be seen as a reset: nobody touching, nothing being eased, the
+   *  cloth back home and nearly still. The view is kept; the canvas is resized right before the new garment's first
+   *  frame (resizing clears it). */
+  function maybeStepDown(): void {
+    if (!stepDownDue || pid !== -1 || grabbing || pinching || pend || homing || settleLeft > 0) return;
+    const s = G.sim;
+    if (s.recoverT >= 0 || sinceRelease >= 0 || s.kinetic > 0.002) return;
+    stepDownDue = false;
+    quality = "low"; renderer.shadowMap.enabled = false;
+    keepView = true; resizeDue = true;
+    rebuild(false);
   }
   function tick(now: number): void {
     raf = 0;
@@ -750,14 +832,16 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     if (!paused) {
       simTime += dt;
       let frames = 0;
-      if (homing) homeStep(dt);
-      else { updateWind(simTime); frames = G.sim.advance(dt); if (frames > 0) watch(frames / 60); }
+      if (homing) { homeStep(dt); drawAlpha = 1; }
+      else { updateWind(simTime); frames = G.sim.advance(dt); if (frames > 0) watch(frames / 60); drawAlpha = homing ? 1 : G.sim.alpha(); }
       active = true;
       if (autoQuality && quality === "high" && ready && frames > 0 && measured < 90) {
         measured++;
         if (dt > 0.03 || G.sim.lastSolveMs > 7) slowFrames++;
-        if (measured === 90 && slowFrames > 45) { quality = "low"; renderer.shadowMap.enabled = false; rebuild(); }
+        if (measured === 90 && slowFrames > 45) stepDownDue = true;
       }
+      if (stepDownDue) maybeStepDown();
+      if (settleLeft > 0) { schedule(); return; } // stepped down: the new garment settles before anything is drawn
     }
     // camera inertia
     if (!orbiting && (Math.abs(azV) > 1e-4 || Math.abs(elV) > 1e-4)) {
@@ -765,8 +849,8 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
       const k = Math.exp(-dt * 3.2); azV *= k; elV *= k; active = true;
     }
     if (active || needsDraw || grabbing) {
-      if (fabricReady || now - mountT > 3500) {
-        draw();
+      if ((fabricReady || now - mountT > 3500) && (!ready || now - lastDrawT >= DRAW_GAP)) {
+        draw(); lastDrawT = now;
         if (!ready) { ready = true; opts.onReady?.(); }
       }
     }
@@ -775,18 +859,27 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
   function schedule(): void { if (!raf && !disposed && !contextLost) raf = requestAnimationFrame(tick); }
   const mountT = performance.now();
 
-  function rebuild(): void {
+  function rebuild(resetView = true): void {
+    cancelInteraction(); // a garment rebuilt under a finger would leave the finger holding nothing
     bounds = null; homing = false; sinceRelease = -1;
-    build();
+    build(resetView);
     settleLeft = SETTLE_FRAMES; firstGeom = true;
     if (opts.settleSync) settleChunk(1e9);
     needsDraw = true; schedule();
   }
 
   // ---- size ----
+  /** Pixel ratio: at most 2 (1.5 at low quality); on a phone or tablet also at most ~1.1 million canvas pixels at low
+   *  quality (2.4 million at high), so a large tablet stage does not fill a high-density screen pixel for pixel. */
+  function pixelRatio(w: number, h: number): number {
+    const dpr = window.devicePixelRatio || 1;
+    let pr = Math.min(quality === "low" ? 1.5 : 2, dpr);
+    if (coarse) pr = Math.min(pr, Math.max(1, Math.sqrt((quality === "low" ? 1.1e6 : 2.4e6) / (w * h))));
+    return pr;
+  }
   function resize(): void {
     const w = Math.max(1, container.clientWidth), h = Math.max(1, container.clientHeight);
-    const pr = Math.min(quality === "low" ? 1.5 : 2, window.devicePixelRatio || 1);
+    const pr = pixelRatio(w, h);
     renderer.setPixelRatio(pr);
     renderer.setSize(w, h, false);
     aspect = w / h; camera.aspect = aspect; camera.updateProjectionMatrix();
@@ -824,6 +917,7 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
   let grabMax = 0.3, grabDown = 0.3;
   function beginGrab(hit: number, clientX: number, clientY: number): void {
     const s = G.sim, r = s.rest;
+    noteUntouched();
     if (homing) { homing = false; s.zeroVelocities(); }
     const t = Math.tan((FOV * Math.PI) / 360);
     grabMax = Math.min(0.3, 0.18 * 2 * baseDist * t);
@@ -842,7 +936,9 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     canvas.style.cursor = "grab"; canvas.style.touchAction = "pan-y";
   }
   function setGrabTarget(clientX: number, clientY: number): void {
+    if (G.sim.grabIdx < 0 || !Number.isFinite(clientX) || !Number.isFinite(clientY)) return;
     const r = canvas.getBoundingClientRect();
+    if (r.width < 1 || r.height < 1) return;
     // the hand stays inside the stage: a pull towards a corner ends at the frame, the cloth is not cut by its edge
     const nx = Math.max(-0.9, Math.min(0.9, ((clientX - r.left) / r.width) * 2 - 1));
     const ny = Math.max(-0.92, Math.min(0.93, -(((clientY - r.top) / r.height) * 2 - 1)));
@@ -863,6 +959,8 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
   let downStamp = 0, provisional = false;
   function clearPend(): void { if (pend) { window.clearTimeout(pend.timer); pend = null; } }
   function takeCloth(hit: number, clientX: number, clientY: number, pointerId: number, touch: boolean): void {
+    // a finger reports its position less evenly than a mouse: its hand is smoothed a little more
+    G.sim.grabLag = touch ? 0.03 : 0.012;
     beginGrab(hit, clientX, clientY); provisional = false;
     try { canvas.setPointerCapture(pointerId); } catch { /* ignore */ }
     canvas.style.cursor = "grabbing";
@@ -875,27 +973,43 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
   const touches = new Map<number, { x: number; y: number }>();
   let pinching = false, pinchD0 = 1, pinchZoom0 = 1;
   const touchSpread = (): number => { const [a, b] = [...touches.values()]; return Math.hypot(a.x - b.x, a.y - b.y) || 1; };
+  /** Every way a gesture can end without its pointerup (a cancel, lost capture, the page hidden or blurred, a
+   *  pointerup the page never received, a rebuild, a pause) comes here: nothing held, nothing pending, no pointer. */
+  function cancelInteraction(): void {
+    clearPend();
+    if (grabbing) endGrab();
+    if (pid !== -1) { try { if (canvas.hasPointerCapture(pid)) canvas.releasePointerCapture(pid); } catch { /* ignore */ } }
+    pid = -1; orbiting = false; pinching = false; provisional = false;
+    touches.clear();
+    canvas.style.cursor = "grab"; canvas.style.touchAction = "pan-y";
+  }
+  const stamp = (e: Event): number => (e.timeStamp > 0 ? e.timeStamp : performance.now());
   function onDown(e: PointerEvent): void {
+    // A primary pointer goes down only when no other pointer of its kind is down: anything left from an earlier
+    // gesture (its pointerup or pointercancel never arrived) is stale, and must not keep this one from working.
+    if (e.isPrimary && (pid !== -1 || pinching || pend || grabbing || orbiting || touches.size > 0)) cancelInteraction();
+    if (!ready) return;
     if (e.pointerType === "touch") touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (pid !== -1 && ready && e.pointerType === "touch" && touches.size === 2) {
+    if (pid !== -1 && e.pointerType === "touch" && touches.size === 2) { // a second finger: whatever the first did ends, the pinch begins
       clearPend();
       if (grabbing) endGrab();
       orbiting = false; pinching = true; azV = elV = 0;
       pinchD0 = touchSpread(); pinchZoom0 = zoom;
+      canvas.style.touchAction = "none";
       e.preventDefault();
       return;
     }
-    if (pid !== -1 || !ready || (e.pointerType === "mouse" && e.button !== 0)) return;
+    if (pid !== -1 || (e.pointerType === "mouse" && e.button !== 0)) return;
     const touch = e.pointerType !== "mouse";
     const hit = pick(e.clientX, e.clientY, touch);
-    pid = e.pointerId; lastX = downX = e.clientX; lastY = downY = e.clientY; lastMoveT = performance.now();
+    pid = e.pointerId; lastX = downX = e.clientX; lastY = downY = e.clientY; lastMoveT = stamp(e);
     if (hit >= 0 && e.pointerType === "touch") {
       const id = e.pointerId;
       clearPend();
       pend = {
         id, hit, z: grabNdcZ,
         timer: window.setTimeout(() => {
-          if (!pend || pend.id !== id || disposed) return;
+          if (!pend || pend.id !== id || pid !== id || disposed) return;
           const p = pend; pend = null;
           if (Math.abs(lastY - downY) > 6) return; // drifting vertically: that is a slow scroll, not a hold
           grabNdcZ = p.z; takeCloth(p.hit, lastX, lastY, id, true); provisional = true;
@@ -923,7 +1037,8 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
       return;
     }
     if (e.pointerId !== pid) return;
-    const now = performance.now(), dt = Math.max(1, now - lastMoveT) / 1000;
+    // event times, not handling times: a slow frame hands over several moves at once
+    const now = stamp(e), dt = Math.max(4, now - lastMoveT) / 1000;
     const dx = e.clientX - lastX, dy = e.clientY - lastY;
     lastX = e.clientX; lastY = e.clientY; lastMoveT = now;
     if (pend && pend.id === e.pointerId) {
@@ -935,12 +1050,12 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     if (grabbing && provisional) {
       const mx = Math.abs(e.clientX - downX), my = Math.abs(e.clientY - downY);
       if (e.timeStamp - downStamp >= TOUCH_HOLD_MS || (mx > TOUCH_SLOP && mx > my)) provisional = false;
-      else if (my > TOUCH_SLOP && my >= mx) { endGrab(); sinceRelease = -1; return; } // it was a swipe all along: let go, the page scrolls
+      else if (my > TOUCH_SLOP && my >= mx) { endGrab(); sinceRelease = -1; G.sim.pullLatch = false; return; } // it was a swipe all along: let go, the page scrolls
     }
     if (grabbing) { setGrabTarget(e.clientX, e.clientY); e.preventDefault(); }
     else if (orbiting) {
       const k = 0.0075;
-      az -= dx * k; azV = (-dx * k) / dt * 0.6;
+      az -= dx * k; azV = azV * 0.35 + ((-dx * k) / dt) * 0.6 * 0.65;
       if (e.pointerType === "mouse") { el = clampEl(el + dy * k * 0.7); elV = 0; }
       needsDraw = true;
     }
@@ -948,12 +1063,12 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
   }
   function onUp(e: PointerEvent): void {
     touches.delete(e.pointerId);
-    if (pinching) { if (touches.size < 2) { pinching = false; pid = -1; } return; }
+    if (pinching) { if (touches.size < 2) { pinching = false; pid = -1; canvas.style.touchAction = "pan-y"; } return; }
     if (e.pointerId !== pid) return;
     pid = -1;
     clearPend();
     if (grabbing) endGrab();
-    if (orbiting && performance.now() - lastMoveT > 80) azV = 0;
+    if (orbiting && stamp(e) - lastMoveT > 80) azV = 0;
     orbiting = false;
     try { canvas.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
     // double tap / double click: back to the settled pose
@@ -971,6 +1086,13 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     else startHome(true);
     needsDraw = true; schedule();
   }
+  // the browser took the pointer away (an element above it, a system gesture): the gesture ends as if cancelled
+  function onLostCapture(e: PointerEvent): void { if (e.pointerId === pid && (grabbing || orbiting || pend)) { cancelInteraction(); schedule(); } }
+  // the page hidden or left mid-gesture: its pointerup will never come
+  function onHidden(): void { if (document.visibilityState === "hidden") cancelInteraction(); }
+  function onBlur(): void { if (pid !== -1 || grabbing || pinching) cancelInteraction(); }
+  // a long press on the cloth is a hold, not a request for the context menu (which would also cancel the pointer)
+  function onContextMenu(e: Event): void { if (grabbing || pend || pinching) e.preventDefault(); }
   function onTouchStart(e: TouchEvent): void { if ((grabbing || pinching || e.touches.length > 1) && e.cancelable) e.preventDefault(); } // keep the page from scrolling while the cloth is held
   function onTouchMove(e: TouchEvent): void { if ((grabbing || pinching) && e.cancelable) e.preventDefault(); }
   function onWheel(e: WheelEvent): void {
@@ -989,11 +1111,17 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
     canvas.addEventListener("touchstart", onTouchStart, { passive: false });
     canvas.addEventListener("touchmove", onTouchMove, { passive: false });
     canvas.addEventListener("wheel", onWheel, { passive: false });
+    canvas.addEventListener("lostpointercapture", onLostCapture);
+    canvas.addEventListener("contextmenu", onContextMenu);
+    document.addEventListener("visibilitychange", onHidden);
+    window.addEventListener("blur", onBlur);
+    window.addEventListener("pagehide", onBlur);
   }
   canvas.addEventListener("webglcontextlost", onLost);
   canvas.addEventListener("webglcontextrestored", onRestored);
 
   function setPaused(p: boolean): void {
+    if (p && !paused) cancelInteraction(); // scrolled away or tab hidden mid-gesture: nothing stays held
     paused = p;
     if (!p) { lastT = performance.now(); schedule(); }
   }
@@ -1026,6 +1154,9 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
       canvas.removeEventListener("pointerup", onUp); canvas.removeEventListener("pointercancel", onUp);
       canvas.removeEventListener("touchstart", onTouchStart); canvas.removeEventListener("touchmove", onTouchMove);
       canvas.removeEventListener("wheel", onWheel);
+      canvas.removeEventListener("lostpointercapture", onLostCapture); canvas.removeEventListener("contextmenu", onContextMenu);
+      document.removeEventListener("visibilitychange", onHidden);
+      window.removeEventListener("blur", onBlur); window.removeEventListener("pagehide", onBlur);
       canvas.removeEventListener("webglcontextlost", onLost); canvas.removeEventListener("webglcontextrestored", onRestored);
       for (const d of disposables) d.dispose();
       weaveTex.dispose(); plainTex.dispose();
@@ -1049,14 +1180,15 @@ export function mountTzitzit(container: HTMLElement, opts: MountOptions): Tzitzi
       },
       release(): void { if (G.sim.grabIdx >= 0) released(); G.sim.grabIdx = -1; },
       reset(): void { resetPose(true); },
-      view() { return { azimuth: az, elevation: el, zoom, grabbed: G.sim.grabIdx, paused, pending: !!pend, homing }; },
+      view() { return { azimuth: az, elevation: el, zoom, grabbed: G.sim.grabIdx, paused, pending: !!pend, homing, pointer: pid, pinching, grabbing }; },
       bounds() { if (settleLeft > 0) settleChunk(1e9); return bounds; },
       textureReady() { return fabricReady; },
       frame(a: number, e: number, d: number, ty: number): void { if (settleLeft > 0) settleChunk(1e9); az = a; el = e; zoom = 1; fixedDist = d; targetY = ty; targetX = 0; needsDraw = true; },
-      render(): void { draw(); },
+      render(): void { drawAlpha = 1; draw(); },
       stats() {
-        return { ...G.counts, solverMsPerFrame: G.sim.lastSolveMs, substeps: G.sim.substeps, kinetic: G.sim.kinetic, strainPasses: G.sim.strainPasses };
+        return { ...G.counts, solverMsPerFrame: G.sim.lastSolveMs, substeps: G.sim.substeps, kinetic: G.sim.kinetic, strainPasses: G.sim.strainPasses, pull: G.sim.pull, recovering: G.sim.recoverT >= 0 };
       },
+      jump() { const j = { move: jumpMove, snap: jumpSnap }; jumpMove = jumpSnap = 0; return j; },
       bench(frames: number): number {
         const t0 = performance.now();
         for (let k = 0; k < frames; k++) G.sim.frame(1 / 60);

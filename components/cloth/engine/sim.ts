@@ -51,9 +51,51 @@ export class ClothSim {
   windGust = 0;
 
   grabIdx = -1;
+  /** where the pointer wants the held particle (set by the caller, at event time) */
   grabX = 0; grabY = 0; grabZ = 0;
   /** The hand never pulls harder than this share of the whole garment's weight: taut cloth holds instead of stretching. */
   grabForce = 0.5;
+  /** Pointer events do not arrive in step with the frames (a phone may deliver two in one frame and none in the next),
+   *  so the hand follows the pointer through a short low-pass (s): it moves every substep instead of in steps, and
+   *  starts from where the held particle is, so taking the cloth never jerks it. 0 = no smoothing. */
+  grabLag = 0.02;
+  /** Mass of one simulated particle relative to one high-quality particle: the coarse grid has heavier particles, and
+   *  the hand's acceleration cap is scaled by it so the held point is as quick at low quality as at high. */
+  massScale = 1;
+  /** A hand opens; it does not vanish. For this long (s) after a release the held particle keeps part of its extra
+   *  weight and the hand part of its pull, both fading out, so cloth that was held taut eases off instead of snapping
+   *  away from the fingers in a single frame. */
+  releaseTime = 0.2;
+  private handX = 0; private handY = 0; private handZ = 0; private handIdx = -1;
+  private relIdx = -1; private relT = 0;
+
+  /** ---- back to its own shape ----
+   *  Friction against the ghost body, a hood that tipped to one side, a fold that caught: after a pull the cloth
+   *  often comes to rest a centimetre or two from where it hung, and nothing in the physics brings it back. So every
+   *  free particle is drawn towards its settled position by a first-order pull (a rate, 1/s) that moves the particle
+   *  and its previous position together: it shifts the pose without adding or taking away speed, so the swing goes
+   *  on as before while its centre glides home. Off while the cloth is held; after a release it rises over
+   *  pullRamp s to pullPeak, holds until pullHold, then falls back (time constant pullDecay) to the weak permanent
+   *  pullRest that undoes slow creep without stilling the draught. Strings take only pullString of it: they swing
+   *  freely. The settled pose itself is never touched (no pull before saveRest()). */
+  pullRest = 0.12;
+  pullPeak = 1.7;
+  pullRamp = 0.45;
+  pullHold = 1.9;
+  pullDecay = 0.8;
+  pullString = 0.25;
+  /** s since the last release while the stronger pull is on, -1 otherwise */
+  recoverT = -1;
+  /** Set by the caller at a release: the pull stays at its peak after pullHold until cleared (the caller has looked
+   *  at the pose and found it home), so cloth the pull is still holding near home is never let go before that look.
+   *  Never longer than pullLatchMax s past pullHold. */
+  pullLatch = false;
+  pullLatchMax = 2.5;
+  private latchT = 0;
+  /** the pull rate (1/s) used in the latest frame */
+  pull = 0;
+  private restReady = false;
+  private wasHeld = false;
   /** Strain limiting: woven cloth does not stretch, and one solver pass per substep lets it.
    *  While the cloth is held (and for a moment after, or whenever a thread is found over-long) the threads (warp,
    *  weft, seams) are solved again in every substep, up to strainIters times, until none is more than strainLimit
@@ -69,6 +111,14 @@ export class ClothSim {
   private limitFrames = 0;
   /** number of leading constraints that are inextensible threads (set by finalize) */
   nStretch = 0;
+  /** of those, the leading ones that are cloth (the strings' come last). While held, and after a release until the
+   *  caller has seen the cloth home (pullLatch), any thread found too long during the solve starts the extra passes:
+   *  a hood dragged off the head hangs on them. Otherwise they run only in frames that start with a cloth thread (not
+   *  a string segment, not a seam or tack under 15 mm) still too long after the previous frame's solve: cloth that
+   *  really is over-stretched. (Mid-solve, some thread next to a seam or a swinging string is always momentarily
+   *  long, and the passes would run on nearly every substep for nothing.) */
+  nStretchCloth = 0;
+  private strained = false;
   totalMass = 0;
 
   private acc = 0;
@@ -80,9 +130,13 @@ export class ClothSim {
   /** how many extra thread passes strain limiting has run so far (a diagnostic: it must not grow while the cloth just hangs) */
   strainPasses = 0;
 
+  /** positions at the start of the latest frame: the renderer draws between this and pos (see lerpTo) */
+  last: Float64Array;
+
   constructor(maxParticles: number, maxConstraints: number) {
     this.pos = new Float64Array(maxParticles * 3);
     this.prev = new Float64Array(maxParticles * 3);
+    this.last = new Float64Array(maxParticles * 3);
     this.vel = new Float64Array(maxParticles * 3);
     this.rest = new Float64Array(maxParticles * 3);
     this.w = new Float64Array(maxParticles);
@@ -102,6 +156,7 @@ export class ClothSim {
     const p = this.pos;
     p[i * 3] = x; p[i * 3 + 1] = y; p[i * 3 + 2] = z;
     this.prev[i * 3] = x; this.prev[i * 3 + 1] = y; this.prev[i * 3 + 2] = z;
+    this.last[i * 3] = x; this.last[i * 3 + 1] = y; this.last[i * 3 + 2] = z;
     this.w[i] = w;
     this.kind[i] = kind;
     return i;
@@ -130,13 +185,16 @@ export class ClothSim {
     this.cA = A; this.cB = B; this.cLen = L; this.cComp = C; this.cGrp = Gp;
     let ns = 0; while (ns < Gp.length && Gp[ns] === 0) ns++;
     this.nStretch = ns;
+    let nc = 0; while (nc < ns && this.kind[A[nc]] !== KIND_STRING && this.kind[B[nc]] !== KIND_STRING) nc++;
+    this.nStretchCloth = nc;
     let m = 0; for (let i = 0; i < this.n; i++) if (this.w[i] > 0) m += 1 / this.w[i];
     this.totalMass = m;
   }
 
   private overStretched(): boolean {
     const pos = this.pos, cA = this.cA, cB = this.cB, cMax = this.cMax;
-    for (let c = 0, n = this.nStretch; c < n; c++) {
+    for (let c = 0, n = this.nStretchCloth; c < n; c++) {
+      if (this.cLen[c] < 0.015) continue;
       const a = cA[c] * 3, b = cB[c] * 3;
       const dx = pos[a] - pos[b], dy = pos[a + 1] - pos[b + 1], dz = pos[a + 2] - pos[b + 2];
       if (dx * dx + dy * dy + dz * dz > cMax[c] * cMax[c]) return true;
@@ -182,13 +240,26 @@ export class ClothSim {
       cHold[c] = Math.max(L[c], settled);
       cMax[c] = L[c] < 0.015 ? cHold[c] + 0.004 : cHold[c] * this.strainLimit; // a seam may gape 4 mm
     }
+    this.restReady = true;
   }
   reset(): void {
-    this.pos.set(this.rest); this.prev.set(this.rest); this.vel.fill(0); this.grabIdx = -1; this.acc = 0;
+    this.pos.set(this.rest); this.prev.set(this.rest); this.last.set(this.rest); this.vel.fill(0);
+    this.grabIdx = -1; this.acc = 0; this.wasHeld = false; this.recoverT = -1; this.handIdx = -1; this.relIdx = -1; this.pullLatch = false;
   }
-  zeroVelocities(): void { this.vel.fill(0); this.prev.set(this.pos); }
+  zeroVelocities(): void { this.vel.fill(0); this.prev.set(this.pos); this.last.set(this.pos); }
 
-  /** Advance by real time; fixed 60 Hz frames with an accumulator. Returns the number of frames simulated. */
+  /** Pull rate (1/s) t seconds after a release (t < 0: no release pending). */
+  pullAt(t: number): number {
+    if (t < 0) return this.pullRest;
+    if (t < this.pullRamp) { const u = t / this.pullRamp; return this.pullPeak * u * u * (3 - 2 * u); }
+    if (t < this.pullHold) return this.pullPeak;
+    return this.pullRest + (this.pullPeak - this.pullRest) * Math.exp(-(t - this.pullHold) / this.pullDecay);
+  }
+
+  /** Advance by real time; fixed 60 Hz frames with an accumulator. Returns the number of frames simulated.
+   *  At 30 fps every call runs two frames; time beyond maxFrames is dropped (never a catch-up spiral), but only the
+   *  excess: the accumulator keeps just under one frame, so a display that runs a little slow does not lose a frame
+   *  every few calls. Draw with lerpTo(alpha()) for motion that is even at any display rate. */
   advance(dtReal: number, maxFrames = 2): number {
     const h = 1 / 60;
     this.acc += Math.min(dtReal, 0.1);
@@ -198,33 +269,64 @@ export class ClothSim {
       this.acc -= h;
       frames++;
     }
-    if (this.acc > h) this.acc = 0; // dropped time: never try to catch up
+    if (this.acc >= h) this.acc = h * 0.999; // dropped time
     return frames;
+  }
+  /** How far real time is past the start of the latest frame, in frames (0..1). */
+  alpha(): number { const a = this.acc * 60; return a < 0 ? 0 : a > 1 ? 1 : a; }
+  /** Positions between the start of the latest frame and its end. The drawn cloth then runs one frame behind the
+   *  simulation, at an even pace, whatever the display rate (30, 60, 90 or 120 Hz). */
+  lerpTo(alpha: number, out: Float64Array): Float64Array {
+    const a = this.last, b = this.pos;
+    for (let i = 0, n = this.n * 3; i < n; i++) out[i] = a[i] + (b[i] - a[i]) * alpha;
+    return out;
   }
 
   frame(h: number): void {
     const t0 = typeof performance !== "undefined" ? performance.now() : 0;
     const sdt = h / this.substeps;
-    if (this.strainIters > 0 && this.nStretch > 0 && this.cMax.length === this.nStretch && (this.grabIdx >= 0 || this.overStretched())) this.limitFrames = 90;
+    this.last.set(this.pos.subarray(0, this.n * 3));
+    // strain limiting: while held, while the pull home is latched (cloth dragged round the body may be hanging on its
+    // limited threads until the caller has looked), for 1.5 s after, and whenever a thread is found over-long
+    const held = this.grabIdx >= 0 || this.relIdx >= 0;
+    this.strained = !held && this.cMax.length === this.nStretch && this.overStretched();
+    if (this.strainIters > 0 && this.nStretch > 0 && this.cMax.length === this.nStretch && (held || this.pullLatch || this.strained)) this.limitFrames = 90;
     this.limiting = this.limitFrames > 0;
     if (this.limiting) this.limitFrames--;
+    // the pull home: off while held, strong for a moment after each release, weak otherwise
+    if (this.grabIdx >= 0) { this.wasHeld = true; this.recoverT = -1; this.pull = 0; this.relIdx = -1; this.pullLatch = false; }
+    else {
+      if (this.wasHeld) { this.wasHeld = false; this.recoverT = 0; this.relIdx = this.handIdx; this.relT = 0; this.latchT = 0; }
+      else if (this.relIdx >= 0 && (this.relT += h) >= this.releaseTime) this.relIdx = -1;
+      this.handIdx = -1;
+      this.pull = this.restReady ? this.pullAt(this.recoverT) : 0;
+      if (this.recoverT >= 0) {
+        if (this.pullLatch && this.recoverT >= this.pullHold && (this.latchT += h) < this.pullLatchMax) this.recoverT = this.pullHold;
+        else { this.recoverT += h; if (this.recoverT > this.pullHold + 6 * this.pullDecay) { this.recoverT = -1; this.pullLatch = false; } }
+      }
+    }
     this.broadPhase();
     for (let s = 0; s < this.substeps; s++) this.substep(sdt);
     if (typeof performance !== "undefined") this.lastSolveMs = performance.now() - t0;
   }
 
   substep(dt: number): void {
-    const n = this.n, pos = this.pos, prev = this.prev, vel = this.vel, w = this.w, nrm = this.nrm, kind = this.kind;
+    const n = this.n, pos = this.pos, prev = this.prev, vel = this.vel, w = this.w, nrm = this.nrm, kind = this.kind, rest = this.rest;
     const gdt = -this.gravity * dt;
     const damp = Math.max(0, 1 - this.damping * dt);
     const vmax = this.vmax, vmax2 = vmax * vmax;
     const k1 = this.dragLin * dt, k2 = this.dragQuad * dt, s1 = this.strDragLin * dt, s2 = this.strDragQuad * dt;
     const wx0 = this.windX, wy0 = this.windY, wz0 = this.windZ, windM = this.windM;
+    const pc = this.pull > 0 ? 1 - Math.exp(-this.pull * dt) : 0, ps = pc * this.pullString;
 
     for (let i = 0, i3 = 0; i < n; i++, i3 += 3) {
       if (w[i] === 0) continue;
       let vx = vel[i3], vy = vel[i3 + 1] + gdt, vz = vel[i3 + 2];
-      const px = pos[i3], py = pos[i3 + 1], pz = pos[i3 + 2];
+      let px = pos[i3], py = pos[i3 + 1], pz = pos[i3 + 2];
+      if (pc > 0) { // the pull home moves the particle and its previous position alike: no speed is added
+        const k = kind[i] === KIND_STRING ? ps : pc;
+        px += (rest[i3] - px) * k; py += (rest[i3 + 1] - py) * k; pz += (rest[i3 + 2] - pz) * k;
+      }
       // slowly varying, spatially uneven air: a travelling swell plus a gust front
       const m = windM[i];
       const rx = vx - wx0 * m, ry = vy - wy0 * m, rz = vz - wz0 * m;
@@ -250,13 +352,23 @@ export class ClothSim {
     // pointer grab: the held particle is heavy and is steered towards the pointer by a velocity servo whose
     // acceleration is capped, so the hand pulls with a bounded force. Slack cloth follows the pointer closely;
     // taut cloth holds the hand back instead of stretching like rubber or being dragged off the shoulders.
-    const g = this.grabIdx;
+    // While the hand opens (releaseTime after a release) the same particle is treated alike, with its extra weight and
+    // the force cap fading out together.
+    const opening = this.grabIdx < 0 && this.relIdx >= 0;
+    const g = opening ? this.relIdx : this.grabIdx;
+    const u = opening ? Math.min(1, this.relT / this.releaseTime) : 0, hold = (1 - u) * (1 - u);
+    const heavy = 0.04 + 0.96 * (1 - hold);
     let gw = 0;
     if (g >= 0) {
       const g3 = g * 3;
-      gw = w[g]; w[g] = gw * 0.04;
-      const aMax = this.grabForce * this.totalMass * this.gravity * w[g];
-      const ex = this.grabX - pos[g3], ey = this.grabY - pos[g3 + 1], ez = this.grabZ - pos[g3 + 2];
+      gw = w[g]; w[g] = gw * heavy;
+      const aMax = this.grabForce * this.totalMass * this.gravity * w[g] * this.massScale * hold;
+      if (!opening) {
+        if (this.handIdx !== g) { this.handIdx = g; this.handX = prev[g3]; this.handY = prev[g3 + 1]; this.handZ = prev[g3 + 2]; }
+        const f = this.grabLag > 0 ? 1 - Math.exp(-dt / this.grabLag) : 1;
+        this.handX += (this.grabX - this.handX) * f; this.handY += (this.grabY - this.handY) * f; this.handZ += (this.grabZ - this.handZ) * f;
+      }
+      const ex = this.handX - pos[g3], ey = this.handY - pos[g3 + 1], ez = this.handZ - pos[g3 + 2];
       const e = Math.sqrt(ex * ex + ey * ey + ez * ez);
       if (e > 1e-9) {
         // approach speed: proportional close in, never faster than the cap can still brake
@@ -273,7 +385,7 @@ export class ClothSim {
     const idt2 = 1 / (dt * dt);
     const cA = this.cA, cB = this.cB, cLen = this.cLen, cComp = this.cComp;
     const cHold = this.cHold, cMax = this.cMax;
-    const nS = this.limiting ? this.nStretch : 0;
+    const nS = this.limiting ? this.nStretch : 0, nTrig = g >= 0 || this.pullLatch ? nS : this.strained ? Math.min(nS, this.nStretchCloth) : 0;
     let over = false;
     for (let c = 0, nc = this.nc; c < nc; c++) {
       const ia = cA[c], ib = cB[c];
@@ -284,7 +396,7 @@ export class ClothSim {
       const dx = pos[a] - pos[b], dy = pos[a + 1] - pos[b + 1], dz = pos[a + 2] - pos[b + 2];
       const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
       if (len < 1e-9) continue;
-      if (c < nS && len > cMax[c]) over = true;
+      if (c < nTrig && len > cMax[c]) over = true;
       const s = -(len - cLen[c]) / ((ws + cComp[c] * idt2) * len);
       const sa = s * wa, sb = s * wb;
       pos[a] += dx * sa; pos[a + 1] += dy * sa; pos[a + 2] += dz * sa;
@@ -313,7 +425,7 @@ export class ClothSim {
         pos[b] -= dx * sb; pos[b + 1] -= dy * sb; pos[b + 2] -= dz * sb;
       }
     }
-    if (g >= 0) w[g] = gw * 0.04;
+    if (g >= 0) w[g] = gw * heavy;
 
     // front panel stays in front of the back panel (cheap cloth–cloth for a garment that never turns)
     const sA = this.sepA, sB = this.sepB, gap = this.sepGap;
