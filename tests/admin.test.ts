@@ -235,7 +235,8 @@ describe("collection slots", () => {
     const slots = (id: string[], tribe = "dan", collectionId = "midbar") =>
       outcome(admin(db, token, "collection.slots", { collectionId, tribe, itemIds: id }));
     expect(await slots(["tz01", "tz02", "tz01"])).toBe("invalid");
-    expect(await slots(["tz01", "tz02", "tz03", "tz04", "tz05", "tz06"])).toBe("slots_full");
+    // the starting limit is 24 pieces per tribe
+    expect(await slots(Array.from({ length: 25 }, (_, i) => `tz${String(i + 1).padStart(2, "0")}`))).toBe("slots_full");
     expect(await slots(["tz01", "no-such-item"])).toBe("invalid");
     expect(await slots(["sh01"])).toBe("invalid"); // archived above
     expect(await slots(["tz01"], "ephraim")).toBe("invalid");
@@ -252,6 +253,7 @@ describe("collection slots", () => {
     expect(c.slots.naftali).toEqual(six);
     await admin(db, token, "settings.save", { slotsPerTribe: 5 });
     expect(await outcome(admin(db, token, "collection.slots", { collectionId: "midbar", tribe: "naftali", itemIds: six }))).toBe("slots_full");
+    await admin(db, token, "settings.save", { slotsPerTribe: 24 });
   });
 
   it("shows a draft item in a slot to the owner only", async () => {
@@ -348,7 +350,7 @@ describe("settings", () => {
     expect(t).toMatchObject({
       whatsapp: "972541234567", calLink: "https://cal.com/shevatim/fitting", instagram: "https://instagram.com/shevatim",
       email: "shop@example.com", announcement: { he: "", en: "", fr: "" }, heroLine: { en: "One thread." },
-      reservationsOpen: true, slotsPerTribe: 5,
+      reservationsOpen: true, slotsPerTribe: 24,
     });
     expect((await catalog(db)).settings).toEqual(t);
     const cleared = await admin<Settings>(db, token, "settings.save", { whatsapp: "", calLink: "", instagram: "" });

@@ -66,7 +66,7 @@ Text contrast: body and secondary text at least 4.5:1 on `--bg`, `--surface` and
 ## Home page, in this order (nothing else)
 1. **Hero**: the film, full viewport, with a warm earth shade at the bottom (not black). The wordmark (cream),
    the one line (settings.heroLine), ONE button: to the collection. Small round controls at the bottom corner:
-   sound and pause. The title's entrance motion stays. No stone strip, no second button, no tiles on this screen.
+   sound and pause. The wordmark is a soft 3D object that assembles from twelve pieces (one per tribe) on load, then a light passes over it once (`LogoAssemble.tsx`). No stone strip, no second button, no tiles on this screen.
 2. **The collection**: small label, the collection's name, one sentence, four pieces, one button "See the
    collection" and a quiet text link "All pieces" (the shop).
 3. **Shop by category**: the six categories as a compact index of small picture tiles (six in one row on
@@ -125,7 +125,7 @@ One small round button (sun / moon), `components/site/Theme.tsx`. It sets `data-
 the choice. An inline script in the document head applies the saved theme before the first paint.
 
 ## Motion
-The hero title's entrance stays. Elsewhere motion only answers an action (slide change, hover swap, menu).
+The hero wordmark assembles once on load (finished at once with reduced motion). Elsewhere motion only answers an action (slide change, hover swap, menu).
 `prefers-reduced-motion` is respected everywhere.
 
 ## Words

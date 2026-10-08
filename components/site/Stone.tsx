@@ -3,7 +3,7 @@ import type { TribeView } from "./tribes";
 import s from "./Choshen.module.css";
 
 /** One stone of the Choshen. Every stone is the same quiet tile now, drawn entirely by the stylesheet
- *  (ground, hairline, and the accent fill of the chosen one), so there is nothing left to set inline.
+ *  (ground, hairline, and the sage fill of the chosen one), so there is nothing left to set inline.
  *  The function stays because listings still spread its result onto their stones. */
 export function stoneStyle(t: TribeView): CSSProperties {
   void t;
