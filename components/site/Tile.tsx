@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
 import { formatPrice, tr } from "@/lib/format";
 import { pick } from "@/lib/i18n";
+import { PRELAUNCH } from "@/lib/launch";
 import type { Item } from "@/lib/types";
 import { useI18n } from "./Providers";
 import { pictureSrcSet, pictureUrl } from "./Pic";
@@ -58,7 +59,7 @@ export default function Tile({ item, sizes, eager }: { item: Item; sizes?: strin
             alt="" decoding="async" onLoad={() => setArrived(true)} />
         ) : null}
         {/* coming soon: the garment under a sand veil, the word in the middle */}
-        {soon ? <span className={s.veil} aria-hidden="true"><span className={s.veilWord}>{t.home.comingSoon}</span><span className={s.veilSub}>{t.shop.nextDrop}</span></span> : null}
+        {soon ? <span className={s.veil} aria-hidden="true"><span className={s.veilWord}>{t.home.comingSoon}</span><span className={s.veilSub}>{PRELAUNCH ? t.shop.atLaunch : t.shop.nextDrop}</span></span> : null}
       </span>
       <span className={s.name}>{name}</span>
       {soon ? <span className="srOnly">{t.home.comingSoon}</span> : item.price != null ? <PriceLine className={s.price} price={item.price} /> : null}

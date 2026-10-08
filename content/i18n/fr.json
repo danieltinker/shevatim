@@ -87,7 +87,8 @@
     "collectionTitle": "La collection {name}",
     "collectionLabel": "La collection",
     "lede": "Toutes les pièces au même endroit. Filtrez par catégorie et par tribu.",
-    "nextDrop": "Dans la prochaine collection"
+    "nextDrop": "Dans la prochaine collection",
+    "atLaunch": "Au lancement"
   },
   "item": {
     "choose": "Choisir une taille",
@@ -119,7 +120,8 @@
     "comingSoonAsk": "Envie d’être prévenu ? Écrivez-nous",
     "left": "Plus que {n}",
     "leftOne": "Dernière pièce",
-    "sizeGone": "épuisé"
+    "sizeGone": "épuisé",
+    "prelaunchNote": "La collection arrive bientôt. La réservation ouvre au lancement."
   },
   "reserve": {
     "title": "Votre réservation",
@@ -163,7 +165,8 @@
     "pausedText": "Les pièces choisies restent enregistrées ici. Vous pourrez les envoyer dès la reprise des réservations.",
     "whatsappInstead": "L’envoyer plutôt sur WhatsApp",
     "whatsappLead": "Bonjour, je souhaite réserver :",
-    "onlyLeft": "Plus que {n}. Réduisez la quantité pour continuer."
+    "onlyLeft": "Plus que {n}. Réduisez la quantité pour continuer.",
+    "err_preview": "Ceci est un aperçu sans la base de données de la boutique : on ne peut pas réserver ici. Sur le site lui-même, la réservation fonctionne."
   },
   "done": {
     "title": "Réservation reçue",

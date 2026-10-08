@@ -9,7 +9,7 @@ import { api } from "./backend";
 import { fill } from "./strings";
 import { isUnauthorized, useStore } from "./store";
 import { Sheet, Thumb } from "./ui";
-import { dateTime, itemMatches, itemThumb, pick } from "./util";
+import { dateTime, itemMatches, itemThumb, pick, stockReady } from "./util";
 
 type Filter = "" | "out" | "low" | "uncounted";
 const LOW = 2; // the shop says "last ones" from this number down
@@ -62,6 +62,16 @@ export function Stock() {
     { key: "low", label: t.stFilterLow, n: counts.low },
     { key: "uncounted", label: t.stFilterUncounted, n: counts.uncounted },
   ];
+
+  // the database does not know stock yet (db/004_stock.sql not applied): say so instead of offering controls that fail
+  if (!stockReady(state.catalog.items)) {
+    return (
+      <section className="adm-stock">
+        <div className="adm-head"><h1>{t.stTitle}</h1></div>
+        <div className="adm-panel adm-empty" role="note"><p>{t.stNotReady}</p></div>
+      </section>
+    );
+  }
 
   return (
     <section className="adm-stock">

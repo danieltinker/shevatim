@@ -4,9 +4,21 @@
 import { useSyncExternalStore } from "react";
 import snapshot from "@/content/catalog.snapshot.json";
 import { getCatalog } from "./api";
+import { PRELAUNCH, PRELAUNCH_LINE } from "./launch";
 import type { Catalog } from "./types";
 
-const SNAPSHOT = snapshot as unknown as Catalog;
+/** What the shop shows. Before the launch (lib/launch.ts) every piece is "coming soon" and reserving is closed,
+ *  whatever the database says; the database itself is left as it is. */
+function shape(c: Catalog): Catalog {
+  if (!PRELAUNCH) return c;
+  return {
+    ...c,
+    items: c.items.map((i) => (i.comingSoon ? i : { ...i, comingSoon: true })),
+    settings: { ...c.settings, reservationsOpen: false, announcement: PRELAUNCH_LINE },
+  };
+}
+
+const SNAPSHOT = shape(snapshot as unknown as Catalog);
 const KEY = "shv.catalog";
 let current: Catalog = SNAPSHOT;
 let started = false;
@@ -14,7 +26,7 @@ const listeners = new Set<() => void>();
 
 function set(next: Catalog) {
   if (!next || !Array.isArray(next.items) || next.version === current.version) return;
-  current = next;
+  current = shape(next);
   listeners.forEach((l) => l());
 }
 

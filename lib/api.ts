@@ -12,6 +12,8 @@ import { ApiError } from "./types";
 // development server falls back to the local database, so a visitor's browser is never sent to localhost.
 const URL_ = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? (process.env.NODE_ENV === "production" ? "" : "http://localhost:54321")).replace(/\/$/, "");
 const KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? "dev-key";
+/** False on a build that has no database address (a Vercel preview): nothing can be reserved or saved there. */
+export const HAS_BACKEND = URL_ !== "";
 // Supabase's publishable keys (sb_publishable_…) go on the `apikey` header only; they are not JWTs, so they must
 // not be sent as a Bearer token. A legacy anon key (a JWT, "eyJ…") is sent on both, as it always was.
 const AUTH: Record<string, string> = KEY.startsWith("eyJ") ? { apikey: KEY, Authorization: `Bearer ${KEY}` } : { apikey: KEY };

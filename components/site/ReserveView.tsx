@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { createReservation } from "@/lib/api";
+import { HAS_BACKEND, createReservation } from "@/lib/api";
 import { bag, useBag } from "@/lib/bag";
 import { refreshCatalog, useCatalog } from "@/lib/catalog";
 import { fill, formatPrice, isEmail, isPhone, isReservationCode, normalizePhone, priceOf, tr } from "@/lib/format";
@@ -98,7 +98,8 @@ export function ReserveView() {
         requestAnimationFrame(() => (form.current?.elements.namedItem("name") as HTMLElement | null)?.focus());
         return;
       }
-      setFailure(t.reserve[k]);
+      // a preview build has no database: say so, instead of blaming the visitor's connection
+      setFailure(code === "network" && !HAS_BACKEND ? t.reserve.err_preview : t.reserve[k]);
       if (code === "item_unavailable") {
         // the catalogue this page holds is out of date: read it again so the line that is gone is marked
         setFlagged(true);

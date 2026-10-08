@@ -11,6 +11,7 @@ import { Collections } from "./Collections";
 import { Items } from "./Items";
 import { SettingsScreen } from "./Settings";
 import { Stock } from "./Stock";
+import { PRELAUNCH } from "@/lib/launch";
 
 const SESSION_KEY = "shv-admin-session"; // sessionStorage only: closing the tab signs the owner out
 const LANG_KEY = "shv-admin-lang";
@@ -248,6 +249,7 @@ export default function AdminApp() {
           ) : <p className="adm-loading">{t.loading}</p>
         ) : (
           <StoreCtx.Provider value={store}>
+            {PRELAUNCH ? <p className="adm-notice adm-prelaunch" role="note">{t.prelaunchNotice}</p> : null}
             {section === "reservations" ? <Reservations /> : null}
             {section === "collections" ? <Collections /> : null}
             {section === "items" ? <Items /> : null}

@@ -7,6 +7,9 @@ import { asset } from "@/lib/asset";
 import { useI18n } from "./Providers";
 
 export const SOUND_KEY = "shv-sound";
+/** Sound is switched off for the whole site (8 Oct 2026, the owner's request): no speaker button, no track, and the
+ *  film stays muted, also for visitors who had turned sound on before. Set to true to bring it back as it was. */
+export const SOUND_ON_SITE = false;
 const TRACK = "/media/audio/midbar-ambient.m4a";
 // The files themselves are quiet (the track about -28 LUFS, the film's sound about -21): iPhones ignore a page's
 // volume setting and play every file at full level, so the level has to be right in the file. The numbers below
@@ -104,7 +107,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let saved = false;
     try { saved = window.localStorage.getItem(SOUND_KEY) === "on"; } catch { /* ignore */ }
-    if (saved) { onRef.current = true; setOn(true); apply(); }
+    if (saved && SOUND_ON_SITE) { onRef.current = true; setOn(true); apply(); }
     // a remembered "on" can only start after the first tap or key on this page
     const kick = () => { if (onRef.current) apply(); };
     // (phones count a finished tap, not the touch going down)
@@ -131,6 +134,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 export function SoundToggle({ className }: { className?: string }) {
   const { t } = useI18n();
   const { on, toggle } = useSound();
+  if (!SOUND_ON_SITE) return null;
   return (
     <button type="button" className={`iconBtn ${className ?? ""}`} onClick={toggle} aria-pressed={on} aria-label={t.sound.label} title={on ? t.sound.off : t.sound.on}>
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

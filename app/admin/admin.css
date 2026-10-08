@@ -80,6 +80,7 @@ body { margin: 0; }
 .adm-hint { color: var(--ink2); font-size: 14px; line-height: 1.45; }
 .adm-error { color: var(--bad); font-size: 15px; font-weight: 500; }
 .adm-notice { background: var(--tek-soft); border-inline-start: 3px solid var(--tek); padding: 10px 12px; font-size: 15px; }
+.adm .adm-prelaunch { margin-block-end: 20px; }
 .adm-rule { border: 0; border-block-start: 1px solid var(--line); margin-block: 16px; }
 .adm-sheet-body > .adm-rule { margin-block: 0; inline-size: 100%; }
 .adm-code { font-weight: 600; letter-spacing: .02em; }

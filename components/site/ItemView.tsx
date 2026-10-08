@@ -9,6 +9,7 @@ import { fill, priceOf, tr } from "@/lib/format";
 import { pick, type Dict } from "@/lib/i18n";
 import { LOCALES, type Locale, type Picture } from "@/lib/types";
 import { asset } from "@/lib/asset";
+import { PRELAUNCH } from "@/lib/launch";
 import { pictureSrcSet, pictureUrl } from "./Pic";
 import { useI18n } from "./Providers";
 import { PriceLine } from "./Tile";
@@ -165,7 +166,7 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
           {soon ? (
             <div className={s.soonBox}>
               <span className={`btn ${s.soonPill}`} aria-disabled="true">{t.home.comingSoon}</span>
-              <p className={s.soonNote}>{t.item.comingSoonNote}</p>
+              <p className={s.soonNote}>{PRELAUNCH ? t.item.prelaunchNote : t.item.comingSoonNote}</p>
               {catalog.settings.whatsapp ? (
                 <a className="link" href={`https://wa.me/${catalog.settings.whatsapp}?text=${encodeURIComponent(`${name} [${item.code}]`)}`} target="_blank" rel="noopener noreferrer">{t.item.comingSoonAsk}</a>
               ) : null}

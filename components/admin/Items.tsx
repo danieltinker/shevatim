@@ -6,7 +6,8 @@ import { api } from "./backend";
 import { fill } from "./strings";
 import { isUnauthorized, useStore } from "./store";
 import { Field, L10nFields, Price, SaveButton, Thumb, Toggle } from "./ui";
-import { TRIBES, itemMatches, itemThumb, l10n, parseShekels, pick, pictureUrl, priceText } from "./util";
+import { TRIBES, itemMatches, itemThumb, l10n, parseShekels, pick, pictureUrl, priceText, stockReady } from "./util";
+import { PRELAUNCH } from "@/lib/launch";
 
 export function Items() {
   const { route, state, t } = useStore();
@@ -136,6 +137,9 @@ function ItemForm({ item }: { item: Item | null }) {
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const isTz = category === "tzitziyot";
+  // the switch needs the database step (db/004_stock.sql); before the launch the whole site is "coming soon" anyway
+  const soonWorks = stockReady(state.catalog.items);
+  const soonLocked = PRELAUNCH || !soonWorks;
 
   const touch = () => { setSaved(false); setDirty(true); };
   useEffect(() => () => setDirty(false), [setDirty]);
@@ -171,7 +175,7 @@ function ItemForm({ item }: { item: Item | null }) {
       };
       let out = await call((tok) => api.adminSaveItem(tok, payload));
       // "coming soon" has its own call; the editor's save leaves it as it is
-      if (comingSoon !== (out.comingSoon ?? false)) { const id = out.id; out = await call((tok) => api.adminSetComingSoon(tok, id, comingSoon)); }
+      if (!soonLocked && comingSoon !== (out.comingSoon ?? false)) { const id = out.id; out = await call((tok) => api.adminSetComingSoon(tok, id, comingSoon)); }
       putItem(out);
       // take the screen from what the server answered
       setName(l10n(out.name)); setDesc(l10n(out.description)); setPrice(priceText(out.price)); setPictures(out.pictures ?? []); setComingSoon(out.comingSoon ?? false);
@@ -353,8 +357,8 @@ function ItemForm({ item }: { item: Item | null }) {
                 ))}
               </div>
             </fieldset>
-            <Toggle checked={comingSoon} onChange={(v) => { setComingSoon(v); touch(); }} label={t.itSoonToggle}
-              hint={comingSoon && status !== "published" ? `${t.itSoonHint} ${t.itSoonDraft}` : t.itSoonHint} />
+            <Toggle checked={comingSoon} onChange={(v) => { setComingSoon(v); touch(); }} label={t.itSoonToggle} disabled={soonLocked}
+              hint={PRELAUNCH ? t.itSoonPrelaunch : !soonWorks ? t.itSoonNotReady : comingSoon && status !== "published" ? `${t.itSoonHint} ${t.itSoonDraft}` : t.itSoonHint} />
             <Toggle checked={soldOut} onChange={(v) => { setSoldOut(v); touch(); }} label={t.itSoldOutToggle} hint={t.itSoldOutHint} />
             {item ? (
               <a className="adm-btn" href={`#/stock/${encodeURIComponent(item.id)}`} onClick={(e) => { e.preventDefault(); go(`stock/${encodeURIComponent(item.id)}`); }}>{t.itStockLink}</a>

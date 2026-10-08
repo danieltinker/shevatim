@@ -18,6 +18,9 @@ export const tribeName = (key: TribeKey | string | null, lang: AdminLang): strin
   return t ? (lang === "he" ? t.he : t.en) : "";
 };
 
+/** True once the database knows stock and "coming soon" (db/004_stock.sql): the owner's items then carry `stock`. */
+export const stockReady = (items: Item[]): boolean => items.length === 0 || items.some((i) => i.stock !== undefined);
+
 export const EMPTY_L10N: L10n = { he: "", en: "", fr: "" };
 export const l10n = (v: Partial<L10n> | null | undefined): L10n => ({ he: v?.he ?? "", en: v?.en ?? "", fr: v?.fr ?? "" });
 /** A name in the interface language, falling back to whichever language has text. */
