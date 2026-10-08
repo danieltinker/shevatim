@@ -13,9 +13,14 @@ export function Collections() {
   return route[1] ? <Board id={route[1]} /> : <CollectionList />;
 }
 
-function filledCount(c: Collection, per: number): number {
-  return TRIBES.reduce((n, tr) => n + Math.min(per, (c.slots?.[tr.key] ?? []).length), 0);
+/** How many pieces a collection holds, and in how many tribes. */
+function filledCount(c: Collection, per: number): { pieces: number; tribes: number } {
+  let pieces = 0, tribes = 0;
+  for (const tr of TRIBES) { const n = Math.min(per, (c.slots?.[tr.key] ?? []).length); pieces += n; if (n) tribes++; }
+  return { pieces, tribes };
 }
+/** Pieces per tribe: as many as the owner wants, up to the setting (24 by default). */
+const DEFAULT_PER_TRIBE = 24;
 
 function CollectionList() {
   const { t, lang, state, go, call, putCollection, toast, errText } = useStore();
@@ -23,7 +28,7 @@ function CollectionList() {
   const [name, setName] = useState<L10n>(EMPTY_L10N);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const per = state.catalog.settings.slotsPerTribe || 5;
+  const per = state.catalog.settings.slotsPerTribe || DEFAULT_PER_TRIBE;
   const list = [...state.catalog.collections].sort((a, b) => Number(b.isCurrent) - Number(a.isCurrent) || a.sort - b.sort);
 
   const create = async () => {
@@ -52,7 +57,7 @@ function CollectionList() {
               <a className="adm-panel adm-colrow" href={`#/collections/${encodeURIComponent(c.id)}`}>
                 <div>
                   <h2 dir="auto">{pick(c.name, lang)}</h2>
-                  <p className="adm-hint"><bdi>{fill(t.colProgress, { filled: filledCount(c, per), total: per * 12 })}</bdi></p>
+                  <p className="adm-hint"><bdi>{(() => { const f = filledCount(c, per); return fill(t.colProgress, { filled: f.pieces, tribes: f.tribes }); })()}</bdi></p>
                 </div>
                 <div className="adm-chips">
                   {c.isCurrent ? <span className="adm-chip is-accent">{t.colCurrent}</span> : null}
@@ -79,7 +84,7 @@ type SlotState = { tribe: TribeInfo; index: number } | null;
 function Board({ id }: { id: string }) {
   const { t, lang, state, go, call, putCollection, toast, errText } = useStore();
   const col = state.catalog.collections.find((c) => c.id === id);
-  const per = state.catalog.settings.slotsPerTribe || 5;
+  const per = state.catalog.settings.slotsPerTribe || DEFAULT_PER_TRIBE;
   const [picker, setPicker] = useState<PickerState>(null);
   const [slot, setSlot] = useState<SlotState>(null);
   const [busyTribe, setBusyTribe] = useState<TribeKey | null>(null);
@@ -99,7 +104,7 @@ function Board({ id }: { id: string }) {
 
   /** Every slot change sends the tribe's full ordered list and redraws from what the server answers. */
   const setSlots = async (tribe: TribeKey, ids: string[]): Promise<boolean> => {
-    if (ids.length > per) { toast(t.errRowFull, "bad"); return false; }
+    if (ids.length > per) { toast(fill(t.errRowFull, { total: per }), "bad"); return false; }
     setBusyTribe(tribe);
     try {
       const saved = await call((tok) => api.adminSetSlots(tok, col.id, tribe, ids));
@@ -133,8 +138,8 @@ function Board({ id }: { id: string }) {
       {showSettings ? <CollectionSettings key={col.id} col={col} /> : null}
 
       <div className="adm-progress">
-        <p><bdi>{fill(t.colProgress, { filled, total: per * 12 })}</bdi></p>
-        <div className="adm-progress-bar" role="progressbar" aria-valuemin={0} aria-valuemax={per * 12} aria-valuenow={filled}><span style={{ inlineSize: `${(filled / (per * 12)) * 100}%` }} /></div>
+        <p><bdi>{fill(t.colProgress, { filled: filled.pieces, tribes: filled.tribes })}</bdi></p>
+        <div className="adm-progress-bar" role="progressbar" aria-valuemin={0} aria-valuemax={12} aria-valuenow={filled.tribes}><span style={{ inlineSize: `${(filled.tribes / 12) * 100}%` }} /></div>
       </div>
 
       <div className="adm-board">
@@ -145,14 +150,14 @@ function Board({ id }: { id: string }) {
               <header className="adm-tribe-head">
                 <span className="adm-stone" style={{ background: tr.hex }} aria-hidden="true" />
                 <h2>{lang === "he" ? tr.he : tr.en}</h2>
-                <bdi className="adm-tribe-count">{fill(t.slotOf, { n: Math.min(ids.length, per), total: per })}</bdi>
+                <bdi className="adm-tribe-count">{fill(t.slotOf, { n: Math.min(ids.length, per) })}</bdi>
               </header>
               <ol className="adm-slots">
-                {Array.from({ length: Math.max(per, ids.length) }, (_, i) => {
-                  const itemId = ids[i];
+                {/* the pieces already in the tribe, then one "add" button for as long as there is room */}
+                {[...ids.map((itemId, i) => ({ itemId, i })), ...(ids.length < per ? [{ itemId: "", i: ids.length }] : [])].map(({ itemId, i }) => {
                   if (!itemId) {
                     return (
-                      <li key={`e${i}`}>
+                      <li key="add">
                         <button type="button" className="adm-slot adm-slot-empty" onClick={() => setPicker({ tribe: tr, replaceIndex: null })}>
                           <span className="adm-slot-plus" aria-hidden="true">+</span>
                           <span>{t.slotAdd}</span>

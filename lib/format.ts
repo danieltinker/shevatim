@@ -26,7 +26,7 @@ export function itemMap(c: Catalog): Map<string, Item> {
 export function slotItems(c: Catalog, col: Collection | null, tribe: TribeKey): Item[] {
   if (!col) return [];
   const m = itemMap(c);
-  return (col.slots[tribe] ?? []).map((id) => m.get(id)).filter((x): x is Item => !!x).slice(0, c.settings.slotsPerTribe || 5);
+  return (col.slots[tribe] ?? []).map((id) => m.get(id)).filter((x): x is Item => !!x).slice(0, c.settings.slotsPerTribe || 24);
 }
 
 /** The price to show for an item (or one of its variants); null = not priced yet. */

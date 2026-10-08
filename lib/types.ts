@@ -86,7 +86,7 @@ export interface Settings {
   calLink: string;        // Cal.com booking link (full URL) or ""
   announcement: L10n;     // thin bar above the header; all empty = hidden
   reservationsOpen: boolean;
-  slotsPerTribe: number;  // 5
+  slotsPerTribe: number;  // pieces per tribe in a collection (24 by default; the back office board adds them one by one)
   heroLine: L10n;
 }
 
