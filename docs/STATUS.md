@@ -27,13 +27,30 @@ Not done / to check by a person:
   cream garments are low in contrast on the sand ground.
 - The six category pictures are crops of campaign pictures and film stills, not product shots.
 
+## Stock and "coming soon" (branch `desert`, 8 Oct 2026): built, database step not applied
+- Back office → **Stock** (`#/stock`): per piece and size, how many the owner has in the studio. Sizes start
+  "not counted" and behave as before (no limit). A counted size: − / + buttons, or type the number and Update;
+  shows free to reserve, held by open reservations, handed over; "stop counting" returns it to no limit; a history
+  of every change (count, by hand, reserved SHV-…, back from a cancellation). Filters: out, few left, not counted.
+  The number typed is free + held, so the owner counts the shelf; it cannot go below what open reservations hold.
+- Reservations take counted pieces at once (refused when not enough); cancelling gives them back; reopening a
+  cancelled reservation takes them again or stays cancelled. Reservations made before counting give nothing back.
+- The shop sees only availability: a size at 0 shows "· sold out" and cannot be chosen, all sizes at 0 = sold out,
+  and the last one or two say "last one" / "2 left". The owner's numbers never reach the shop.
+- Item editor → **Coming soon** switch (saved with the item). In the shop the card gets the approved "sand veil"
+  (option B): the picture faded under sand, "coming soon · next drop", no price; the piece page has no price, no
+  sizes, no button, and a WhatsApp "ask about it" link when WhatsApp is set. Reservations refuse it.
+- Database: `db/004_stock.sql` (tables `stock`, `stock_moves`, column `items.coming_soon`, new public function
+  `shv_admin_stock`). Backward compatible with the live code. **Order to go live:** apply 004 to Supabase (run it in
+  the SQL editor; it has no destructive statements), then merge `desert` → `main`, then set "pieces per tribe" to 24.
+
 ## Where everything is
 | Thing | Where |
 |---|---|
 | Live site | https://shevatim.vercel.app (Vercel project `shevatim`, team "danielb534-6388's projects", preset Next.js, repository root) |
 | Code | GitHub `danieltinker/shevatim` (private), branch `main`. Every push to `main` redeploys production. |
 | Back office | https://shevatim.vercel.app/admin/ |
-| Database | Supabase project `halom-studio` (`zemdhczqlhkabfwxccqq`), private schema `shevatim`, four public functions `shv_catalog`, `shv_reserve`, `shv_admin_login`, `shv_admin`. Pictures the owner uploads go to the bucket `shevatim-media`. |
+| Database | Supabase project `halom-studio` (`zemdhczqlhkabfwxccqq`), private schema `shevatim`, four public functions `shv_catalog`, `shv_reserve`, `shv_admin_login`, `shv_admin` (a fifth, `shv_admin_stock`, comes with `db/004_stock.sql`). Pictures the owner uploads go to the bucket `shevatim-media`. |
 | Build variables | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_KEY` (publishable key). Share previews follow the Vercel production domain by themselves; set `NEXT_PUBLIC_SITE_URL` only to pin another address. |
 | Source media | `~/Documents/shevatim` on the founder's Mac, sorted into `01_brand` … `06_other` (`SORTING.md`, `sorting_manifest.csv`). |
 | Earlier build history | branch `shevatim` of `danieltinker/halom-models` (up to 6 Oct 2026, before this repository existed). |
