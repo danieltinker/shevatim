@@ -9,10 +9,11 @@
 :global(html[lang="he"]) .display { line-height: 1.2; }
 .lede { max-inline-size: 56ch; margin-block-start: clamp(16px, 1.8vw, 24px); }
 .quiet {
-  display: inline-block; padding-block: 10px; font-size: 15px; color: var(--muted);
+  display: inline-block; padding-block: 10px; font-size: 15px; color: var(--muted); border-radius: 4px;
   text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 6px;
+  transition: color .2s ease, text-decoration-color .2s ease;
 }
-@media (hover: hover) { .quiet:hover { color: var(--fg); text-decoration-color: var(--fg); } }
+@media (hover: hover) { .quiet:hover { color: var(--sage); text-decoration-color: var(--sage); } }
 .head .quiet { margin-block-start: 8px; }
 
 /* the collection: four pieces, then the way in */
@@ -26,33 +27,80 @@
 @media (min-width: 768px) { .catGrid { gap: 44px 24px; } }
 @media (min-width: 1024px) { .catGrid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 24px; } }
 .cat { display: block; text-decoration: none; color: var(--fg); }
-.catFrame { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; background: var(--stage); }
+/* small picture boxes: --r-box on phones (three across), --r-card from tablets up */
+.catFrame {
+  position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; isolation: isolate; background: var(--stage);
+  border-radius: var(--r-box); transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .25s ease;
+}
+@media (min-width: 768px) { .catFrame { border-radius: var(--r-card); } }
 .catMedia { inline-size: 100% !important; block-size: 100% !important; object-fit: cover; display: block; }
 .catHold, .catZoom { display: block; inline-size: 100%; block-size: 100%; }
 .catClip { position: absolute; inset: 0; }
-.catName { display: block; margin-block-start: 12px; font-family: var(--font-display); font-weight: 600; font-size: clamp(15px, 1.5vw, 19px); line-height: 1.2; overflow-wrap: anywhere; }
+.catName { display: block; margin-block-start: 12px; font-family: var(--font-display); font-weight: 600; font-size: clamp(15px, 1.5vw, 19px); line-height: 1.2; overflow-wrap: anywhere; transition: color .2s ease; }
 .soon { display: block; font-size: var(--fs-small); color: var(--muted); margin-block-start: 2px; }
-.cat:focus-visible { outline-offset: 6px; }
+/* under the pointer: the box rises a little, a fine sage ring, the name in sage */
+@media (hover: hover) and (pointer: fine) {
+  .cat:hover .catFrame { transform: var(--lift); box-shadow: 0 0 0 1px var(--sage); }
+  .cat:hover .catName { color: var(--sage); }
+}
+/* the keyboard ring follows the rounded picture box */
+.cat:focus-visible { outline: none; }
+.cat:focus-visible .catFrame { outline: 2px solid var(--sage); outline-offset: 3px; }
+.cat:focus-visible .catName { color: var(--sage); }
+@media (prefers-reduced-motion: reduce) { .catFrame, .catName, .quiet { transition: none; } .cat:hover .catFrame { transform: none; } }
 
-/* lookbook: large pictures with air. Phones: one column, wide and tall in turn. From tablets up: a calm
-   asymmetric grid, a wide picture beside a tall one, sides swapping from row to row. */
+/* lookbook: one dense, continuous mosaic from edge to edge (the page's max width does not apply here). Each
+   picture has a cell of its own (the order in Story.tsx is the layout): big 2x2, tall 1x2, wide 2x1 and single
+   cells, joined by thin seams, every row filled. Rows take their height from the width, so the cells keep their
+   shape at every size. Phones: two columns, eight rows, ten pictures. From 640px: four columns, five rows, eleven. */
+.lookSection { padding-block: var(--section-y); }
+.lookHead { padding-inline: var(--gutter); }
 .lookLabel { margin-block-end: clamp(24px, 3vw, 40px); }
-.look { display: grid; gap: 24px; }
-.look figure { margin: 0; overflow: hidden; background: var(--stage); }
-@media (max-width: 639px) { .look > :nth-child(n + 6) { display: none; } }
+.lookFrame { --seam: clamp(6px, .7vw, 10px); padding-inline: var(--seam); container-type: inline-size; }
+.look {
+  display: grid; gap: var(--seam);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: calc((100vw - 3 * var(--seam)) / 2 * .75);
+  grid-auto-rows: calc((100cqi - var(--seam)) / 2 * .75);
+}
+.look figure { margin: 0; min-block-size: 0; overflow: hidden; isolation: isolate; border-radius: var(--r-box); background: var(--stage); }
+/* the picture fills its cell; the cell crops it (object-position in Story.tsx keeps the people in view) */
+.look figure img { inline-size: 100% !important; block-size: 100% !important; }
+.look > :nth-child(1) { grid-column: 1 / span 2; grid-row: 1 / span 2; }  /* big */
+.look > :nth-child(2) { grid-column: 1; grid-row: 3 / span 2; }           /* tall */
+.look > :nth-child(3) { grid-column: 2; grid-row: 3; }
+.look > :nth-child(4) { grid-column: 2; grid-row: 4; }
+.look > :nth-child(5) { grid-column: 1; grid-row: 5; }
+.look > :nth-child(6) { grid-column: 2; grid-row: 5; }
+.look > :nth-child(7) { grid-column: 2; grid-row: 6 / span 2; }           /* tall */
+.look > :nth-child(8) { grid-column: 1; grid-row: 6; }
+.look > :nth-child(10) { grid-column: 1; grid-row: 7; }
+.look > :nth-child(9) { grid-column: 1 / span 2; grid-row: 8; }           /* wide */
+.look > :nth-child(n + 11) { display: none; }
 @media (min-width: 640px) {
-  .look { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(24px, 2.8vw, 40px); }
-  .look > :nth-child(4n + 1) { grid-column: 1 / span 7; }
-  .look > :nth-child(4n + 2) { grid-column: 9 / span 4; }
-  .look > :nth-child(4n + 3) { grid-column: 1 / span 4; }
-  .look > :nth-child(4n + 4) { grid-column: 6 / span 7; }
-  .look { align-items: stretch; }
-  .look figure img { block-size: 100% !important; } /* a row is as tall as its tall picture; the wide one fills it */
+  .look {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: calc((100vw - 5 * var(--seam)) / 4 * .66);
+    grid-auto-rows: calc((100cqi - 3 * var(--seam)) / 4 * .66);
+  }
+  .look > :nth-child(1) { grid-column: 1 / span 2; grid-row: 1 / span 2; }  /* big */
+  .look > :nth-child(2) { grid-column: 3; grid-row: 1 / span 2; }           /* tall */
+  .look > :nth-child(3) { grid-column: 4; grid-row: 1; }
+  .look > :nth-child(4) { grid-column: 4; grid-row: 2; }
+  .look > :nth-child(5) { grid-column: 1; grid-row: 3; }
+  .look > :nth-child(6) { grid-column: 1; grid-row: 4; }
+  .look > :nth-child(7) { grid-column: 2; grid-row: 3 / span 2; }           /* tall */
+  .look > :nth-child(8) { grid-column: 3 / span 2; grid-row: 3 / span 2; }  /* big */
+  .look > :nth-child(9) { grid-column: 1 / span 2; grid-row: 5; }           /* wide */
+  .look > :nth-child(10) { grid-column: 3; grid-row: 5; }
+  .look > :nth-child(11) { display: block; grid-column: 4; grid-row: 5; }
+  .look > :nth-child(n + 12) { display: none; }
 }
 
 /* the crew */
 .crewPics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.crewPics figure { margin: 0; overflow: hidden; background: var(--stage); }
+.crewPics figure { margin: 0; overflow: hidden; background: var(--stage); border-radius: var(--r-box); }
+@media (min-width: 768px) { .crewPics figure { border-radius: var(--r-card); } }
 @media (min-width: 768px) { .crewPics { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 2.2vw, 32px); } }
 
 /* how reserving works */
