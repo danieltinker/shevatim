@@ -20,11 +20,8 @@
   display: flex; flex-direction: column; align-items: center; text-align: center;
 }
 .mark { margin: 0; line-height: 0; }
-.ink {
-  display: block; inline-size: min(64vw, 480px, 52vh); aspect-ratio: 1252 / 484; background: var(--cream);
-  -webkit-mask: var(--mark) center / contain no-repeat; mask: var(--mark) center / contain no-repeat;
-}
-@media (max-width: 420px) and (max-resolution: 2dppx) { .ink { -webkit-mask-image: var(--mark-small); mask-image: var(--mark-small); } }
+/* the wordmark's box: its final size from the first frame (the object inside is drawn by LogoAssemble) */
+.ink { inline-size: min(64vw, 480px, 52vh); aspect-ratio: 1252 / 484; }
 .line { font-family: var(--font-display); font-weight: 500; font-size: clamp(19px, 1.9vw, 26px); line-height: 1.3; margin-block-start: clamp(8px, 1.6vh, 16px); }
 .cta { margin-block-start: clamp(24px, 4.2vh, 40px); min-inline-size: 208px; }
 
@@ -51,13 +48,13 @@
   .cta { margin-block-start: 12px; }
 }
 
-/* the one orchestrated moment: the wordmark, the line and the button rise and settle in turn, once */
+/* the one orchestrated moment, once: the wordmark assembles from its twelve pieces and the light passes over it
+   (LogoAssemble), then the line and the button rise and settle in turn */
 @media (prefers-reduced-motion: no-preference) {
-  .mark, .line, .cta { animation: rise 1.2s cubic-bezier(.16, 1, .3, 1) both; }
-  .mark { animation-delay: .15s; }
-  .line { animation-delay: .5s; }
-  .cta { animation-delay: .78s; }
-  .controls { animation: appear .9s ease 1.2s both; }
+  .line, .cta { animation: rise 1.2s cubic-bezier(.16, 1, .3, 1) both; }
+  .line { animation-delay: 2.05s; }
+  .cta { animation-delay: 2.3s; }
+  .controls { animation: appear .9s ease 2.65s both; }
 }
 @media (prefers-reduced-motion: reduce) { .controls .ctl { transition: none; } }
 @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }

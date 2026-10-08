@@ -1,0 +1,101 @@
+/* The hero wordmark as a soft matte object. The box (.logo) gets its size from the hero; every layer inside is
+   absolutely placed in it, so nothing here can move the layout. Lengths are in cqi (1cqi = 1/100 of the
+   wordmark's width), so the depth, the shadows and the motion keep their proportions from a phone to a wide
+   screen. The wordmark is never mirrored: positions are physical (left), not logical. */
+.logo {
+  position: relative; display: block; container-type: inline-size;
+  --m: var(--mark); /* the mask in use: the hero sets --mark and --mark-small */
+  --deep: .78cqi; /* how far the sides reach below the face: a few px, never more than ~1.2 device px per step */
+}
+@media (max-width: 420px) and (max-resolution: 2dppx) { .logo { --m: var(--mark-small); } }
+
+.shadow, .shadowInk, .obj, .body, .pieces, .sheen { position: absolute; inset: 0; display: block; }
+
+/* every layer of the object is the wordmark drawn through its PNG. The PNG's empty area is not quite empty
+   (alpha 1 or 2 of 255 everywhere): stacked, that haze would show as a grey box, so the shape is the mask
+   intersected with itself (alpha squared), which leaves nothing there and keeps the letters */
+.side, .face, .shadowInk {
+  -webkit-mask: var(--m) center / contain no-repeat, var(--m) center / contain no-repeat;
+  -webkit-mask-composite: source-in;
+  mask: var(--m) center / contain no-repeat, var(--m) center / contain no-repeat;
+  mask-composite: intersect;
+}
+.side, .face {
+  position: absolute; display: block; width: 100cqi;
+  top: var(--bleed, 0); bottom: var(--bleed, 0); left: var(--shift, 0);
+}
+
+/* the face: matte cream, lit softly from above */
+.face { background: linear-gradient(to bottom, #F8F2E7 6%, #F0E6D4 52%, #E4D6BF 96%); }
+/* the sides: six copies, each a little lower and a little darker, from light sand under the face to clay at the
+   back; drawn with transforms so the steps can be finer than a pixel and the edge stays smooth */
+.side { transform: translateY(calc(var(--deep) * var(--k))); background: var(--c); }
+.side:nth-child(1) { --k: 1; --c: #A88F71; }
+.side:nth-child(2) { --k: .833; --c: #B59D80; }
+.side:nth-child(3) { --k: .667; --c: #C2AC8F; }
+.side:nth-child(4) { --k: .5; --c: #CEBA9F; }
+.side:nth-child(5) { --k: .333; --c: #D9C8AF; }
+.side:nth-child(6) { --k: .167; --c: #E3D5BF; }
+
+/* the soft shadow on the film: the wordmark's own shape in the earth of the shade, low and blurred */
+.shadow { transform: translateY(2cqi); filter: blur(1.3cqi); opacity: .7; }
+.shadowInk { background: rgb(var(--shade)); }
+
+/* the twelve pieces: each is a column of the whole object (face and sides), clipped to its cut. The cuts are
+   rounded to whole pixels, the same way on both sides of each cut, so the columns meet exactly: no seam, no
+   overlap, and nothing rounded differently from the whole object, which replaces them once they have locked */
+.pieces { display: none; }
+.piece {
+  inset: auto; overflow: hidden;
+  --bleed: 12px; top: -12px; bottom: -12px;
+  left: calc(var(--l) * 100cqi); width: calc(var(--pw) * 100cqi);
+  --shift: calc(var(--l) * -100cqi);
+}
+@supports (left: round(1.5px, 1px)) {
+  .piece {
+    --x0: round(var(--l) * 100cqi, 1px);
+    --x1: round((var(--l) + var(--pw)) * 100cqi, 1px);
+    left: var(--x0); width: calc(var(--x1) - var(--x0)); --shift: calc(-1 * var(--x0));
+  }
+}
+
+/* the light that passes once over the object after the pieces have locked: drawn through the face and the sides
+   (the shape three times, down to the back of the sides), so it lifts the cream a little and catches the sand of
+   the edges, as a low light crossing a plaster relief */
+.sheen {
+  display: none; pointer-events: none;
+  --at: var(--m) 50% 50% / contain no-repeat, var(--m) 50% calc(50% + var(--deep) / 2) / contain no-repeat,
+    var(--m) 50% calc(50% + var(--deep)) / contain no-repeat;
+  -webkit-mask: var(--at); mask: var(--at);
+}
+.band {
+  position: absolute; display: block; top: -10%; bottom: -10%; left: -45%; width: 45%;
+  background: linear-gradient(104deg, rgba(253, 249, 242, 0) 15%, rgba(253, 249, 242, .38) 36%, rgba(253, 249, 242, .78) 50%, rgba(253, 249, 242, .38) 64%, rgba(253, 249, 242, 0) 85%);
+  --sx: 1;
+}
+:global([dir="rtl"]) .band { left: 100%; --sx: -1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* the pieces, then the whole object from the moment they have all locked (a held value, not a step, so the
+     switch cannot be lost to rounding) */
+  .pieces { display: block; perspective: 240cqi; animation: hold 1ms linear 2.3s forwards; }
+  .whole { visibility: hidden; animation: show 1ms linear 2.3s forwards; }
+  .piece {
+    animation:
+      assemble 1.5s cubic-bezier(.32, 0, .12, 1) var(--d) both,
+      arrive .55s cubic-bezier(.4, 0, .6, 1) var(--d) both;
+  }
+  .shadow { animation: shadowIn 1.4s cubic-bezier(.4, 0, .2, 1) .8s both; }
+  .sheen { display: block; }
+  .band { animation: sweep 1.6s cubic-bezier(.45, .05, .25, 1) 1.95s both; }
+}
+
+@keyframes assemble {
+  from { transform: translate3d(var(--x), var(--y), var(--z)) rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz)); }
+  to { transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+}
+@keyframes arrive { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shadowIn { from { opacity: 0; } to { opacity: .7; } }
+@keyframes sweep { from { transform: translateX(0); } to { transform: translateX(calc(var(--sx) * 322%)); } }
+@keyframes hold { from, to { visibility: hidden; } }
+@keyframes show { from, to { visibility: visible; } }
