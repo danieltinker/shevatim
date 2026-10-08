@@ -75,7 +75,7 @@ export function Stock() {
       <div className="adm-filterchips" role="group" aria-label={t.stTitle}>
         {chips.map((c) => (
           <button key={c.key || "all"} type="button" className={`adm-fchip${filter === c.key ? " is-active" : ""}`} aria-pressed={filter === c.key} onClick={() => setFilter(c.key)}>
-            {c.label}{c.n != null ? <bdi className="adm-fchip-n">{c.n}</bdi> : null}
+            {c.label}{c.n != null ? <span className="adm-fchip-n">{c.n}</span> : null}
           </button>
         ))}
       </div>
