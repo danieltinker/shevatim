@@ -10,10 +10,11 @@ import { Reservations } from "./Reservations";
 import { Collections } from "./Collections";
 import { Items } from "./Items";
 import { SettingsScreen } from "./Settings";
+import { Stock } from "./Stock";
 
 const SESSION_KEY = "shv-admin-session"; // sessionStorage only: closing the tab signs the owner out
 const LANG_KEY = "shv-admin-lang";
-const SECTIONS = ["reservations", "collections", "items", "settings"] as const;
+const SECTIONS = ["reservations", "collections", "items", "stock", "settings"] as const;
 type Section = (typeof SECTIONS)[number];
 
 const readHash = (): string[] => {
@@ -212,6 +213,7 @@ export default function AdminApp() {
     { key: "reservations", label: t.navReservations, icon: "M4 5h16v14H4z M4 9h16 M8 13h5" },
     { key: "collections", label: t.navCollections, icon: "M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z" },
     { key: "items", label: t.navItems, icon: "M8 4l-5 3 2 4 2-1v10h10V10l2 1 2-4-5-3c-1 2-5 2-6 0z" },
+    { key: "stock", label: t.navStock, icon: "M3 8l9-4 9 4-9 4z M3 8v8l9 4 9-4V8 M12 12v8" },
     { key: "settings", label: t.navSettings, icon: "M4 7h10 M18 7h2 M4 17h2 M10 17h10 M14 5v4h4V5z M6 15v4h4v-4z" },
   ];
   const navLinks = (cls: string) => nav.map((n) => (
@@ -249,6 +251,7 @@ export default function AdminApp() {
             {section === "reservations" ? <Reservations /> : null}
             {section === "collections" ? <Collections /> : null}
             {section === "items" ? <Items /> : null}
+            {section === "stock" ? <Stock /> : null}
             {section === "settings" ? <SettingsScreen /> : null}
           </StoreCtx.Provider>
         )}

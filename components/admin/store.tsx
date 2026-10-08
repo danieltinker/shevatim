@@ -47,6 +47,8 @@ export function errorSentence(e: unknown, t: Strings): string {
     case "not_found": return t.errNotFound;
     case "slots_full": case "too_many_slots": case "tribe_full": return t.errRowFull;
     case "is_current": return t.colDeleteCurrent;
+    case "not_enough": return t.errNotEnough;
+    case "item_unavailable": return t.errItemUnavailable;
     case "taken": case "duplicate": case "slug_taken": return t.errTaken;
     default: return t.errGeneric;
   }

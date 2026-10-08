@@ -1,6 +1,6 @@
 // Local stand-in for Supabase: the real SQL (db/001_schema.sql + the seed) on an embedded Postgres (pglite),
 // behind the same URLs the browser uses in production.
-//   POST /rest/v1/rpc/<fn>                               the four shv_* functions (PostgREST style)
+//   POST /rest/v1/rpc/<fn>                               the five shv_* functions (PostgREST style)
 //   POST /storage/v1/object/shevatim-media/u/<ticket>/…   picture upload (needs a live upload ticket)
 //   GET  /storage/v1/object/public/shevatim-media/…       serves uploaded pictures
 // Env: PORT (54321) · ADMIN_PASSWORD (shevatim-dev-password) · DATA_DIR (unset = in memory, nothing is kept)
@@ -31,6 +31,7 @@ const FUNCTIONS = {
   shv_reserve: { p_payload: "jsonb" },
   shv_admin_login: { p_password: "text" },
   shv_admin: { p_token: "text", p_action: "text", p_payload: "jsonb" },
+  shv_admin_stock: { p_token: "text", p_action: "text", p_payload: "jsonb" },
 };
 
 // ───────── database ─────────

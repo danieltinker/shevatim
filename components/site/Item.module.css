@@ -47,7 +47,7 @@
 .opt { position: relative; display: block; }
 .opt input { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; opacity: 0; margin: 0; cursor: pointer; }
 /* size options are pills: an outline at rest, sage edge and text under the pointer, sage fill when chosen */
-.opt span {
+.opt > span {
   display: grid; place-items: center; min-block-size: 48px; padding: 8px 16px; border: 1px solid var(--line-strong); border-radius: var(--r-pill);
   text-align: center; font-weight: 400; font-size: 15px; line-height: 1.25;
   transition: border-color .2s ease, background-color .2s ease, color .2s ease;
@@ -90,12 +90,12 @@
 .canvas { position: relative; inline-size: 100%; display: block; }
 .canvasHold { aspect-ratio: 3 / 4; }
 @media (min-width: 900px) { .playIn { grid-template-columns: 5fr 7fr; gap: 72px; } }
-@media (prefers-reduced-motion: reduce) { .thumbs button, .opt span, .crumb { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .thumbs button, .opt > span, .crumb { transition: none; } }
 
 /* counted stock: "only 2 left" under the price */
 .left { margin-block-start: 6px; font-size: var(--fs-small); color: var(--sage); }
-.optGone { color: var(--muted); font-size: 13px; }
+.optGone { display: inline-block; text-decoration: none; margin-inline-start: 4px; color: var(--muted); font-size: 13px; }
 /* coming soon: an outlined sage pill where the button would be, and one quiet sentence */
 .soonBox { display: grid; gap: 10px; justify-items: stretch; margin-block-start: 28px; max-inline-size: 440px; }
-.soonPill.soonPill { background: transparent; color: var(--sage); border-color: var(--sage); cursor: default; pointer-events: none; }
+.soonPill.soonPill.soonPill { background: transparent; color: var(--sage); border-color: var(--sage); cursor: default; pointer-events: none; opacity: 1; font-weight: 600; letter-spacing: .02em; }
 .soonNote { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }

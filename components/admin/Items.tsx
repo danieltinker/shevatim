@@ -45,7 +45,7 @@ function ItemList() {
   }, [state.catalog.collections]);
   const list = state.catalog.items
     .filter((i) => i.status !== "archived" && (!cat || i.category === cat)
-      && (!status || (status === "soldout" ? i.soldOut : i.status === status))
+      && (!status || (status === "soldout" ? i.soldOut : status === "soon" ? !!i.comingSoon : i.status === status))
       && (!noPrice || i.price == null) && (!noTribe || (!i.tribe && !placed.has(i.id))) && itemMatches(i, q))
     .sort((a, b) => a.sort - b.sort || a.code.localeCompare(b.code));
 
@@ -68,6 +68,7 @@ function ItemList() {
             <option value="">{t.all}</option>
             <option value="published">{t.itStPublished}</option>
             <option value="draft">{t.itStDraft}</option>
+            <option value="soon">{t.itSoon}</option>
             <option value="soldout">{t.itSoldOut}</option>
           </select>
         </label>
@@ -88,6 +89,7 @@ function ItemList() {
                 <span className="adm-itemrow-end">
                   <Price value={it.price} />
                   <span className="adm-chips">
+                    {it.comingSoon ? <span className="adm-chip is-soon">{t.itSoon}</span> : null}
                     {it.soldOut ? <span className="adm-chip">{t.itSoldOut}</span> : null}
                     <span className={`adm-chip${it.status === "published" ? " is-on" : ""}`}>{it.status === "published" ? t.itStPublished : t.itStDraft}</span>
                   </span>
@@ -115,6 +117,7 @@ function ItemForm({ item }: { item: Item | null }) {
   const [tribe, setTribe] = useState<TribeKey | "">(item?.tribe ?? "");
   const [status, setStatus] = useState<"draft" | "published">(item?.status === "published" ? "published" : "draft");
   const [soldOut, setSoldOut] = useState(item?.soldOut ?? false);
+  const [comingSoon, setComingSoon] = useState(item?.comingSoon ?? false);
   const [pictures, setPictures] = useState<Picture[]>(item?.pictures ?? []);
   const find = (k: string) => item?.variants.find((v) => v.key === k);
   const [adult, setAdult] = useState({ on: item ? (find("adult")?.available ?? false) : true, price: priceText(find("adult")?.price ?? null) });
@@ -166,10 +169,12 @@ function ItemForm({ item }: { item: Item | null }) {
         description: { he: desc.he.trim(), en: desc.en.trim(), fr: desc.fr.trim() },
         category, price: p as number | null, variants: v, tribe: tribe || null, status, soldOut, pictures,
       };
-      const out = await call((tok) => api.adminSaveItem(tok, payload));
+      let out = await call((tok) => api.adminSaveItem(tok, payload));
+      // "coming soon" has its own call; the editor's save leaves it as it is
+      if (comingSoon !== (out.comingSoon ?? false)) { const id = out.id; out = await call((tok) => api.adminSetComingSoon(tok, id, comingSoon)); }
       putItem(out);
       // take the screen from what the server answered
-      setName(l10n(out.name)); setDesc(l10n(out.description)); setPrice(priceText(out.price)); setPictures(out.pictures ?? []);
+      setName(l10n(out.name)); setDesc(l10n(out.description)); setPrice(priceText(out.price)); setPictures(out.pictures ?? []); setComingSoon(out.comingSoon ?? false);
       setSaved(true); setDirty(false); toast(t.saved);
       if (!item) go(`items/${encodeURIComponent(out.id)}`);
     } catch (e) {
@@ -348,7 +353,12 @@ function ItemForm({ item }: { item: Item | null }) {
                 ))}
               </div>
             </fieldset>
+            <Toggle checked={comingSoon} onChange={(v) => { setComingSoon(v); touch(); }} label={t.itSoonToggle}
+              hint={comingSoon && status !== "published" ? `${t.itSoonHint} ${t.itSoonDraft}` : t.itSoonHint} />
             <Toggle checked={soldOut} onChange={(v) => { setSoldOut(v); touch(); }} label={t.itSoldOutToggle} hint={t.itSoldOutHint} />
+            {item ? (
+              <a className="adm-btn" href={`#/stock/${encodeURIComponent(item.id)}`} onClick={(e) => { e.preventDefault(); go(`stock/${encodeURIComponent(item.id)}`); }}>{t.itStockLink}</a>
+            ) : null}
             {item ? <button type="button" className="adm-btn adm-btn-danger-quiet" disabled={busy} onClick={() => void archive()}>{t.itArchive}</button> : null}
           </div>
         </div>

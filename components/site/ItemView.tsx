@@ -154,7 +154,7 @@ export function ItemView({ slug, tribes, pending }: { slug: string | null; tribe
                   <label key={v.key} className={s.opt}>
                     <input type="radio" name="variant" value={v.key} checked={chosen?.key === v.key} disabled={!v.available}
                       onChange={() => { setVariant(v.key); setAdded(false); setNeedChoice(false); }} />
-                    <span><bdi>{tr(v.label, locale)}</bdi>{v.available ? null : <span className={s.optGone}> · {t.item.sizeGone}</span>}</span>
+                    <span><span><bdi>{tr(v.label, locale)}</bdi>{v.available ? null : <span className={s.optGone}>· {t.item.sizeGone}</span>}</span></span>
                   </label>
                 ))}
               </div>
