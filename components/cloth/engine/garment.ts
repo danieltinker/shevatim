@@ -46,10 +46,11 @@ export class Sheet {
     this.bDst = Int32Array.from(bD); this.bSrc = Int32Array.from(bS); this.bW = Float32Array.from(bW);
   }
 
-  /** Refresh follower particles, the refined surface, its normals, and the solver's per-particle normals. */
-  update(): void {
+  /** Refresh follower particles, the refined surface, its normals, and the solver's per-particle normals.
+   *  src: the particle positions to draw (default the solver's own; the renderer passes positions between frames). */
+  update(src?: Float64Array): void {
     const { sim, nu, nv, ru, rv, rpos, rnrm, start } = this;
-    const p = sim.pos;
+    const p = src ?? sim.pos;
     for (const f of this.followers) {
       let x = 0, y = 0, z = 0;
       for (let k = 0; k < f.src.length; k++) { const s = f.src[k] * 3, w = f.wt[k]; x += p[s] * w; y += p[s + 1] * w; z += p[s + 2] * w; }
@@ -149,6 +150,7 @@ export function buildGarment(spec: GarmentSpec, quality: "low" | "high", kid: bo
   const maxP = nx * ny + nhu * nhv + 4 * (nWound + nStr * nSeg) + 8;
   const sim = new ClothSim(maxP, maxP * 7);
   sim.substeps = quality === "high" ? 10 : 8;
+  sim.massScale = (cell / 0.0323) ** 2;
   if (kid) sim.gravity = 9.81 / 0.7; // a smaller garment swings faster; the camera does the scaling
 
   // --- ghost body (never drawn) ---
