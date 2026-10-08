@@ -1,4 +1,4 @@
-/* The Choshen stones: twelve identical quiet tiles. No tribe has a colour of its own. */
+/* The Choshen stones: twelve identical quiet pills. No tribe has a colour of its own; the chosen one is sage. */
 .strip { background: transparent; }
 .stripList {
   list-style: none; margin: 0; padding: 12px var(--gutter);
@@ -10,7 +10,7 @@
 
 .stone {
   display: grid; place-content: center; justify-items: center; gap: 2px;
-  min-block-size: 56px; min-inline-size: 88px; padding: 8px 8px; border-radius: 0;
+  min-block-size: 56px; min-inline-size: 88px; padding: 8px 14px; border-radius: var(--r-pill);
   /* on a --surface section (.onChalk) the stone takes the page ground, so it still reads as a tile */
   background: var(--stone-ground, var(--surface)); color: var(--fg);
   border: 1px solid var(--line); text-decoration: none;
@@ -18,22 +18,29 @@
 }
 :global(.onChalk) .stone { --stone-ground: var(--bg); }
 .stoneName { font-family: var(--font-display); font-weight: 600; font-size: 18px; line-height: 1.15; white-space: nowrap; }
-.stoneLatin { font-size: 11.5px; line-height: 1.25; font-weight: 400; white-space: nowrap; color: var(--muted); }
-.stone[aria-current="true"], .stone[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.stone[aria-current="true"] .stoneLatin, .stone[aria-pressed="true"] .stoneLatin { color: var(--accent-ink); }
-@media (hover: hover) { .stone:hover { border-color: var(--fg); } .stone[aria-current="true"]:hover, .stone[aria-pressed="true"]:hover { border-color: var(--accent); } }
-@media (prefers-reduced-motion: reduce) { .stone { transition: none; } }
+.stoneLatin { font-size: 11.5px; line-height: 1.25; font-weight: 400; white-space: nowrap; color: var(--muted); transition: color .2s ease; }
+/* under the pointer: a sage edge, sage text and a faint sage wash over the ground */
+@media (hover: hover) {
+  .stone:hover { border-color: var(--sage); color: var(--sage); background-image: linear-gradient(var(--sage-soft), var(--sage-soft)); }
+  .stone:hover .stoneLatin { color: var(--sage); }
+}
+/* the chosen stone: filled with sage, its text in sage ink */
+.stone[aria-current="true"], .stone[aria-pressed="true"],
+.stone[aria-current="true"]:hover, .stone[aria-pressed="true"]:hover { background: var(--sage); color: var(--sage-ink); border-color: var(--sage); }
+.stone[aria-current="true"] .stoneLatin, .stone[aria-pressed="true"] .stoneLatin { color: var(--sage-ink); }
+@media (prefers-reduced-motion: reduce) { .stone, .stoneLatin { transition: none; } }
 
 /* The breastplate that chooses a tribe on the home page: four rows of three on phones (the Choshen's own
-   order), two rows of six on tablets, one calm row of twelve on wide screens. Nothing scrolls sideways. */
+   order), two rows of six on tablets, one calm row of twelve on wide screens. Nothing scrolls sideways.
+   Its stones are pills like every other stone. */
 .plate { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; list-style: none; margin: 0; padding: 0; }
-.plate .stone { inline-size: 100%; min-inline-size: 0; min-block-size: 56px; cursor: pointer; }
+.plate .stone { inline-size: 100%; min-inline-size: 0; min-block-size: 56px; padding-inline: 8px; cursor: pointer; }
 @media (min-width: 640px) { .plate { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; } }
 @media (min-width: 1200px) { .plate { grid-template-columns: repeat(12, minmax(0, 1fr)); } .plate .stone { min-block-size: 64px; } }
 
 /* small chips: shop filter */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
-.chips .stone { padding-inline: 12px; }
+.chips .stone { padding-inline: 18px; }
 @media (max-width: 767px) {
   .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 6px var(--gutter); margin-inline: calc(-1 * var(--gutter)); }
   .chips::-webkit-scrollbar { display: none; }

@@ -7,31 +7,36 @@
 .stageBox { min-inline-size: 0; }
 /* the picture is laid over the box, so the whole garment always fits inside it (a percentage height does not
    resolve inside an auto grid row, which used to crop the hem on wide screens) */
-.main { position: relative; aspect-ratio: 3 / 4; background: var(--stage); overflow: hidden; display: grid; place-items: center; max-block-size: 86vh; inline-size: 100%; }
+.main { position: relative; aspect-ratio: 3 / 4; background: var(--stage); border-radius: var(--r-card); overflow: hidden; isolation: isolate; display: grid; place-items: center; max-block-size: 86vh; inline-size: 100%; }
 /* the garment is a transparent cut-out: it keeps clear of the edge (the padding) and rests on one soft ground shadow */
 .main img {
   position: absolute; inset: 0; inline-size: 100%; block-size: 100%; max-inline-size: 100%; max-block-size: 100%;
   padding: clamp(16px, 5%, 48px); object-fit: contain; object-position: center; display: block;
   filter: drop-shadow(0 18px 22px rgba(var(--shade), .28));
 }
+/* phones and tablets: the rounded stage sits inside the page gutter, never against the screen edge */
+@media (max-width: 1023px) { .main { inline-size: auto; margin: 12px var(--gutter) 0; } }
 .noPic { display: grid; gap: 8px; justify-items: center; text-align: center; padding: 24px; }
 .noPic span { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h2); line-height: 1.2; }
 .noPic small { color: var(--fg); font-size: var(--fs-small); }
 .renderNote { font-size: 13px; line-height: 1.5; color: var(--muted); padding: 10px var(--gutter) 0; }
-.thumbs { list-style: none; margin: 0; padding: 3px var(--gutter); display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
+/* the padding leaves room for the focus ring (2px at 3px) inside the scrolling strip */
+.thumbs { list-style: none; margin: 0; padding: 6px var(--gutter); display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
 .thumbs::-webkit-scrollbar { display: none; }
 .thumbs li { flex: none; }
-/* thumbnails: small stage tiles; the one on show carries the text-colour edge */
-.thumbs button { display: block; inline-size: 60px; padding: 0; border: 0; background: var(--stage); aspect-ratio: 3 / 4; outline: 1px solid transparent; outline-offset: 2px; }
-.thumbs button[aria-pressed="true"] { outline-color: var(--fg); }
-.thumbs button:focus-visible { outline: 2px solid var(--accent); }
-@media (hover: hover) { .thumbs button:hover { outline-color: var(--line-strong); } .thumbs button[aria-pressed="true"]:hover { outline-color: var(--fg); } }
+/* thumbnails: small rounded stage tiles; the one on show carries a sage edge on a faint sage wash */
+.thumbs button {
+  display: block; inline-size: 60px; padding: 0; border: 2px solid transparent; border-radius: var(--r-box); overflow: hidden;
+  background: var(--stage); aspect-ratio: 3 / 4; transition: border-color .2s ease;
+}
+.thumbs button[aria-pressed="true"] { border-color: var(--sage); background-image: linear-gradient(var(--sage-soft), var(--sage-soft)); }
+@media (hover: hover) { .thumbs button:hover { border-color: color-mix(in srgb, var(--sage) 55%, transparent); } }
 .thumbs img { inline-size: 100%; block-size: 100%; padding: 8%; object-fit: contain; display: block; }
 
 /* the calm column: label, name, price, size, one button, description, the tribe */
 .info { padding-inline: var(--gutter); display: grid; align-content: start; justify-items: start; gap: 0; min-inline-size: 0; }
-.crumb { text-decoration: none; padding-block: 12px; }
-@media (hover: hover) { .crumb:hover { color: var(--fg); } }
+.crumb { text-decoration: none; padding-block: 12px; border-radius: 4px; transition: color .2s ease; }
+@media (hover: hover) { .crumb:hover { color: var(--sage); } }
 .name { font-size: clamp(28px, 3vw, 44px); line-height: 1.14; }
 :global(html[lang="he"]) .name { line-height: 1.2; }
 .price { margin-block-start: 14px; color: var(--muted); font-size: var(--fs-body); }
@@ -41,9 +46,15 @@
 .optsLong { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-inline-size: 440px; }
 .opt { position: relative; display: block; }
 .opt input { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; opacity: 0; margin: 0; cursor: pointer; }
-.opt span { display: grid; place-items: center; min-block-size: 48px; padding: 8px 12px; border: 1px solid var(--line-strong); text-align: center; font-weight: 400; font-size: 15px; line-height: 1.25; transition: border-color .2s ease; }
-.opt input:checked + span { border-color: var(--fg); box-shadow: inset 0 0 0 1px var(--fg); font-weight: 500; }
-.opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 3px; }
+/* size options are pills: an outline at rest, sage edge and text under the pointer, sage fill when chosen */
+.opt span {
+  display: grid; place-items: center; min-block-size: 48px; padding: 8px 16px; border: 1px solid var(--line-strong); border-radius: var(--r-pill);
+  text-align: center; font-weight: 400; font-size: 15px; line-height: 1.25;
+  transition: border-color .2s ease, background-color .2s ease, color .2s ease;
+}
+@media (hover: hover) { .opt input:not(:disabled):hover + span { border-color: var(--sage); color: var(--sage); background: var(--sage-soft); } }
+.opt input:checked + span, .opt input:checked:hover + span { border-color: var(--sage); background: var(--sage); color: var(--sage-ink); font-weight: 500; }
+.opt input:focus-visible + span { outline: 2px solid var(--sage); outline-offset: 3px; }
 .opt input:disabled + span { color: var(--muted); border-color: var(--line); text-decoration: line-through; }
 .opt input:disabled { cursor: not-allowed; }
 .needChoice { margin-block-start: 12px; font-size: var(--fs-small); color: var(--warn); font-weight: 500; }
@@ -58,8 +69,8 @@
 
 @media (min-width: 1024px) {
   .grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(48px, 5vw, 88px); padding: 32px var(--gutter) var(--section-y); align-items: start; }
-  .withThumbs { grid-template-columns: 72px minmax(0, 1fr); gap: 20px; }
-  .thumbs { flex-direction: column; padding: 3px; order: -1; overflow: hidden auto; max-block-size: calc(100vh - var(--header-h) - var(--ann-h) - 64px); }
+  .withThumbs { grid-template-columns: 78px minmax(0, 1fr); gap: 16px; }
+  .thumbs { flex-direction: column; padding: 6px; order: -1; overflow: hidden auto; max-block-size: calc(100vh - var(--header-h) - var(--ann-h) - 64px); }
   .thumbs button { inline-size: 66px; }
   /* the stage is exactly the free height of the window (no floor: in a short window the picture gets smaller
      instead of running under the fold), measured with dvh where the browser has it */
@@ -74,8 +85,9 @@
 .playIn { padding: var(--section-y) var(--gutter); display: grid; gap: 36px; align-items: center; }
 .playText { display: grid; gap: 14px; max-inline-size: 40ch; }
 /* the stage keeps its 3:4 box whatever is inside it (poster, loading code, live cloth) */
-.playStage { position: relative; inline-size: 100%; max-inline-size: min(560px, 60vh); aspect-ratio: 3 / 4; margin-inline: auto; touch-action: pan-y; background: var(--stage); overflow: hidden; }
+.playStage { position: relative; inline-size: 100%; max-inline-size: min(560px, 60vh); aspect-ratio: 3 / 4; margin-inline: auto; touch-action: pan-y; background: var(--stage); border-radius: var(--r-card); overflow: hidden; isolation: isolate; }
 .stagePoster { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; padding: 6%; object-fit: contain; display: block; }
 .canvas { position: relative; inline-size: 100%; display: block; }
 .canvasHold { aspect-ratio: 3 / 4; }
 @media (min-width: 900px) { .playIn { grid-template-columns: 5fr 7fr; gap: 72px; } }
+@media (prefers-reduced-motion: reduce) { .thumbs button, .opt span, .crumb { transition: none; } }

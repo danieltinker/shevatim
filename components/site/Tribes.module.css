@@ -3,16 +3,16 @@
 .head { display: grid; justify-items: center; gap: clamp(16px, 1.8vw, 24px); text-align: center; margin-block-end: clamp(40px, 5vw, 72px); }
 .head p { color: var(--muted); max-inline-size: 56ch; }
 
-.stage { display: grid; justify-items: center; outline-offset: 16px; }
+.stage { display: grid; justify-items: center; outline-offset: 16px; border-radius: var(--r-card); }
 .stage > ul { inline-size: 100%; }
 
 .nav { display: flex; align-items: center; gap: 12px; margin-block-start: clamp(28px, 3.4vw, 44px); }
 .arrow {
   inline-size: 44px; block-size: 44px; border-radius: 50%; display: grid; place-items: center;
   background: transparent; border: 1px solid var(--line); color: var(--fg);
-  transition: border-color .2s ease;
+  transition: border-color .2s ease, color .2s ease, background-color .2s ease;
 }
-@media (hover: hover) { .arrow:hover { border-color: var(--fg); } }
+@media (hover: hover) { .arrow:hover { border-color: var(--sage); color: var(--sage); background: var(--sage-soft); } }
 :global(html[dir="rtl"]) .arrow svg { transform: scaleX(-1); }
 .counter { font-size: var(--fs-small); color: var(--muted); font-variant-numeric: tabular-nums; min-inline-size: 9ch; text-align: center; }
 
@@ -30,10 +30,11 @@
 .essence { color: var(--muted); max-inline-size: 56ch; margin-block-start: clamp(24px, 2.8vw, 36px); }
 .links { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 0 32px; margin-block-start: clamp(16px, 2vw, 24px); }
 .quiet {
-  display: inline-block; padding-block: 10px; font-size: 15px; color: var(--muted);
+  display: inline-block; padding-block: 10px; font-size: 15px; color: var(--muted); border-radius: 4px;
   text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 6px;
+  transition: color .2s ease, text-decoration-color .2s ease;
 }
-@media (hover: hover) { .quiet:hover { color: var(--fg); text-decoration-color: var(--fg); } }
+@media (hover: hover) { .quiet:hover { color: var(--sage); text-decoration-color: var(--sage); } }
 
 /* a change of tribe answers the visitor: a short, soft arrival. The first paint has none. */
 @media (prefers-reduced-motion: no-preference) {
@@ -42,5 +43,5 @@
   .fresh > :nth-child(3) { animation-delay: .1s; }
   .fresh > :nth-child(4) { animation-delay: .14s; }
 }
-@media (prefers-reduced-motion: reduce) { .arrow { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .arrow, .quiet { transition: none; } }
 @keyframes arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }

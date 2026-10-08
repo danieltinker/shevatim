@@ -13,6 +13,8 @@
   /* soft corners everywhere: pictures and cards, smaller boxes and fields, pills for buttons, tags and chips */
   --r-card: 20px; --r-box: 14px; --r-pill: 999px;
   --on-film: #F2E8D8; /* cream text laid over the film and its earth shade: the same in both themes */
+  --sage-on-film: #AAB88A; /* the hover and current-page green over the film's dark shade, in both themes */
+  --lift: translateY(-3px); /* the quiet rise of a picture tile under the pointer */
 }
 @media (min-width: 768px) { :root { --gutter: 40px; } }
 @media (min-width: 1024px) { :root { --gutter: 64px; --header-h: 68px; } }
@@ -65,8 +67,8 @@ p { text-wrap: pretty; }
 a { color: inherit; }
 button, input, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-::selection { background: var(--accent); color: var(--accent-ink); }
+:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; } /* the ring follows each box's radius */
+::selection { background: var(--sage); color: var(--sage-ink); }
 
 .wrap { max-inline-size: 1680px; margin-inline: auto; }
 .section { padding: var(--section-y) var(--gutter); }
@@ -78,25 +80,28 @@ button { cursor: pointer; }
 /* small section label: introduces the heading under it */
 .label { font-size: 13px; line-height: 1.5; color: var(--muted); font-weight: 400; }
 .label a { text-decoration: none; }
-.label a:hover { color: var(--fg); }
+@media (hover: hover) { .label a:hover { color: var(--sage); } }
 
-/* filled = the one main action of a view; hover turns it into an outline. Ghost = the outline. */
+/* Buttons are pills. Filled = the one main action of a view (earth ground, sand text); ghost = the outline.
+   Under the pointer both turn sage: the filled one takes a sage ground, the outline a sage edge and text. */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-block-size: 48px; padding: 12px 30px; border: 1px solid var(--fg); border-radius: 0;
+  min-block-size: 48px; padding: 12px 30px; border: 1px solid var(--fg); border-radius: var(--r-pill);
   background: var(--fg); color: var(--bg); font-weight: 500; font-size: 15px; line-height: 1.25; text-decoration: none; text-align: center;
-  transition: background-color .2s ease, color .2s ease;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
 }
-@media (hover: hover) { .btn:hover:not([disabled]) { background: transparent; color: var(--fg); } }
+@media (hover: hover) { .btn:hover:not([disabled]):not([aria-disabled="true"]) { background: var(--sage); border-color: var(--sage); color: var(--sage-ink); } }
 .btn[disabled], .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
 .btnGhost { background: transparent; color: var(--fg); }
-@media (hover: hover) { .btnGhost:hover:not([disabled]) { background: var(--fg); color: var(--bg); } }
+@media (hover: hover) { .btnGhost:hover:not([disabled]):not([aria-disabled="true"]) { background: var(--sage-soft); border-color: var(--sage); color: var(--sage); } }
+/* a quiet text link: hairline underline at rest, sage text and underline under the pointer */
 .link {
-  color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 6px;
-  font-weight: 500; font-size: 15px; display: inline-block; padding-block: 10px;
+  color: var(--fg); text-decoration: underline; text-decoration-color: var(--line-strong); text-decoration-thickness: 1px; text-underline-offset: 6px;
+  font-weight: 500; font-size: 15px; display: inline-block; padding-block: 10px; border-radius: 4px;
+  transition: color .2s ease, text-decoration-color .2s ease;
 }
-@media (hover: hover) { .link:hover { color: var(--accent); } }
-@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+@media (hover: hover) { .link:hover { color: var(--sage); text-decoration-color: var(--sage); } }
+@media (prefers-reduced-motion: reduce) { .btn, .link { transition: none; } }
 
 /* the wordmark: the PNG is only a mask, so the mark is drawn in the text colour of whatever it sits on */
 .wordmark {
@@ -109,7 +114,7 @@ button { cursor: pointer; }
 .verseTr { font-size: var(--fs-body); line-height: 1.55; margin-block-start: 8px; }
 .verseRef { font-size: var(--fs-small); color: var(--muted); margin-block-start: 8px; }
 
-.skip { position: absolute; inset-block-start: -100px; inset-inline-start: 8px; z-index: 100; background: var(--fg); color: var(--bg); padding: 12px 16px; }
+.skip { position: absolute; inset-block-start: -100px; inset-inline-start: 8px; z-index: 100; background: var(--fg); color: var(--bg); padding: 12px 20px; border-radius: var(--r-pill); }
 .skip:focus { inset-block-start: 8px; }
 
 /* small round controls (theme, sound): quiet, the same everywhere */
@@ -118,6 +123,6 @@ button { cursor: pointer; }
   background: none; border: 0; border-radius: 50%; color: inherit; cursor: pointer;
   transition: background-color .2s ease, color .2s ease;
 }
-@media (hover: hover) { .iconBtn:hover { color: var(--accent); } }
-.iconBtn[aria-pressed="true"] { color: var(--accent); }
+@media (hover: hover) { .iconBtn:hover { color: var(--sage); background: var(--sage-soft); } }
+.iconBtn[aria-pressed="true"] { color: var(--sage); }
 @media (prefers-reduced-motion: reduce) { body, .iconBtn { transition: none; } }

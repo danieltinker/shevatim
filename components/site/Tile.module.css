@@ -9,8 +9,12 @@
 @media (min-width: 1024px) { .five { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 56px 28px; } }
 
 .tile { display: flex; flex-direction: column; text-decoration: none; color: var(--fg); min-inline-size: 0; }
-/* the stage: the garment is a transparent cut-out that never touches the edge */
-.frame { position: relative; display: block; aspect-ratio: 3 / 4; background: var(--stage); overflow: hidden; }
+/* the stage: a soft-cornered box; the garment is a transparent cut-out that never touches the edge */
+.frame {
+  position: relative; display: block; aspect-ratio: 3 / 4; background: var(--stage);
+  border-radius: var(--r-card); overflow: hidden; isolation: isolate;
+  transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .25s ease;
+}
 .pic {
   position: absolute; inset-block-start: 7%; inset-inline-start: 7%; inline-size: 86%; block-size: 86%;
   object-fit: contain; object-position: center; display: block; transition: opacity .3s ease;
@@ -20,9 +24,14 @@
 @media (hover: hover) and (pointer: fine) {
   .tile:hover .swap .first, .tile:focus-visible .swap .first { opacity: 0; }
   .tile:hover .swap .second, .tile:focus-visible .swap .second { opacity: 1; }
-  .tile:hover .name { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 5px; }
+  /* under the pointer: the box rises a little, a fine sage ring, the name in sage */
+  .tile:hover .frame { transform: var(--lift); box-shadow: 0 0 0 1px var(--sage); }
+  .tile:hover .name { color: var(--sage); }
 }
-@media (prefers-reduced-motion: reduce) { .pic { transition: none; } }
-.name { margin-block-start: 14px; font-size: 15px; font-weight: 500; line-height: 1.4; text-wrap: balance; }
+.name { margin-block-start: 14px; font-size: 15px; font-weight: 500; line-height: 1.4; text-wrap: balance; transition: color .2s ease; }
 .price, .sold { margin-block-start: 2px; font-size: 13px; line-height: 1.5; color: var(--muted); }
-.tile:focus-visible { outline-offset: 6px; }
+/* the keyboard ring sits on the rounded picture box, not around the whole tile */
+.tile:focus-visible { outline: none; }
+.tile:focus-visible .frame { outline: 2px solid var(--sage); outline-offset: 3px; }
+.tile:focus-visible .name { color: var(--sage); }
+@media (prefers-reduced-motion: reduce) { .pic, .frame, .name { transition: none; } .tile:hover .frame { transform: none; } }
